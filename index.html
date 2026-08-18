@@ -3,66 +3,72 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="完全在瀏覽器本機移除 PDF 密碼的工具" />
-    <title>PDF 移除密碼</title>
-    <script type="module" crossorigin src="./assets/index-7sZ_pNQX.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-rGbPh9_C.css">
+    <meta name="description" content="完全在瀏覽器本機處理 PDF 的多功能工具" />
+    <title>PDF 本機工具箱</title>
   </head>
   <body>
     <main class="app-shell">
       <section class="card" aria-labelledby="page-title">
-        <div class="eyebrow">Browser-only PDF tool</div>
-        <h1 id="page-title">PDF 移除密碼</h1>
-        <p class="privacy-note">
-          所有 PDF 均在您的瀏覽器本機處理，不會上傳至任何伺服器。
-        </p>
+        <div class="eyebrow">Browser-only PDF toolbox</div>
+        <h1 id="page-title">PDF 本機工具箱</h1>
+        <p class="privacy-note">所有檔案均在您的瀏覽器本機處理，不會上傳至任何伺服器。</p>
 
-        <form id="unlock-form" novalidate>
-          <label class="field-label" for="pdf-file">加入加密 PDF</label>
-          <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-controls="pdf-file">
-            <input
-              id="pdf-file"
-              class="visually-hidden"
-              type="file"
-              accept="application/pdf,.pdf"
-              multiple
-            />
+        <nav class="tool-tabs" aria-label="PDF 工具">
+          <button class="tool-tab is-active" type="button" data-tool="unlock">移除密碼</button>
+          <button class="tool-tab" type="button" data-tool="merge">合併 PDF</button>
+          <button class="tool-tab" type="button" data-tool="split">拆分 PDF</button>
+          <button class="tool-tab" type="button" data-tool="jpg-to-pdf">JPG 轉 PDF</button>
+          <button class="tool-tab" type="button" data-tool="pdf-to-jpg">PDF 轉 JPG</button>
+        </nav>
+
+        <section class="tool-intro" aria-live="polite">
+          <h2 id="tool-title">移除 PDF 密碼</h2>
+          <p id="tool-description">加入多個使用相同密碼的 PDF，逐檔移除密碼並下載。</p>
+        </section>
+
+        <form id="tool-form" novalidate>
+          <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-controls="file-input">
+            <input id="file-input" class="visually-hidden" type="file" accept="application/pdf,.pdf" multiple />
             <svg aria-hidden="true" viewBox="0 0 24 24">
               <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
             </svg>
-            <strong>將 PDF 拖曳到這裡</strong>
-            <span>或點一下選擇多個檔案</span>
+            <strong id="drop-title">將 PDF 拖曳到這裡</strong>
+            <span id="drop-hint">或點一下選擇多個檔案</span>
           </div>
           <p id="file-feedback" class="file-feedback" aria-live="polite">尚未加入檔案</p>
 
           <section id="queue-section" class="queue-section" hidden aria-labelledby="queue-title">
             <div class="queue-heading">
-              <h2 id="queue-title">待處理檔案</h2>
+              <h3 id="queue-title">待處理檔案</h3>
               <button id="clear-files" class="text-button compact" type="button">清除全部</button>
             </div>
             <ul id="file-list" class="file-list"></ul>
           </section>
 
-          <label class="field-label" for="password">PDF 密碼</label>
-          <div class="password-field">
-            <input
-              id="password"
-              type="password"
-              autocomplete="off"
-              placeholder="輸入 PDF 密碼"
-              required
-            />
-            <button id="toggle-password" class="text-button" type="button" aria-pressed="false">
-              顯示
-            </button>
+          <div id="password-section">
+            <label class="field-label" for="password">PDF 密碼</label>
+            <div class="password-field">
+              <input id="password" type="password" autocomplete="off" placeholder="輸入 PDF 密碼" />
+              <button id="toggle-password" class="text-button" type="button" aria-pressed="false">顯示</button>
+            </div>
           </div>
 
-          <button id="unlock-button" class="primary-button" type="submit">全部移除密碼並下載</button>
+          <div id="jpg-options" class="options" hidden>
+            <label for="jpg-scale">JPG 清晰度</label>
+            <select id="jpg-scale">
+              <option value="1.5">標準（150%）</option>
+              <option value="2" selected>清晰（200%）</option>
+              <option value="3">高解析（300%）</option>
+            </select>
+          </div>
+
+          <button id="process-button" class="primary-button" type="submit">全部移除密碼並下載</button>
         </form>
 
         <div id="status" class="status" role="status" aria-live="polite">準備就緒</div>
-        <p class="limit-note">檔案會逐一處理。瀏覽器可能會詢問是否允許下載多個檔案。</p>
+        <p id="limit-note" class="limit-note">檔案會逐一處理。瀏覽器可能會詢問是否允許下載多個檔案。</p>
       </section>
     </main>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
