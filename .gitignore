@@ -1,6 +1,9 @@
 # Logs
 *.log
 
+# Browser UI check profiles
+.ui-check-profile/
+
 # Editors and operating systems
 .idea/
 .vscode/
