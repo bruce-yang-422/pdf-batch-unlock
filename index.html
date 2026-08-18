@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="完全在瀏覽器本機處理 PDF 的多功能工具" />
     <title>PDF 本機工具箱</title>
-    <script type="module" crossorigin src="./assets/index-B1DXhJbu.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-B3ZpobTn.css">
+    <script type="module" crossorigin src="./assets/index-BP6Zbr7r.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-D8xLhqzd.css">
   </head>
   <body>
     <main class="app-shell">
@@ -36,50 +36,69 @@
 
         <section class="tool-intro" aria-live="polite">
           <h2 id="tool-title">移除 PDF 密碼</h2>
-          <p id="tool-description">加入多個使用相同密碼的 PDF，逐檔移除密碼並下載。</p>
+          <p id="tool-description">加入多個使用相同密碼的 PDF；多檔結果會打包成 ZIP。</p>
         </section>
 
         <form id="tool-form" novalidate>
-          <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-controls="file-input">
-            <input id="file-input" class="visually-hidden" type="file" accept="application/pdf,.pdf" multiple />
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
-            </svg>
-            <strong id="drop-title">將 PDF 拖曳到這裡</strong>
-            <span id="drop-hint">或點一下選擇多個檔案</span>
-          </div>
-          <p id="file-feedback" class="file-feedback" aria-live="polite">尚未加入檔案</p>
+          <div class="workspace">
+            <div class="control-panel">
+              <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-controls="file-input">
+                <input id="file-input" class="visually-hidden" type="file" accept="application/pdf,.pdf" multiple />
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
+                </svg>
+                <strong id="drop-title">將 PDF 拖曳到這裡</strong>
+                <span id="drop-hint">或點一下選擇多個檔案</span>
+              </div>
+              <p id="file-feedback" class="file-feedback" aria-live="polite">尚未加入檔案</p>
 
-          <section id="queue-section" class="queue-section" hidden aria-labelledby="queue-title">
-            <div class="queue-heading">
-              <h3 id="queue-title">待處理檔案</h3>
-              <button id="clear-files" class="text-button compact" type="button">清除全部</button>
+              <div id="password-section">
+                <label class="field-label" for="password">PDF 密碼</label>
+                <div class="password-field">
+                  <input id="password" type="password" autocomplete="off" placeholder="輸入 PDF 密碼" />
+                  <button id="toggle-password" class="text-button" type="button" aria-pressed="false">顯示</button>
+                </div>
+              </div>
+
+              <div id="jpg-options" class="options" hidden>
+                <label for="jpg-scale">JPG 輸出解析度</label>
+                <select id="jpg-scale">
+                  <option value="1.333333">螢幕（96 DPI）</option>
+                  <option value="2.083333" selected>清晰（150 DPI）</option>
+                  <option value="4.166667">高畫質（300 DPI）</option>
+                </select>
+              </div>
+
+              <button id="process-button" class="primary-button" type="submit">全部移除密碼並下載</button>
+              <div id="status" class="status" role="status" aria-live="polite">準備就緒</div>
+              <p id="limit-note" class="limit-note">檔案會逐一處理；多檔結果會打包成單一 ZIP 下載。</p>
             </div>
-            <ul id="file-list" class="file-list"></ul>
-          </section>
 
-          <div id="password-section">
-            <label class="field-label" for="password">PDF 密碼</label>
-            <div class="password-field">
-              <input id="password" type="password" autocomplete="off" placeholder="輸入 PDF 密碼" />
-              <button id="toggle-password" class="text-button" type="button" aria-pressed="false">顯示</button>
-            </div>
+            <aside class="activity-panel" aria-label="檔案與處理歷程">
+              <section id="queue-section" class="queue-section" aria-labelledby="queue-title">
+                <div class="queue-heading">
+                  <div>
+                    <span class="section-kicker">Current batch</span>
+                    <h3 id="queue-title">待處理檔案</h3>
+                  </div>
+                  <button id="clear-files" class="text-button compact" type="button">清除全部</button>
+                </div>
+                <ul id="file-list" class="file-list"></ul>
+              </section>
+
+              <section id="history-section" class="history-section" aria-labelledby="history-title">
+                <div class="queue-heading">
+                  <div>
+                    <span class="section-kicker">Session history</span>
+                    <h3 id="history-title">處理歷程</h3>
+                  </div>
+                  <button id="clear-history" class="text-button compact" type="button">清除歷程</button>
+                </div>
+                <ol id="history-list" class="history-list"></ol>
+              </section>
+            </aside>
           </div>
-
-          <div id="jpg-options" class="options" hidden>
-            <label for="jpg-scale">JPG 輸出解析度</label>
-            <select id="jpg-scale">
-              <option value="1.333333">螢幕（96 DPI）</option>
-              <option value="2.083333" selected>清晰（150 DPI）</option>
-              <option value="4.166667">高畫質（300 DPI）</option>
-            </select>
-          </div>
-
-          <button id="process-button" class="primary-button" type="submit">全部移除密碼並下載</button>
         </form>
-
-        <div id="status" class="status" role="status" aria-live="polite">準備就緒</div>
-        <p id="limit-note" class="limit-note">檔案會逐一處理。瀏覽器可能會詢問是否允許下載多個檔案。</p>
       </section>
     </main>
   </body>
