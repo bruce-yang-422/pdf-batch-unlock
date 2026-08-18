@@ -1,5 +1,7 @@
 # PDF Batch Unlocker
 
+前台網址：<https://bruce-yang-422.github.io/pdf-batch-unlock/>
+
 純前端的 PDF 批次移除密碼工具。使用者可一次選擇或拖入多個 PDF，輸入一次共同密碼後，網站會在瀏覽器中逐檔解密並下載結果。
 
 > 所有 PDF 與密碼只會在使用者的瀏覽器本機處理，不會上傳至伺服器，也不會寫入 LocalStorage、IndexedDB、Cookie 或任何分析服務。
