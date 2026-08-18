@@ -84,22 +84,27 @@ C:\Program Files\Google\Chrome\Application\chrome.exe
 
 ## GitHub Pages 部署
 
-專案包含 [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml)。推送至 `main` 後，GitHub Actions 會執行：
+目前 GitHub Pages 使用 `main / (root)` 的 branch deployment。由於 GitHub Actions runner 受帳號 billing 狀態限制，production build 會提交在 `docs/`，根目錄頁面則自動導向該版本。
 
-```text
+更新前台時執行：
+
+```bash
 npm ci
-→ npm run build
-→ 上傳 dist/
-→ 部署至 GitHub Pages
+npm run build:pages
+git add docs
+git commit -m "Update GitHub Pages build"
+git push
 ```
 
-第一次部署前，請在 GitHub repository 中開啟：
+GitHub Pages 設定維持：
 
 ```text
-Settings → Pages → Build and deployment → Source → GitHub Actions
+Settings → Pages → Build and deployment
+Source: Deploy from a branch
+Branch: main / (root)
 ```
 
-Vite 使用相對 `base`，因此 JavaScript、CSS 與 WASM 資源可在 GitHub Pages repository 子目錄下正確載入。
+Vite 使用相對 `base`，因此 `docs/` 內的 JavaScript、CSS 與 WASM 資源可正確載入。
 
 ## 技術架構
 
@@ -128,7 +133,7 @@ WASM 由 Vite 打包為同站台的雜湊資產，不使用第三方 CDN。
 ## 專案結構
 
 ```text
-├─ .github/workflows/       GitHub Pages deployment
+├─ docs/                    GitHub Pages production build
 ├─ src/
 │  ├─ core/                 QPDF 初始化、解密與錯誤分類
 │  ├─ utils/                檔名與檔案大小工具
