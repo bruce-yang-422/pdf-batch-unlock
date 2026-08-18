@@ -1,7 +1,30 @@
+# Dependencies and generated builds
 node_modules/
 dist/
 .vite/
+coverage/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Browser test artifacts
 .chrome-smoke-profile*/
 .edge-smoke-profile*/
 .smoke-*
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
