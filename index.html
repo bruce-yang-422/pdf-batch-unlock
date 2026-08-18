@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="完全在瀏覽器本機處理 PDF 的多功能工具" />
     <title>PDF 本機工具箱</title>
-    <script type="module" crossorigin src="./assets/index-CB1DEimM.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DO7Le7Lq.css">
   </head>
   <body>
     <main class="app-shell">
@@ -14,6 +12,17 @@
         <div class="eyebrow">Browser-only PDF toolbox</div>
         <h1 id="page-title">PDF 本機工具箱</h1>
         <p class="privacy-note">所有檔案均在您的瀏覽器本機處理，不會上傳至任何伺服器。</p>
+
+        <div class="mobile-tool-picker">
+          <label for="tool-select">選擇工具</label>
+          <select id="tool-select">
+            <option value="unlock">移除密碼</option>
+            <option value="merge">合併 PDF</option>
+            <option value="split">拆分 PDF</option>
+            <option value="jpg-to-pdf">JPG 轉 PDF</option>
+            <option value="pdf-to-jpg">PDF 轉 JPG</option>
+          </select>
+        </div>
 
         <nav class="tool-tabs" aria-label="PDF 工具">
           <button class="tool-tab is-active" type="button" data-tool="unlock">移除密碼</button>
@@ -56,11 +65,11 @@
           </div>
 
           <div id="jpg-options" class="options" hidden>
-            <label for="jpg-scale">JPG 清晰度</label>
+            <label for="jpg-scale">JPG 輸出解析度</label>
             <select id="jpg-scale">
-              <option value="1.5">標準（150%）</option>
-              <option value="2" selected>清晰（200%）</option>
-              <option value="3">高解析（300%）</option>
+              <option value="1.333333">螢幕（96 DPI）</option>
+              <option value="2.083333" selected>清晰（150 DPI）</option>
+              <option value="4.166667">高畫質（300 DPI）</option>
             </select>
           </div>
 
@@ -70,6 +79,7 @@
         <div id="status" class="status" role="status" aria-live="polite">準備就緒</div>
         <p id="limit-note" class="limit-note">檔案會逐一處理。瀏覽器可能會詢問是否允許下載多個檔案。</p>
       </section>
-    </main>
+    </main>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
