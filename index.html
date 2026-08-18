@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="完全在瀏覽器本機處理 PDF 的多功能工具" />
     <title>PDF 本機工具箱</title>
-    <script type="module" crossorigin src="./assets/index-BP6Zbr7r.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-D8xLhqzd.css">
+    <script type="module" crossorigin src="./assets/index-XfCSYlnY.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CFPIHGYZ.css">
   </head>
   <body>
     <main class="app-shell">
@@ -23,6 +23,8 @@
             <option value="split">拆分 PDF</option>
             <option value="jpg-to-pdf">JPG 轉 PDF</option>
             <option value="pdf-to-jpg">PDF 轉 JPG</option>
+            <option value="pages">頁面管理</option>
+            <option value="decorate">浮水印／頁碼</option>
           </select>
         </div>
 
@@ -32,6 +34,8 @@
           <button class="tool-tab" type="button" data-tool="split">拆分 PDF</button>
           <button class="tool-tab" type="button" data-tool="jpg-to-pdf">JPG 轉 PDF</button>
           <button class="tool-tab" type="button" data-tool="pdf-to-jpg">PDF 轉 JPG</button>
+          <button class="tool-tab" type="button" data-tool="pages">頁面管理</button>
+          <button class="tool-tab" type="button" data-tool="decorate">浮水印／頁碼</button>
         </nav>
 
         <section class="tool-intro" aria-live="polite">
@@ -69,6 +73,36 @@
                 </select>
               </div>
 
+              <div id="decorate-options" class="options decorate-options" hidden>
+                <label for="watermark-text">浮水印文字</label>
+                <input id="watermark-text" type="text" maxlength="80" placeholder="例如：機密文件（可留空）" />
+                <div class="option-grid">
+                  <label>透明度
+                    <input id="watermark-opacity" type="range" min="5" max="100" value="25" />
+                    <output id="watermark-opacity-value" for="watermark-opacity">25%</output>
+                  </label>
+                  <label for="watermark-position">位置
+                    <select id="watermark-position">
+                      <option value="center">置中</option>
+                      <option value="top-left">左上</option>
+                      <option value="top-right">右上</option>
+                      <option value="bottom-left">左下</option>
+                      <option value="bottom-right">右下</option>
+                    </select>
+                  </label>
+                  <label for="watermark-angle">旋轉角度
+                    <select id="watermark-angle">
+                      <option value="-45">-45°</option>
+                      <option value="-30" selected>-30°</option>
+                      <option value="0">0°</option>
+                      <option value="30">30°</option>
+                      <option value="45">45°</option>
+                    </select>
+                  </label>
+                </div>
+                <label class="check-option"><input id="add-page-numbers" type="checkbox" /> 自動在頁面下方加入頁碼</label>
+              </div>
+
               <button id="process-button" class="primary-button" type="submit">全部移除密碼並下載</button>
               <div id="status" class="status" role="status" aria-live="polite">準備就緒</div>
               <p id="limit-note" class="limit-note">檔案會逐一處理；多檔結果會打包成單一 ZIP 下載。</p>
@@ -77,10 +111,7 @@
             <aside class="activity-panel" aria-label="檔案與處理歷程">
               <section id="queue-section" class="queue-section" aria-labelledby="queue-title">
                 <div class="queue-heading">
-                  <div>
-                    <span class="section-kicker">Current batch</span>
-                    <h3 id="queue-title">待處理檔案</h3>
-                  </div>
+                  <div><span class="section-kicker">Current batch</span><h3 id="queue-title">待處理檔案</h3></div>
                   <button id="clear-files" class="text-button compact" type="button">清除全部</button>
                 </div>
                 <ul id="file-list" class="file-list"></ul>
@@ -88,16 +119,29 @@
 
               <section id="history-section" class="history-section" aria-labelledby="history-title">
                 <div class="queue-heading">
-                  <div>
-                    <span class="section-kicker">Session history</span>
-                    <h3 id="history-title">處理歷程</h3>
-                  </div>
-                  <button id="clear-history" class="text-button compact" type="button">清除歷程</button>
+                  <div><span class="section-kicker">Session history</span><h3 id="history-title">處理歷程</h3></div>
+                  <button id="clear-history" class="text-button compact" type="button">全部釋放</button>
                 </div>
                 <ol id="history-list" class="history-list"></ol>
               </section>
             </aside>
           </div>
+
+          <section id="page-manager-section" class="page-manager-section" hidden aria-labelledby="page-manager-title">
+            <div class="page-manager-heading">
+              <div><span class="section-kicker">Page workspace</span><h3 id="page-manager-title">頁面編排</h3></div>
+              <span id="page-selection-count" class="selection-count">已選取 0 頁</span>
+            </div>
+            <div class="page-toolbar" role="toolbar" aria-label="頁面操作">
+              <button id="select-all-pages" type="button">全選／取消</button>
+              <button id="rotate-pages-left" type="button">向左旋轉</button>
+              <button id="rotate-pages-right" type="button">向右旋轉</button>
+              <button id="delete-pages" class="danger-button" type="button">刪除選取</button>
+              <button id="extract-pages" class="accent-button" type="button">擷取選取頁面</button>
+            </div>
+            <p class="page-manager-note">點選頁面即可選取；拖曳卡片調整順序。手機可使用卡片上的左右箭頭排序。</p>
+            <ol id="page-grid" class="page-grid"></ol>
+          </section>
         </form>
       </section>
     </main>
