@@ -52,6 +52,12 @@ const errorSummary = document.querySelector('#error-summary');
 const errorReason = document.querySelector('#error-reason');
 const errorActions = document.querySelector('#error-actions');
 const dismissError = document.querySelector('#dismiss-error');
+const toolForm = document.querySelector('#tool-form');
+const passwordInput = document.querySelector('#password');
+const passwordLabel = document.querySelector('#password-label');
+const togglePassword = document.querySelector('#toggle-password');
+const confirmPasswordSection = document.querySelector('#confirm-password-section');
+const confirmPassword = document.querySelector('#confirm-password');
 
 const pageManagerHome = document.createComment('page-manager-home');
 const processButtonHome = document.createComment('process-button-home');
@@ -63,6 +69,11 @@ decorationPreview.before(decorationPreviewHome);
 let toastTimer;
 let touchSort = null;
 let touchSortTimer = null;
+let touchSortFrame = null;
+let pendingTouchPoint = null;
+let fileSortFrame = null;
+let pendingFileSort = null;
+let fileDropIndicator = null;
 let suppressPageClickUntil = 0;
 let previewImageUrl = null;
 let previewImageAspectRatio = 1;
@@ -73,6 +84,10 @@ let previewPdfFile = null;
 let previewPageWidth = 595;
 let previewPageHeight = 842;
 let lastCoreError = null;
+
+const emptyDragImage = document.createElement('canvas');
+emptyDragImage.width = 1;
+emptyDragImage.height = 1;
 
 function activeTool() {
   return tabs.find((tab) => tab.classList.contains('is-active'))?.dataset.tool ?? 'unlock';
@@ -117,6 +132,15 @@ function updateResponsiveLayout() {
   }
 
   updateUploadMode();
+  updatePasswordMode();
+}
+
+function updatePasswordMode() {
+  const protectMode = activeTool() === 'protect';
+  passwordLabel.textContent = protectMode ? '新密碼' : 'PDF 密碼';
+  passwordInput.placeholder = protectMode ? '輸入新的 PDF 開啟密碼' : '輸入 PDF 密碼';
+  confirmPasswordSection.hidden = !protectMode;
+  if (!protectMode) confirmPassword.value = '';
 }
 
 function updateHistoryState(expanded) {
@@ -128,8 +152,10 @@ function updateHistoryState(expanded) {
 function updateStatusPresentation() {
   clearTimeout(toastTimer);
   status.classList.remove('is-success-toast', 'is-toast-hidden');
+  confirmPassword.disabled = status.dataset.kind === 'working';
 
   if (status.dataset.kind === 'success') {
+    if (activeTool() === 'protect') confirmPassword.value = '';
     status.classList.add('is-success-toast');
     toastTimer = window.setTimeout(() => {
       status.classList.remove('is-success-toast');
@@ -144,8 +170,26 @@ function updateStatusPresentation() {
   }
 }
 
+toolForm.addEventListener('submit', (event) => {
+  if (activeTool() !== 'protect' || passwordInput.value === confirmPassword.value) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  status.textContent = '兩次輸入的密碼不一致。';
+  status.dataset.kind = 'error';
+  showErrorNotice('無法為 PDF 加上密碼。', '兩次輸入的密碼不一致。');
+  confirmPassword.focus();
+}, { capture: true });
+
+togglePassword.addEventListener('click', () => {
+  confirmPassword.type = passwordInput.type;
+});
+
 function errorExplanation(message = '') {
   const text = message.toLowerCase();
+  if (/不一致|do not match|not match|一致しません|일치하지|no coinciden|stimmen nicht|ne correspondent pas/.test(text)) return {
+    reason: '兩次輸入的密碼不一致。',
+    actions: ['確認兩個欄位完全相同後再試一次。'],
+  };
   if (/password|密碼/.test(text)) return {
     reason: 'PDF 密碼不正確，或檔案使用目前工具無法處理的加密方式。',
     actions: ['重新確認密碼及大小寫。', '先使用「移除密碼」產生未加密 PDF，再執行其他工具。'],
@@ -544,6 +588,70 @@ function dispatchSortEvent(target, type) {
   target.dispatchEvent(new Event(type, { bubbles: true, cancelable: true }));
 }
 
+function clearFileDropIndicator() {
+  if (fileSortFrame !== null) cancelAnimationFrame(fileSortFrame);
+  fileSortFrame = null;
+  pendingFileSort = null;
+  fileDropIndicator?.classList.remove('drop-before', 'drop-after');
+  fileDropIndicator = null;
+}
+
+function updateFileDropIndicator() {
+  fileSortFrame = null;
+  const pending = pendingFileSort;
+  pendingFileSort = null;
+  if (!pending?.target?.isConnected) return;
+
+  const rect = pending.target.getBoundingClientRect();
+  const position = pending.clientY > rect.top + rect.height / 2 ? 'drop-after' : 'drop-before';
+  if (fileDropIndicator !== pending.target) {
+    fileDropIndicator?.classList.remove('drop-before', 'drop-after');
+    fileDropIndicator = pending.target;
+  }
+  fileDropIndicator.classList.toggle('drop-before', position === 'drop-before');
+  fileDropIndicator.classList.toggle('drop-after', position === 'drop-after');
+}
+
+function setLightweightDragImage(event) {
+  if (!event.dataTransfer) return;
+  event.dataTransfer.setDragImage(emptyDragImage, 0, 0);
+  document.body.classList.add('is-native-sorting');
+}
+
+document.addEventListener('dragstart', (event) => {
+  const source = event.target instanceof Element
+    ? event.target.closest('.page-card[draggable="true"], .drag-handle[draggable="true"]')
+    : null;
+  if (source) setLightweightDragImage(event);
+}, { capture: true });
+
+document.addEventListener('dragend', () => {
+  document.body.classList.remove('is-native-sorting');
+  clearFileDropIndicator();
+}, { capture: true });
+
+document.addEventListener('selectstart', (event) => {
+  if (document.body.classList.contains('is-native-sorting')) event.preventDefault();
+}, { capture: true });
+
+fileList.addEventListener('dragover', (event) => {
+  const source = fileList.querySelector('.file-row.is-dragging');
+  const target = event.target instanceof Element ? event.target.closest('.file-row') : null;
+  if (!source || !target) return;
+
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  if (target === source) {
+    clearFileDropIndicator();
+    return;
+  }
+
+  pendingFileSort = { target, clientY: event.clientY };
+  if (fileSortFrame === null) fileSortFrame = requestAnimationFrame(updateFileDropIndicator);
+}, { capture: true });
+
+fileList.addEventListener('drop', clearFileDropIndicator, { capture: true });
+
 function pageCardAtPoint(clientX, clientY) {
   return document.elementFromPoint(clientX, clientY)?.closest('.page-card') ?? null;
 }
@@ -551,11 +659,27 @@ function pageCardAtPoint(clientX, clientY) {
 function clearTouchSort() {
   clearTimeout(touchSortTimer);
   touchSortTimer = null;
+  if (touchSortFrame !== null) cancelAnimationFrame(touchSortFrame);
+  touchSortFrame = null;
+  pendingTouchPoint = null;
   pageGrid.querySelectorAll('.is-touch-dragging, .is-touch-drop-target').forEach((card) => {
     card.classList.remove('is-touch-dragging', 'is-touch-drop-target');
   });
   document.body.classList.remove('is-touch-sorting');
   touchSort = null;
+}
+
+function updateTouchSortTarget() {
+  touchSortFrame = null;
+  const point = pendingTouchPoint;
+  pendingTouchPoint = null;
+  if (!touchSort?.active || !point) return;
+
+  const target = pageCardAtPoint(point.clientX, point.clientY);
+  if (!target || target === touchSort.source || touchSort.target === target) return;
+  touchSort.target?.classList.remove('is-touch-drop-target');
+  touchSort.target = target;
+  target.classList.add('is-touch-drop-target');
 }
 
 function touchByIdentifier(touchList, identifier) {
@@ -599,15 +723,8 @@ pageGrid.addEventListener('touchmove', (event) => {
   }
 
   event.preventDefault();
-  const target = pageCardAtPoint(touch.clientX, touch.clientY);
-  if (!target || target === touchSort.source) return;
-
-  if (touchSort.target !== target) {
-    touchSort.target?.classList.remove('is-touch-drop-target');
-    touchSort.target = target;
-    target.classList.add('is-touch-drop-target');
-  }
-  dispatchSortEvent(target, 'dragover');
+  pendingTouchPoint = { clientX: touch.clientX, clientY: touch.clientY };
+  if (touchSortFrame === null) touchSortFrame = requestAnimationFrame(updateTouchSortTarget);
 }, { passive: false });
 
 function finishTouchSort(event) {
@@ -618,8 +735,12 @@ function finishTouchSort(event) {
   clearTimeout(touchSortTimer);
   if (touchSort.active) {
     event.preventDefault();
+    if (touchSortFrame !== null) cancelAnimationFrame(touchSortFrame);
+    touchSortFrame = null;
+    pendingTouchPoint = null;
     const source = touchSort.source;
-    const target = pageCardAtPoint(touch.clientX, touch.clientY) ?? touchSort.target;
+    const hitTarget = pageCardAtPoint(touch.clientX, touch.clientY);
+    const target = hitTarget && hitTarget !== source ? hitTarget : touchSort.target;
     if (target && target !== source) dispatchSortEvent(target, 'drop');
     dispatchSortEvent(source, 'dragend');
     suppressPageClickUntil = Date.now() + 500;

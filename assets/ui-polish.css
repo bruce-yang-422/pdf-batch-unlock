@@ -1,9 +1,26 @@
 /* UI refinements layered on top of the production bundle. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
 .header-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
+}
+
+.tool-tabs {
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.password-help {
+  margin: 8px 2px 0;
+  color: #778296;
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
 
 .language-switcher {
@@ -133,6 +150,7 @@
 }
 
 .page-card[draggable="true"] {
+  contain: layout paint style;
   cursor: grab;
   touch-action: pan-y;
   -webkit-touch-callout: none;
@@ -165,6 +183,31 @@
 body.is-touch-sorting {
   overscroll-behavior: contain;
   user-select: none;
+}
+
+body.is-native-sorting,
+body.is-native-sorting .drag-handle,
+body.is-native-sorting .page-card {
+  cursor: grabbing !important;
+}
+
+body.is-native-sorting {
+  overflow-x: clip;
+  overscroll-behavior: contain;
+}
+
+body.is-native-sorting {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body.is-native-sorting .page-card,
+body.is-native-sorting .page-preview img {
+  transition: none !important;
+}
+
+body.is-native-sorting .page-card:hover {
+  transform: none;
 }
 
 .decorate-options .watermark-type-options,
