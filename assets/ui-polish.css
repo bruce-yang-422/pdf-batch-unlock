@@ -146,6 +146,33 @@ body.is-touch-sorting {
   user-select: none;
 }
 
+.decorate-options .watermark-type-options,
+.decorate-options .page-number-options {
+  margin-top: 14px;
+}
+
+.decorate-options .page-number-options[hidden] {
+  display: none;
+}
+
+.decorate-options output {
+  display: inline-block;
+  min-width: 54px;
+  margin-top: 5px;
+  color: #236a9f;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.decorate-options input[type="range"] {
+  width: 100%;
+  accent-color: #16705a;
+}
+
+#watermark-position-label.is-disabled-option {
+  opacity: 0.5;
+}
+
 @media (max-width: 640px) {
   .card {
     padding-top: 16px;

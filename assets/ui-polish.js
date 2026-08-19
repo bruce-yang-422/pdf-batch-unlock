@@ -9,6 +9,17 @@ const historySection = document.querySelector('#history-section');
 const historyToggle = document.querySelector('#toggle-history');
 const status = document.querySelector('#status');
 const mobileQuery = window.matchMedia('(max-width: 640px)');
+const watermarkLayout = document.querySelector('#watermark-layout');
+const watermarkPosition = document.querySelector('#watermark-position');
+const watermarkPositionLabel = document.querySelector('#watermark-position-label');
+const watermarkSize = document.querySelector('#watermark-size');
+const watermarkSizeValue = document.querySelector('#watermark-size-value');
+const watermarkScale = document.querySelector('#watermark-scale');
+const watermarkScaleValue = document.querySelector('#watermark-scale-value');
+const addPageNumbers = document.querySelector('#add-page-numbers');
+const pageNumberOptions = document.querySelector('#page-number-options');
+const pageNumberSize = document.querySelector('#page-number-size');
+const pageNumberSizeValue = document.querySelector('#page-number-size-value');
 
 const pageManagerHome = document.createComment('page-manager-home');
 const processButtonHome = document.createComment('process-button-home');
@@ -54,6 +65,18 @@ function updateStatusPresentation() {
       status.classList.add('is-toast-hidden');
     }, 4200);
   }
+}
+
+function updateDecorationOptions() {
+  if (!watermarkLayout) return;
+  const repeated = watermarkLayout.value === 'repeat';
+  watermarkPosition.disabled = repeated;
+  watermarkPositionLabel.classList.toggle('is-disabled-option', repeated);
+  watermarkPositionLabel.title = repeated ? '重複模式會自動鋪滿頁面，不使用單一位置。' : '';
+  watermarkSizeValue.textContent = `${watermarkSize.value} pt`;
+  watermarkScaleValue.textContent = `${watermarkScale.value}%`;
+  pageNumberOptions.hidden = !addPageNumbers.checked;
+  pageNumberSizeValue.textContent = `${pageNumberSize.value} pt`;
 }
 
 function dispatchSortEvent(target, type) {
@@ -159,6 +182,12 @@ historyToggle.addEventListener('click', () => {
   updateHistoryState(historyToggle.getAttribute('aria-expanded') !== 'true');
 });
 
+watermarkLayout?.addEventListener('change', updateDecorationOptions);
+watermarkSize?.addEventListener('input', updateDecorationOptions);
+watermarkScale?.addEventListener('input', updateDecorationOptions);
+addPageNumbers?.addEventListener('change', updateDecorationOptions);
+pageNumberSize?.addEventListener('input', updateDecorationOptions);
+
 const tabObserver = new MutationObserver(updateResponsiveLayout);
 tabs.forEach((tab) => tabObserver.observe(tab, { attributes: true, attributeFilter: ['class'] }));
 
@@ -169,3 +198,4 @@ mobileQuery.addEventListener?.('change', updateResponsiveLayout);
 updateHistoryState(false);
 updateResponsiveLayout();
 updateStatusPresentation();
+updateDecorationOptions();
