@@ -23,6 +23,207 @@ body {
   line-height: 1.5;
 }
 
+.protect-password-mode {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 20px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.protect-password-mode[hidden],
+.generated-password-options[hidden],
+#custom-password-options[hidden] {
+  display: none;
+}
+
+.protect-password-mode legend {
+  grid-column: 1 / -1;
+  margin-bottom: 7px;
+  color: #17233a;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.protect-password-mode label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid #ccd7e3;
+  border-radius: 12px;
+  color: #40506a;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.84rem;
+  font-weight: 750;
+}
+
+.protect-password-mode label:has(input:checked) {
+  border-color: #298474;
+  color: #126653;
+  background: #edf8f4;
+  box-shadow: 0 0 0 2px rgb(41 132 116 / 10%);
+}
+
+.protect-password-mode input,
+.generated-password-settings input[type="checkbox"] {
+  accent-color: #16705a;
+}
+
+.generated-password-options {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.generated-password-settings {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 14px;
+}
+
+.password-length-control {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.password-length-control > label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  color: #17233a;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.password-length-control input[type="range"] {
+  width: 100%;
+  accent-color: #16705a;
+}
+
+.password-length-control output {
+  color: #236a9f;
+  font-weight: 800;
+}
+
+.password-length-control datalist {
+  display: none;
+}
+
+.password-strength-scale {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  color: #778296;
+}
+
+.password-strength-scale span {
+  display: grid;
+  gap: 1px;
+  justify-items: center;
+  font-size: 0.68rem;
+}
+
+.password-strength-scale span:first-child {
+  justify-items: start;
+}
+
+.password-strength-scale span:last-child {
+  justify-items: end;
+}
+
+.password-strength-scale b {
+  color: #526075;
+  font-size: 0.7rem;
+}
+
+.password-strength-scale small {
+  font-size: 0.66rem;
+  white-space: nowrap;
+}
+
+.password-strength-warning {
+  margin: 3px 0 0;
+  padding: 8px 10px;
+  border-left: 3px solid #c47b16;
+  border-radius: 7px;
+  color: #7b4b0e;
+  background: #fff7e8;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.password-strength-warning[hidden] {
+  display: none;
+}
+
+.generated-password-settings .check-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: #344158;
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.generated-password-result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #b9dfd1;
+  border-radius: 12px;
+  background: #eff9f5;
+}
+
+.generated-password-result code {
+  min-width: 0;
+  overflow-x: auto;
+  padding: 5px 7px;
+  color: #173a33;
+  font-size: 0.94rem;
+  font-weight: 800;
+  white-space: nowrap;
+  user-select: all;
+}
+
+.generated-password-result button,
+.secondary-button {
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid #16705a;
+  border-radius: 10px;
+  color: #fff;
+  background: #16705a;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.secondary-button {
+  justify-self: start;
+  color: #16705a;
+  background: #fff;
+}
+
+.generated-password-result button:hover,
+.secondary-button:hover {
+  filter: brightness(0.95);
+}
+
+.generated-password-result button:focus-visible,
+.secondary-button:focus-visible,
+.protect-password-mode input:focus-visible {
+  outline: 3px solid rgb(35 106 159 / 24%);
+  outline-offset: 2px;
+}
+
 .language-switcher {
   display: flex;
   align-items: center;
@@ -547,6 +748,17 @@ body.is-native-sorting .page-card:hover {
 
   .activity-panel {
     padding: 12px 10px;
+  }
+
+  .protect-password-mode,
+  .generated-password-settings,
+  .generated-password-result {
+    grid-template-columns: 1fr;
+  }
+
+  .generated-password-result button,
+  .secondary-button {
+    width: 100%;
   }
 
   .activity-panel .empty-list {

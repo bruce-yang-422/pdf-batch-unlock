@@ -58,6 +58,17 @@ const passwordLabel = document.querySelector('#password-label');
 const togglePassword = document.querySelector('#toggle-password');
 const confirmPasswordSection = document.querySelector('#confirm-password-section');
 const confirmPassword = document.querySelector('#confirm-password');
+const protectPasswordMode = document.querySelector('#protect-password-mode');
+const protectPasswordSources = [...document.querySelectorAll('input[name="protect-password-source"]')];
+const customPasswordOptions = document.querySelector('#custom-password-options');
+const generatedPasswordOptions = document.querySelector('#generated-password-options');
+const generatedPasswordLength = document.querySelector('#generated-password-length');
+const generatedPasswordLengthValue = document.querySelector('#generated-password-length-value');
+const generatedPasswordWarning = document.querySelector('#generated-password-warning');
+const generatedPasswordSpecial = document.querySelector('#generated-password-special');
+const generatedPasswordValue = document.querySelector('#generated-password-value');
+const copyGeneratedPassword = document.querySelector('#copy-generated-password');
+const regeneratePassword = document.querySelector('#regenerate-password');
 
 const pageManagerHome = document.createComment('page-manager-home');
 const processButtonHome = document.createComment('process-button-home');
@@ -137,10 +148,92 @@ function updateResponsiveLayout() {
 
 function updatePasswordMode() {
   const protectMode = activeTool() === 'protect';
+  const generatedMode = protectMode && selectedPasswordSource() === 'generated';
+  protectPasswordMode.hidden = !protectMode;
+  customPasswordOptions.hidden = generatedMode;
+  generatedPasswordOptions.hidden = !generatedMode;
   passwordLabel.textContent = protectMode ? '新密碼' : 'PDF 密碼';
   passwordInput.placeholder = protectMode ? '輸入新的 PDF 開啟密碼' : '輸入 PDF 密碼';
-  confirmPasswordSection.hidden = !protectMode;
-  if (!protectMode) confirmPassword.value = '';
+  confirmPasswordSection.hidden = !protectMode || generatedMode;
+
+  if (generatedMode && !generatedPasswordValue.textContent) generatePassword();
+  if (!protectMode) {
+    const generatedSource = protectPasswordSources.find((input) => input.value === 'generated');
+    const customSource = protectPasswordSources.find((input) => input.value === 'custom');
+    if (generatedSource?.checked) {
+      generatedSource.checked = false;
+      customSource.checked = true;
+      generatedPasswordValue.textContent = '';
+      passwordInput.value = '';
+    }
+    confirmPassword.value = '';
+  }
+}
+
+function selectedPasswordSource() {
+  return protectPasswordSources.find((input) => input.checked)?.value ?? 'custom';
+}
+
+function secureRandomIndex(maximum) {
+  if (!Number.isSafeInteger(maximum) || maximum < 1) throw new RangeError('Invalid password character set.');
+  const limit = 0x100000000 - (0x100000000 % maximum);
+  const value = new Uint32Array(1);
+  do crypto.getRandomValues(value); while (value[0] >= limit);
+  return value[0] % maximum;
+}
+
+function randomCharacter(characters) {
+  return characters[secureRandomIndex(characters.length)];
+}
+
+function generatePassword() {
+  const lower = 'abcdefghijkmnopqrstuvwxyz';
+  const upper = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const digits = '23456789';
+  const special = '!@#$%^&*_-+=';
+  const requestedLength = Number(generatedPasswordLength.value) || 24;
+  const length = Math.max(8, Math.min(40, 8 + Math.round((requestedLength - 8) / 4) * 4));
+  const requiredSets = [lower, upper, digits];
+  if (generatedPasswordSpecial.checked) requiredSets.push(special);
+  const characterSet = requiredSets.join('');
+  const characters = requiredSets.map(randomCharacter);
+  while (characters.length < length) characters.push(randomCharacter(characterSet));
+  for (let index = characters.length - 1; index > 0; index -= 1) {
+    const swapIndex = secureRandomIndex(index + 1);
+    [characters[index], characters[swapIndex]] = [characters[swapIndex], characters[index]];
+  }
+  const password = characters.join('');
+  generatedPasswordLength.value = String(length);
+  generatedPasswordLengthValue.value = String(length);
+  generatedPasswordWarning.hidden = length > 12;
+  generatedPasswordValue.textContent = password;
+  passwordInput.value = password;
+  confirmPassword.value = password;
+  return password;
+}
+
+async function copyGeneratedPasswordToClipboard() {
+  const password = generatedPasswordValue.textContent || generatePassword();
+  try {
+    await navigator.clipboard.writeText(password);
+  } catch {
+    const temporary = document.createElement('textarea');
+    temporary.value = password;
+    temporary.setAttribute('readonly', '');
+    temporary.style.position = 'fixed';
+    temporary.style.opacity = '0';
+    document.body.append(temporary);
+    temporary.select();
+    const copied = document.execCommand('copy');
+    temporary.remove();
+    if (!copied) {
+      status.textContent = '無法存取剪貼簿，請手動選取並複製密碼。';
+      status.dataset.kind = 'error';
+      return;
+    }
+  }
+  status.textContent = '密碼已複製到剪貼簿。';
+  status.dataset.kind = 'success';
 }
 
 function updateHistoryState(expanded) {
@@ -153,9 +246,14 @@ function updateStatusPresentation() {
   clearTimeout(toastTimer);
   status.classList.remove('is-success-toast', 'is-toast-hidden');
   confirmPassword.disabled = status.dataset.kind === 'working';
+  const working = status.dataset.kind === 'working';
+  for (const input of protectPasswordSources) input.disabled = working;
+  generatedPasswordLength.disabled = working;
+  generatedPasswordSpecial.disabled = working;
+  regeneratePassword.disabled = working;
 
   if (status.dataset.kind === 'success') {
-    if (activeTool() === 'protect') confirmPassword.value = '';
+    if (activeTool() === 'protect' && selectedPasswordSource() === 'custom') confirmPassword.value = '';
     status.classList.add('is-success-toast');
     toastTimer = window.setTimeout(() => {
       status.classList.remove('is-success-toast');
@@ -171,6 +269,12 @@ function updateStatusPresentation() {
 }
 
 toolForm.addEventListener('submit', (event) => {
+  if (activeTool() === 'protect' && selectedPasswordSource() === 'generated') {
+    const generated = generatedPasswordValue.textContent || generatePassword();
+    passwordInput.value = generated;
+    confirmPassword.value = generated;
+    return;
+  }
   if (activeTool() !== 'protect' || passwordInput.value === confirmPassword.value) return;
   event.preventDefault();
   event.stopImmediatePropagation();
@@ -183,6 +287,18 @@ toolForm.addEventListener('submit', (event) => {
 togglePassword.addEventListener('click', () => {
   confirmPassword.type = passwordInput.type;
 });
+
+for (const input of protectPasswordSources) input.addEventListener('change', (event) => {
+  if (event.target.value === 'custom') {
+    passwordInput.value = '';
+    confirmPassword.value = '';
+  }
+  updatePasswordMode();
+});
+generatedPasswordLength.addEventListener('input', generatePassword);
+generatedPasswordSpecial.addEventListener('change', generatePassword);
+regeneratePassword.addEventListener('click', generatePassword);
+copyGeneratedPassword.addEventListener('click', copyGeneratedPasswordToClipboard);
 
 function errorExplanation(message = '') {
   const text = message.toLowerCase();

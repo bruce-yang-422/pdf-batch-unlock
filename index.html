@@ -54,12 +54,12 @@
         }
       }
     </script>
-    <script type="module" crossorigin src="./assets/index-XfCSYlnY.js?v=20260819-2"></script>
-    <script type="module" src="./assets/ui-polish.js?v=20260819-8"></script>
-    <script type="module" src="./assets/i18n.js?v=20260819-3"></script>
+    <script type="module" crossorigin src="./assets/index-XfCSYlnY.js?v=20260819-3"></script>
+    <script type="module" src="./assets/ui-polish.js?v=20260819-10"></script>
+    <script type="module" src="./assets/i18n.js?v=20260819-5"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CFPIHGYZ.css">
     <link rel="stylesheet" href="./assets/layout-DH4mL2.css">
-    <link rel="stylesheet" href="./assets/ui-polish.css?v=20260819-7">
+    <link rel="stylesheet" href="./assets/ui-polish.css?v=20260819-9">
   </head>
   <body>
     <main class="app-shell">
@@ -126,17 +126,54 @@
               <p id="file-feedback" class="file-feedback" aria-live="polite">尚未加入檔案</p>
 
               <div id="password-section">
-                <label id="password-label" class="field-label" for="password">PDF 密碼</label>
-                <div class="password-field">
-                  <input id="password" type="password" name="pdf-password" autocomplete="new-password" data-1p-ignore placeholder="輸入 PDF 密碼" />
-                  <button id="toggle-password" class="text-button" type="button" aria-pressed="false">顯示</button>
-                </div>
-                <div id="confirm-password-section" hidden>
-                  <label class="field-label" for="confirm-password">再次輸入密碼</label>
+                <fieldset id="protect-password-mode" class="protect-password-mode" hidden>
+                  <legend>密碼設定方式</legend>
+                  <label><input type="radio" name="protect-password-source" value="custom" checked /> 自己設定密碼</label>
+                  <label><input type="radio" name="protect-password-source" value="generated" /> 系統產生密碼</label>
+                </fieldset>
+                <div id="custom-password-options">
+                  <label id="password-label" class="field-label" for="password">PDF 密碼</label>
                   <div class="password-field">
-                    <input id="confirm-password" type="password" name="confirm-pdf-password" autocomplete="new-password" data-1p-ignore placeholder="再次輸入相同密碼" />
+                    <input id="password" type="password" name="pdf-password" autocomplete="new-password" data-1p-ignore placeholder="輸入 PDF 密碼" />
+                    <button id="toggle-password" class="text-button" type="button" aria-pressed="false">顯示</button>
                   </div>
-                  <p class="password-help">使用 AES-256 加密；建議設定至少 8 個字元，請妥善保存密碼。</p>
+                  <div id="confirm-password-section" hidden>
+                    <label class="field-label" for="confirm-password">再次輸入密碼</label>
+                    <div class="password-field">
+                      <input id="confirm-password" type="password" name="confirm-pdf-password" autocomplete="new-password" data-1p-ignore placeholder="再次輸入相同密碼" />
+                    </div>
+                    <p class="password-help">使用 AES-256 加密；建議設定至少 8 個字元，請妥善保存密碼。</p>
+                  </div>
+                </div>
+                <div id="generated-password-options" class="generated-password-options" hidden>
+                  <div class="generated-password-settings">
+                    <div class="password-length-control">
+                      <label for="generated-password-length"><span>密碼長度</span>
+                        <output id="generated-password-length-value" for="generated-password-length">24</output>
+                      </label>
+                      <input id="generated-password-length" type="range" min="8" max="40" step="4" value="24" list="generated-password-length-marks" />
+                      <datalist id="generated-password-length-marks">
+                        <option value="8"></option><option value="12"></option><option value="16"></option>
+                        <option value="20"></option><option value="24"></option><option value="28"></option>
+                        <option value="32"></option><option value="36"></option><option value="40"></option>
+                      </datalist>
+                      <div class="password-strength-scale" aria-hidden="true">
+                        <span><b>8</b><small>較弱</small></span>
+                        <span><b>16</b><small>基本</small></span>
+                        <span><b>24</b><small>建議</small></span>
+                        <span><b>32</b><small>很強</small></span>
+                        <span><b>40</b><small>極強</small></span>
+                      </div>
+                      <p id="generated-password-warning" class="password-strength-warning" hidden>8–12 字元安全性較低，建議使用 24 字元以上。</p>
+                    </div>
+                    <label class="check-option"><input id="generated-password-special" type="checkbox" checked /> 包含特殊符號</label>
+                  </div>
+                  <div class="generated-password-result">
+                    <code id="generated-password-value" data-i18n-skip aria-label="系統產生的密碼"></code>
+                    <button id="copy-generated-password" type="button">複製密碼</button>
+                  </div>
+                  <button id="regenerate-password" class="secondary-button" type="button">重新產生密碼</button>
+                  <p class="password-help">下載時會同時提供加密檔案與密碼 TXT；畫面上的密碼會保留到離開此工具或重新整理頁面。</p>
                 </div>
               </div>
 
