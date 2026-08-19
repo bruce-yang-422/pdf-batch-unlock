@@ -6,10 +6,10 @@
     <meta name="description" content="完全在瀏覽器本機處理 PDF 的多功能工具" />
     <title>PDF 本機工具箱</title>
     <script type="module" crossorigin src="./assets/index-XfCSYlnY.js?v=20260819-1"></script>
-    <script type="module" src="./assets/ui-polish.js?v=20260819-1"></script>
+    <script type="module" src="./assets/ui-polish.js?v=20260819-4"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CFPIHGYZ.css">
     <link rel="stylesheet" href="./assets/layout-DH4mL2.css">
-    <link rel="stylesheet" href="./assets/ui-polish.css?v=20260819-1">
+    <link rel="stylesheet" href="./assets/ui-polish.css?v=20260819-4">
   </head>
   <body>
     <main class="app-shell">
@@ -98,8 +98,8 @@
                       </svg>
                     </span>
                     <span class="watermark-upload-copy">
-                      <strong>拖放圖片到這裡</strong>
-                      <span>或點一下選擇圖片</span>
+                      <strong>點一下選擇圖片</strong>
+                      <span>從裝置中選擇 PNG、JPG 或 SVG</span>
                     </span>
                     <span class="watermark-upload-button" aria-hidden="true">選擇圖片</span>
                   </label>
@@ -171,16 +171,17 @@
                 <section class="decoration-preview" aria-labelledby="decoration-preview-title">
                   <div class="decoration-preview-heading">
                     <strong id="decoration-preview-title">效果預覽</strong>
-                    <span>示意畫面</span>
+                    <span id="preview-mode-label">尚未載入 PDF</span>
                   </div>
                   <div id="decoration-preview-paper" class="decoration-preview-paper" aria-label="浮水印與頁碼效果預覽">
-                    <div class="preview-document-content" aria-hidden="true">
+                    <img id="preview-pdf-page" class="preview-pdf-page" alt="PDF 第一頁預覽" hidden />
+                    <div id="preview-document-placeholder" class="preview-document-content" aria-hidden="true">
                       <span></span><span></span><span></span><span></span><span></span><span></span>
                     </div>
                     <div id="preview-watermark-layer" class="preview-watermark-layer" aria-hidden="true"></div>
                     <span id="preview-page-number" class="preview-page-number" aria-hidden="true"></span>
                   </div>
-                  <p class="option-help">預覽用來確認版面與比例；實際位置會依 PDF 頁面尺寸略有不同。</p>
+                  <p class="option-help">加入 PDF 後會使用第一頁實際畫面預覽；輸出仍以原始 PDF 頁面尺寸計算。</p>
                 </section>
               </div>
 

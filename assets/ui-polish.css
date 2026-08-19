@@ -1,13 +1,9 @@
 /* UI refinements layered on top of the production bundle. */
 @media (min-width: 901px) {
   .card {
-    width: min(100%, 1320px);
+    width: min(100%, 1480px);
     padding: clamp(28px, 4vw, 48px);
     transition: width 180ms ease;
-  }
-
-  .card.page-manager-mode {
-    width: min(100%, 1480px);
   }
 
   .card.page-manager-mode .page-grid {
@@ -183,7 +179,7 @@ body.is-touch-sorting {
   gap: 14px;
   min-height: 94px;
   padding: 16px 18px;
-  border: 2px dashed #9ab5c9;
+  border: 1px solid #b9ccda;
   border-radius: 14px;
   color: #344158;
   background: #f5f9fc;
@@ -191,8 +187,7 @@ body.is-touch-sorting {
   transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
 }
 
-.watermark-image-upload:hover,
-.watermark-image-upload.is-dragover {
+.watermark-image-upload:hover {
   border-color: #167c73;
   background: #edf8f5;
 }
@@ -318,6 +313,19 @@ body.is-touch-sorting {
   gap: 8%;
 }
 
+.preview-document-content[hidden],
+.preview-pdf-page[hidden] {
+  display: none;
+}
+
+.preview-pdf-page {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
 .preview-document-content::before {
   width: 52%;
   height: 8px;
@@ -367,6 +375,22 @@ body.is-touch-sorting {
   position: static;
   width: 86%;
   white-space: normal;
+}
+
+.preview-watermark-layer.is-repeat.is-image-repeat {
+  inset: 0;
+  display: block;
+}
+
+.preview-watermark-layer.is-image-repeat .preview-watermark-mark {
+  position: absolute;
+  max-width: none;
+  white-space: normal;
+  transform-origin: center;
+}
+
+.preview-watermark-layer.is-image-repeat .preview-watermark-mark img {
+  max-height: none;
 }
 
 .preview-watermark-mark img {

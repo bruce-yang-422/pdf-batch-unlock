@@ -9,6 +9,8 @@ const processButton = document.querySelector('#process-button');
 const historySection = document.querySelector('#history-section');
 const historyToggle = document.querySelector('#toggle-history');
 const status = document.querySelector('#status');
+const fileInput = document.querySelector('#file-input');
+const fileList = document.querySelector('#file-list');
 const dropTitle = document.querySelector('#drop-title');
 const dropHint = document.querySelector('#drop-hint');
 const mobileQuery = window.matchMedia('(max-width: 640px)');
@@ -42,6 +44,10 @@ const watermarkAngle = document.querySelector('#watermark-angle');
 const pageNumberFont = document.querySelector('#page-number-font');
 const previewWatermarkLayer = document.querySelector('#preview-watermark-layer');
 const previewPageNumber = document.querySelector('#preview-page-number');
+const previewPaper = document.querySelector('#decoration-preview-paper');
+const previewPdfPage = document.querySelector('#preview-pdf-page');
+const previewDocumentPlaceholder = document.querySelector('#preview-document-placeholder');
+const previewModeLabel = document.querySelector('#preview-mode-label');
 const decorationPreview = document.querySelector('.decoration-preview');
 const errorNotice = document.querySelector('#error-notice');
 const errorSummary = document.querySelector('#error-summary');
@@ -61,7 +67,13 @@ let touchSort = null;
 let touchSortTimer = null;
 let suppressPageClickUntil = 0;
 let previewImageUrl = null;
+let previewImageAspectRatio = 1;
 let previewImageToken = 0;
+let previewPdfUrl = null;
+let previewPdfToken = 0;
+let previewPdfFile = null;
+let previewPageWidth = 595;
+let previewPageHeight = 842;
 let lastCoreError = null;
 
 function activeTool() {
@@ -77,16 +89,14 @@ function updateUploadMode() {
     if (dropHint.textContent !== '從裝置中選擇要處理的檔案') dropHint.dataset.desktopCopy = dropHint.textContent;
     dropTitle.textContent = '點一下選擇檔案';
     dropHint.textContent = '從裝置中選擇要處理的檔案';
-    watermarkUploadTitle.textContent = '點一下選擇圖片';
-    watermarkUploadHint.textContent = '從裝置中選擇 PNG、JPG 或 SVG';
   } else {
     if (dropTitle.dataset.desktopCopy) dropTitle.textContent = dropTitle.dataset.desktopCopy;
     if (dropHint.dataset.desktopCopy) dropHint.textContent = dropHint.dataset.desktopCopy;
     delete dropTitle.dataset.desktopCopy;
     delete dropHint.dataset.desktopCopy;
-    watermarkUploadTitle.textContent = '拖放圖片到這裡';
-    watermarkUploadHint.textContent = '或點一下選擇圖片';
   }
+  watermarkUploadTitle.textContent = '點一下選擇圖片';
+  watermarkUploadHint.textContent = '從裝置中選擇 PNG、JPG 或 SVG';
 }
 
 function updateResponsiveLayout() {
@@ -191,12 +201,14 @@ function hideErrorNotice() {
 }
 
 function previewPosition() {
+  const horizontalEdge = Math.max(1, 28 / previewPageWidth * 100);
+  const verticalEdge = Math.max(1, 28 / previewPageHeight * 100);
   return {
     center: { left: '50%', top: '50%', translate: 'translate(-50%, -50%)' },
-    'top-left': { left: '11%', top: '11%', translate: 'translate(0, 0)' },
-    'top-right': { left: '89%', top: '11%', translate: 'translate(-100%, 0)' },
-    'bottom-left': { left: '11%', top: '89%', translate: 'translate(0, -100%)' },
-    'bottom-right': { left: '89%', top: '89%', translate: 'translate(-100%, -100%)' },
+    'top-left': { left: `${horizontalEdge}%`, top: `${verticalEdge}%`, translate: 'translate(0, 0)' },
+    'top-right': { left: `${100 - horizontalEdge}%`, top: `${verticalEdge}%`, translate: 'translate(-100%, 0)' },
+    'bottom-left': { left: `${horizontalEdge}%`, top: `${100 - verticalEdge}%`, translate: 'translate(0, -100%)' },
+    'bottom-right': { left: `${100 - horizontalEdge}%`, top: `${100 - verticalEdge}%`, translate: 'translate(-100%, -100%)' },
   }[watermarkPosition.value];
 }
 
@@ -221,22 +233,53 @@ function createPreviewMark({ repeated = false } = {}) {
   return mark;
 }
 
+function renderRepeatedImagePreview(angle, scale) {
+  const widthPercent = Math.min(90, Math.max(8, 30 * scale));
+  const pageAspectRatio = previewPageWidth / previewPageHeight;
+  const heightPercent = widthPercent * pageAspectRatio / Math.max(0.01, previewImageAspectRatio);
+  const horizontalStep = widthPercent + Math.max(34 / previewPageWidth * 100, 6);
+  const verticalStep = heightPercent + Math.max(42 / previewPageHeight * 100, 7);
+  let row = 0;
+  let count = 0;
+
+  for (let top = -heightPercent; top < 100 + heightPercent && count < 160; top += verticalStep) {
+    const rowOffset = row % 2 ? -horizontalStep / 2 : 0;
+    for (let left = rowOffset - widthPercent; left < 100 + widthPercent && count < 160; left += horizontalStep) {
+      const mark = createPreviewMark({ repeated: true });
+      if (!mark) return;
+      mark.style.left = `${left}%`;
+      mark.style.top = `${top}%`;
+      mark.style.width = `${widthPercent}%`;
+      mark.style.transform = `rotate(${angle}deg)`;
+      previewWatermarkLayer.append(mark);
+      count += 1;
+    }
+    row += 1;
+  }
+}
+
 function renderDecorationPreview() {
   if (!previewWatermarkLayer) return;
   previewWatermarkLayer.replaceChildren();
-  previewWatermarkLayer.classList.toggle('is-repeat', watermarkLayout.value === 'repeat');
+  const repeated = watermarkLayout.value === 'repeat';
+  const imageMode = watermarkSource.value === 'image';
+  previewWatermarkLayer.classList.toggle('is-repeat', repeated);
+  previewWatermarkLayer.classList.toggle('is-image-repeat', repeated && imageMode);
   previewWatermarkLayer.style.opacity = String(Number(watermarkOpacity.value) / 100);
   previewWatermarkLayer.style.transform = '';
   const angle = Number(watermarkAngle.value);
   const scale = Number(watermarkScale.value) / 100;
 
-  if (watermarkLayout.value === 'repeat') {
-    previewWatermarkLayer.style.transform = `rotate(${angle}deg) scale(${Math.min(1.35, Math.max(0.65, scale))})`;
-    for (let index = 0; index < 15; index += 1) {
-      const mark = createPreviewMark({ repeated: true });
-      if (!mark) break;
-      if (watermarkSource.value === 'image') mark.style.width = `${Math.min(95, Math.max(30, 48 * scale))}%`;
-      previewWatermarkLayer.append(mark);
+  if (repeated) {
+    if (imageMode) {
+      renderRepeatedImagePreview(angle, scale);
+    } else {
+      previewWatermarkLayer.style.transform = `rotate(${angle}deg) scale(${Math.min(1.35, Math.max(0.65, scale))})`;
+      for (let index = 0; index < 15; index += 1) {
+        const mark = createPreviewMark({ repeated: true });
+        if (!mark) break;
+        previewWatermarkLayer.append(mark);
+      }
     }
   } else {
     const mark = createPreviewMark();
@@ -244,7 +287,7 @@ function renderDecorationPreview() {
       const position = previewPosition();
       mark.style.left = position.left;
       mark.style.top = position.top;
-      if (watermarkSource.value === 'image') mark.style.width = `${Math.min(82, Math.max(8, 30 * scale))}%`;
+      if (imageMode) mark.style.width = `${Math.min(90, Math.max(8, 30 * scale))}%`;
       const textScale = watermarkSource.value === 'text' ? Math.min(3, Math.max(0.25, scale)) : 1;
       mark.style.transform = `${position.translate} rotate(${angle}deg) scale(${textScale})`;
       previewWatermarkLayer.append(mark);
@@ -258,12 +301,76 @@ function renderDecorationPreview() {
     courier: 'Courier New, monospace',
   }[pageNumberFont.value];
   previewPageNumber.style.fontSize = `${8 + (Number(pageNumberSize.value) - 8) / 2}px`;
+  previewPageNumber.style.bottom = `${Math.max(1, 16 / previewPageHeight * 100)}%`;
+}
+
+function resetPdfPagePreview() {
+  previewPdfToken += 1;
+  previewPdfFile = null;
+  if (previewPdfUrl) URL.revokeObjectURL(previewPdfUrl);
+  previewPdfUrl = null;
+  previewPageWidth = 595;
+  previewPageHeight = 842;
+  previewPdfPage.removeAttribute('src');
+  previewPdfPage.hidden = true;
+  previewDocumentPlaceholder.hidden = false;
+  previewPaper.style.aspectRatio = '210 / 297';
+  previewModeLabel.textContent = '尚未載入 PDF';
+  renderDecorationPreview();
+}
+
+async function renderPdfPagePreview(file) {
+  if (!file || activeTool() !== 'decorate' || !/\.pdf$/i.test(file.name)) return;
+  const token = ++previewPdfToken;
+  previewPdfFile = file;
+  previewModeLabel.textContent = '正在載入第 1 頁…';
+  let pdfDocument;
+
+  try {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    if (token !== previewPdfToken) return;
+    const loadingTask = globalThis.pdfjsLib.getDocument({ data: bytes });
+    pdfDocument = await loadingTask.promise;
+    const page = await pdfDocument.getPage(1);
+    const baseViewport = page.getViewport({ scale: 1 });
+    const renderScale = Math.min(2.5, Math.max(1, 720 / baseViewport.width));
+    const viewport = page.getViewport({ scale: renderScale });
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(viewport.width));
+    canvas.height = Math.max(1, Math.round(viewport.height));
+    const context = canvas.getContext('2d', { alpha: false });
+    await page.render({ canvasContext: context, viewport, background: '#ffffff' }).promise;
+    const blob = await new Promise((resolve, reject) => {
+      canvas.toBlob((result) => result ? resolve(result) : reject(new Error('無法建立 PDF 預覽圖片。')), 'image/jpeg', 0.86);
+    });
+    canvas.width = 0;
+    canvas.height = 0;
+    if (token !== previewPdfToken) return;
+
+    if (previewPdfUrl) URL.revokeObjectURL(previewPdfUrl);
+    previewPdfUrl = URL.createObjectURL(blob);
+    previewPageWidth = baseViewport.width;
+    previewPageHeight = baseViewport.height;
+    previewPaper.style.aspectRatio = `${previewPageWidth} / ${previewPageHeight}`;
+    previewPdfPage.src = previewPdfUrl;
+    previewPdfPage.hidden = false;
+    previewDocumentPlaceholder.hidden = true;
+    previewModeLabel.textContent = 'PDF 第 1 頁';
+    renderDecorationPreview();
+  } catch (error) {
+    if (token !== previewPdfToken) return;
+    resetPdfPagePreview();
+    showErrorNotice('無法載入 PDF 第一頁預覽。', error?.message ?? String(error));
+  } finally {
+    await pdfDocument?.destroy?.();
+  }
 }
 
 async function updatePreviewImage() {
   const token = ++previewImageToken;
   if (previewImageUrl) URL.revokeObjectURL(previewImageUrl);
   previewImageUrl = null;
+  previewImageAspectRatio = 1;
   if (!validateWatermarkImage()) {
     renderDecorationPreview();
     return;
@@ -285,6 +392,7 @@ async function updatePreviewImage() {
       return;
     }
     previewImageUrl = url;
+    previewImageAspectRatio = image.naturalWidth / Math.max(1, image.naturalHeight);
     hideErrorNotice();
   } catch (error) {
     showErrorNotice('無法建立圖片浮水印預覽。', error?.message ?? String(error));
@@ -424,41 +532,16 @@ function isFileDrag(event) {
 }
 
 function blockCompactFileDrop(event) {
-  if (!compactUploadQuery.matches || !isFileDrag(event)) return;
+  if (!isFileDrag(event)) return;
   const target = event.target instanceof Element
     ? event.target.closest('#drop-zone, #watermark-image-dropzone')
     : null;
   if (!target) return;
+  const shouldBlock = target === watermarkImageDropzone || compactUploadQuery.matches;
+  if (!shouldBlock) return;
   event.preventDefault();
   event.stopImmediatePropagation();
   target.classList.remove('is-dragging', 'is-dragover');
-}
-
-function handleWatermarkImageDrag(event) {
-  if (!isFileDrag(event)) return;
-  event.preventDefault();
-  event.dataTransfer.dropEffect = 'copy';
-  watermarkImageDropzone.classList.add('is-dragover');
-}
-
-function clearWatermarkImageDrag(event) {
-  if (event.type === 'dragleave' && watermarkImageDropzone.contains(event.relatedTarget)) return;
-  watermarkImageDropzone.classList.remove('is-dragover');
-}
-
-function dropWatermarkImage(event) {
-  if (!isFileDrag(event)) return;
-  event.preventDefault();
-  clearWatermarkImageDrag(event);
-  const files = [...(event.dataTransfer?.files ?? [])];
-  if (files.length !== 1) {
-    showErrorNotice('無法加入浮水印圖片。', '一次只能上傳一張 PNG、JPG 或 SVG 圖片。');
-    return;
-  }
-  const transfer = new DataTransfer();
-  transfer.items.add(files[0]);
-  watermarkImage.files = transfer.files;
-  updatePreviewImage();
 }
 
 function dispatchSortEvent(target, type) {
@@ -567,13 +650,19 @@ historyToggle.addEventListener('click', () => {
 watermarkLayout?.addEventListener('change', updateDecorationOptions);
 watermarkSource?.addEventListener('change', updateDecorationOptions);
 watermarkImage?.addEventListener('change', updatePreviewImage);
-watermarkImageDropzone?.addEventListener('dragenter', handleWatermarkImageDrag);
-watermarkImageDropzone?.addEventListener('dragover', handleWatermarkImageDrag);
-watermarkImageDropzone?.addEventListener('dragleave', clearWatermarkImageDrag);
-watermarkImageDropzone?.addEventListener('drop', dropWatermarkImage);
 for (const eventName of ['dragenter', 'dragover', 'drop']) {
   document.addEventListener(eventName, blockCompactFileDrop, { capture: true });
 }
+fileInput.addEventListener('change', (event) => {
+  const [file] = event.target.files ?? [];
+  if (file) renderPdfPagePreview(file);
+}, { capture: true });
+document.addEventListener('drop', (event) => {
+  if (compactUploadQuery.matches || activeTool() !== 'decorate') return;
+  const target = event.target instanceof Element ? event.target.closest('#drop-zone') : null;
+  const [file] = event.dataTransfer?.files ?? [];
+  if (target && file) renderPdfPagePreview(file);
+}, { capture: true });
 watermarkText?.addEventListener('input', renderDecorationPreview);
 watermarkFont?.addEventListener('change', renderDecorationPreview);
 watermarkSize?.addEventListener('input', updateDecorationOptions);
@@ -606,6 +695,11 @@ tabs.forEach((tab) => tabObserver.observe(tab, { attributes: true, attributeFilt
 
 const statusObserver = new MutationObserver(updateStatusPresentation);
 statusObserver.observe(status, { attributes: true, attributeFilter: ['data-kind'], childList: true, characterData: true, subtree: true });
+
+const fileListObserver = new MutationObserver(() => {
+  if (previewPdfFile && !fileList.querySelector('.file-row')) resetPdfPagePreview();
+});
+fileListObserver.observe(fileList, { childList: true });
 
 mobileQuery.addEventListener?.('change', updateResponsiveLayout);
 desktopQuery.addEventListener?.('change', updateResponsiveLayout);
