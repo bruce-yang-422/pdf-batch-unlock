@@ -111,6 +111,41 @@
 
 .site-footer a:hover { color: #236a9f; }
 
+.page-card[draggable="true"] {
+  cursor: grab;
+  touch-action: pan-y;
+  -webkit-touch-callout: none;
+}
+
+.page-card[draggable="true"] img {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.page-card[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.page-card.is-touch-dragging {
+  z-index: 3;
+  opacity: 0.58;
+  cursor: grabbing;
+  transform: scale(0.97);
+  box-shadow: 0 12px 28px rgba(38, 55, 78, 0.2);
+}
+
+.page-card.is-touch-drop-target {
+  outline: 3px dashed #236a9f;
+  outline-offset: 3px;
+  background: #e7f3fa;
+}
+
+body.is-touch-sorting {
+  overscroll-behavior: contain;
+  user-select: none;
+}
+
 @media (max-width: 640px) {
   .card {
     padding-top: 16px;

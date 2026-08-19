@@ -16,6 +16,9 @@ pageManager.before(pageManagerHome);
 processButton.before(processButtonHome);
 
 let toastTimer;
+let touchSort = null;
+let touchSortTimer = null;
+let suppressPageClickUntil = 0;
 
 function activeTool() {
   return tabs.find((tab) => tab.classList.contains('is-active'))?.dataset.tool ?? 'unlock';
@@ -52,6 +55,105 @@ function updateStatusPresentation() {
     }, 4200);
   }
 }
+
+function dispatchSortEvent(target, type) {
+  target.dispatchEvent(new Event(type, { bubbles: true, cancelable: true }));
+}
+
+function pageCardAtPoint(clientX, clientY) {
+  return document.elementFromPoint(clientX, clientY)?.closest('.page-card') ?? null;
+}
+
+function clearTouchSort() {
+  clearTimeout(touchSortTimer);
+  touchSortTimer = null;
+  pageGrid.querySelectorAll('.is-touch-dragging, .is-touch-drop-target').forEach((card) => {
+    card.classList.remove('is-touch-dragging', 'is-touch-drop-target');
+  });
+  document.body.classList.remove('is-touch-sorting');
+  touchSort = null;
+}
+
+function touchByIdentifier(touchList, identifier) {
+  return [...touchList].find((touch) => touch.identifier === identifier);
+}
+
+pageGrid.addEventListener('touchstart', (event) => {
+  if (event.touches.length !== 1 || event.target.closest('button')) return;
+  const source = event.target.closest('.page-card[draggable="true"]');
+  if (!source) return;
+
+  const touch = event.changedTouches[0];
+  touchSort = {
+    identifier: touch.identifier,
+    source,
+    target: source,
+    startX: touch.clientX,
+    startY: touch.clientY,
+    active: false,
+  };
+
+  touchSortTimer = window.setTimeout(() => {
+    if (!touchSort || touchSort.source !== source) return;
+    touchSort.active = true;
+    source.classList.add('is-touch-dragging');
+    document.body.classList.add('is-touch-sorting');
+    dispatchSortEvent(source, 'dragstart');
+    navigator.vibrate?.(20);
+  }, 260);
+}, { passive: true });
+
+pageGrid.addEventListener('touchmove', (event) => {
+  if (!touchSort) return;
+  const touch = touchByIdentifier(event.changedTouches, touchSort.identifier);
+  if (!touch) return;
+
+  if (!touchSort.active) {
+    const distance = Math.hypot(touch.clientX - touchSort.startX, touch.clientY - touchSort.startY);
+    if (distance > 10) clearTouchSort();
+    return;
+  }
+
+  event.preventDefault();
+  const target = pageCardAtPoint(touch.clientX, touch.clientY);
+  if (!target || target === touchSort.source) return;
+
+  if (touchSort.target !== target) {
+    touchSort.target?.classList.remove('is-touch-drop-target');
+    touchSort.target = target;
+    target.classList.add('is-touch-drop-target');
+  }
+  dispatchSortEvent(target, 'dragover');
+}, { passive: false });
+
+function finishTouchSort(event) {
+  if (!touchSort) return;
+  const touch = touchByIdentifier(event.changedTouches, touchSort.identifier);
+  if (!touch) return;
+
+  clearTimeout(touchSortTimer);
+  if (touchSort.active) {
+    event.preventDefault();
+    const source = touchSort.source;
+    const target = pageCardAtPoint(touch.clientX, touch.clientY) ?? touchSort.target;
+    if (target && target !== source) dispatchSortEvent(target, 'drop');
+    dispatchSortEvent(source, 'dragend');
+    suppressPageClickUntil = Date.now() + 500;
+  }
+  clearTouchSort();
+}
+
+pageGrid.addEventListener('touchend', finishTouchSort, { passive: false });
+pageGrid.addEventListener('touchcancel', clearTouchSort, { passive: true });
+pageGrid.addEventListener('contextmenu', (event) => {
+  if (touchSort?.active) event.preventDefault();
+});
+pageGrid.addEventListener('click', (event) => {
+  if (Date.now() < suppressPageClickUntil) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+}, true);
 
 historyToggle.addEventListener('click', () => {
   updateHistoryState(historyToggle.getAttribute('aria-expanded') !== 'true');
