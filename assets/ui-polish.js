@@ -22,8 +22,6 @@ const watermarkTextOptions = document.querySelector('#watermark-text-options');
 const watermarkImageOptions = document.querySelector('#watermark-image-options');
 const watermarkImage = document.querySelector('#watermark-image');
 const watermarkImageDropzone = document.querySelector('#watermark-image-dropzone');
-const watermarkUploadTitle = watermarkImageDropzone.querySelector('.watermark-upload-copy strong');
-const watermarkUploadHint = watermarkImageDropzone.querySelector('.watermark-upload-copy span');
 const watermarkImageFeedback = document.querySelector('#watermark-image-feedback');
 const watermarkFontLabel = document.querySelector('#watermark-font-label');
 const watermarkSizeLabel = document.querySelector('#watermark-size-label');
@@ -95,8 +93,6 @@ function updateUploadMode() {
     delete dropTitle.dataset.desktopCopy;
     delete dropHint.dataset.desktopCopy;
   }
-  watermarkUploadTitle.textContent = '點一下選擇圖片';
-  watermarkUploadHint.textContent = '從裝置中選擇 PNG、JPG 或 SVG';
 }
 
 function updateResponsiveLayout() {

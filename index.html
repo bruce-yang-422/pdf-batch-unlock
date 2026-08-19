@@ -6,15 +6,30 @@
     <meta name="description" content="完全在瀏覽器本機處理 PDF 的多功能工具" />
     <title>PDF 本機工具箱</title>
     <script type="module" crossorigin src="./assets/index-XfCSYlnY.js?v=20260819-1"></script>
-    <script type="module" src="./assets/ui-polish.js?v=20260819-4"></script>
+    <script type="module" src="./assets/ui-polish.js?v=20260819-5"></script>
+    <script type="module" src="./assets/i18n.js?v=20260819-1"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CFPIHGYZ.css">
     <link rel="stylesheet" href="./assets/layout-DH4mL2.css">
-    <link rel="stylesheet" href="./assets/ui-polish.css?v=20260819-4">
+    <link rel="stylesheet" href="./assets/ui-polish.css?v=20260819-5">
   </head>
   <body>
     <main class="app-shell">
       <section class="card" aria-labelledby="page-title">
-        <div class="eyebrow">本機瀏覽器 PDF 工具</div>
+        <div class="header-bar">
+          <div class="eyebrow">本機瀏覽器 PDF 工具</div>
+          <label class="language-switcher" for="language-select">
+            <span>語言</span>
+            <select id="language-select" data-i18n-skip aria-label="選擇介面語言">
+              <option value="zh-Hant">正體中文</option>
+              <option value="en">English</option>
+              <option value="ja">日本語</option>
+              <option value="ko">한국어</option>
+              <option value="es">Español</option>
+              <option value="de">Deutsch</option>
+              <option value="fr">Français</option>
+            </select>
+          </label>
+        </div>
         <h1 id="page-title">PDF 本機工具箱</h1>
         <p class="privacy-note"><span class="privacy-badge">✓ 100% 本機處理</span><span>檔案不會上傳至任何伺服器</span></p>
 
@@ -88,21 +103,18 @@
                 </div>
                 <div id="watermark-image-options" class="watermark-source-options" hidden>
                   <span class="option-label">浮水印圖片</span>
-                  <label id="watermark-image-dropzone" class="watermark-image-upload" for="watermark-image">
+                  <div id="watermark-image-dropzone" class="watermark-image-picker">
                     <input id="watermark-image" class="visually-hidden-file" type="file" accept="image/png,image/jpeg,image/svg+xml,.png,.jpg,.jpeg,.svg" />
-                    <span class="watermark-upload-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <label class="watermark-upload-button" for="watermark-image">
+                      <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 16V4" />
                         <path d="m7 9 5-5 5 5" />
                         <path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
                       </svg>
-                    </span>
-                    <span class="watermark-upload-copy">
-                      <strong>點一下選擇圖片</strong>
-                      <span>從裝置中選擇 PNG、JPG 或 SVG</span>
-                    </span>
-                    <span class="watermark-upload-button" aria-hidden="true">選擇圖片</span>
-                  </label>
+                      <span>選擇圖片</span>
+                    </label>
+                    <span class="watermark-upload-formats">從裝置選擇一張 PNG、JPG 或 SVG</span>
+                  </div>
                   <p id="watermark-image-feedback" class="option-help">支援 PNG、JPG、SVG，建議使用透明背景 PNG 或 SVG，最大 20 MB。</p>
                 </div>
                 <div class="option-grid watermark-type-options">
@@ -202,7 +214,7 @@
             <aside class="activity-panel" aria-label="檔案與處理歷程">
               <section id="queue-section" class="queue-section" aria-labelledby="queue-title">
                 <div class="queue-heading">
-                  <div><span class="section-kicker">Current batch</span><h3 id="queue-title">待處理檔案</h3></div>
+                  <div><span class="section-kicker">本批次</span><h3 id="queue-title">待處理檔案</h3></div>
                   <button id="clear-files" class="text-button compact" type="button">清除全部</button>
                 </div>
                 <ul id="file-list" class="file-list"></ul>
@@ -210,7 +222,7 @@
 
               <section id="history-section" class="history-section is-collapsed" aria-labelledby="history-title">
                 <div class="queue-heading">
-                  <div><span class="section-kicker">Session history</span><h3 id="history-title">處理歷程</h3></div>
+                  <div><span class="section-kicker">本次歷程</span><h3 id="history-title">處理歷程</h3></div>
                   <div class="history-actions">
                     <button id="toggle-history" class="text-button compact" type="button" aria-expanded="false" aria-controls="history-list">展開</button>
                     <button id="clear-history" class="text-button compact" type="button">全部釋放</button>
@@ -223,7 +235,7 @@
 
           <section id="page-manager-section" class="page-manager-section" hidden aria-labelledby="page-manager-title">
             <div class="page-manager-heading">
-              <div><span class="section-kicker">Page workspace</span><h3 id="page-manager-title">頁面編排</h3></div>
+              <div><span class="section-kicker">頁面工作區</span><h3 id="page-manager-title">頁面編排</h3></div>
               <span id="page-selection-count" class="selection-count">已選取 0 頁</span>
             </div>
             <div class="page-toolbar" role="toolbar" aria-label="頁面操作">
