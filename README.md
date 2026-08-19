@@ -94,6 +94,7 @@ Repository 只保留可直接部署的正式靜態網站：
 ```text
 .gitignore
 CNAME
+LICENSE
 README.md
 index.html
 robots.txt
@@ -142,3 +143,7 @@ Branch: main / (root)
 - [Privacy](https://pdf.stack-base.com/privacy)：本機文件處理、語言偏好與一般網站連線資料說明
 - [Terms](https://pdf.stack-base.com/terms)：合法使用、文件與密碼責任、服務現況及責任限制
 - [Open Source Licenses](https://pdf.stack-base.com/licenses)：PDF.js、pdf-lib、JSZip 與 QPDF 的第三方授權資訊
+
+## 授權
+
+本專案由 Bruce Yang 以 [MIT License](LICENSE) 授權。第三方元件仍依各自的授權條款提供，詳見 [Open Source Licenses](https://pdf.stack-base.com/licenses)。
