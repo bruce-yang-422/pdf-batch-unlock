@@ -393,11 +393,12 @@ body {
 .history-section {
   overflow: hidden;
   padding: 0 14px 14px;
-  border: 1px solid #26364b;
+  border: 1px solid #c7d8e5;
   border-radius: 14px;
-  color: #d9e6f2;
-  background: #142033;
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 4%), 0 8px 24px rgb(18 31 48 / 9%);
+  color: #314158;
+  background: #f6fafd;
+  box-shadow: inset 0 1px 0 #fff, 0 8px 24px rgb(43 75 102 / 9%);
+  font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
 }
 
 .terminal-titlebar {
@@ -407,15 +408,15 @@ body {
   min-height: 36px;
   margin: 0 -14px 14px;
   padding: 7px 11px;
-  border-bottom: 1px solid #2a3a50;
-  color: #91a4ba;
-  background: #182436;
+  border-bottom: 1px solid #c7d8e5;
+  color: #60758d;
+  background: #e8f0f6;
   font-size: 0.67rem;
   letter-spacing: 0.02em;
 }
 
-.terminal-titlebar > span:nth-child(2) {
-  font-weight: 750;
+.terminal-titlebar code {
+  font: inherit;
 }
 
 .terminal-lights {
@@ -434,74 +435,92 @@ body {
 .terminal-lights i:nth-child(3) { background: #28c840; }
 
 .history-section .section-kicker {
-  display: none;
+  color: #16705a;
+  letter-spacing: 0.04em;
+}
+
+.history-section .section-kicker::before {
+  margin-right: 5px;
+  color: #236a9f;
+  content: "$";
 }
 
 .history-section .queue-heading h3 {
-  color: #eef6ff;
+  color: #223149;
   font-weight: 700;
+}
+
+.history-section .queue-heading h3::after {
+  margin-left: 5px;
+  color: #16705a;
+  content: "_";
+  animation: terminal-cursor 1.05s steps(1) infinite;
+}
+
+@keyframes terminal-cursor {
+  50% { opacity: 0; }
 }
 
 .history-section .text-button.compact,
 .history-section .history-actions button {
   min-height: 34px;
   padding: 5px 9px;
-  border: 1px solid #3a526d;
+  border: 1px solid #b8cddd;
   border-radius: 7px;
-  color: #8ed8f5;
-  background: #162337;
+  color: #236a9f;
+  background: #fff;
   font-size: 0.72rem;
 }
 
 .history-section .text-button.compact:hover,
 .history-section .history-actions button:hover {
-  border-color: #55bfe6;
-  color: #dff6ff;
-  background: #1c3047;
+  border-color: #6ea3c5;
+  color: #174f78;
+  background: #edf6fb;
 }
 
 .history-section .history-list {
-  scrollbar-color: #3c536d #111c2b;
+  scrollbar-color: #a8bdcc #edf3f7;
 }
 
 .history-section .empty-list {
-  border-color: #34475e;
-  color: #8ea1b7;
-  background: #111c2b;
+  border-color: #c7d8e5;
+  color: #687b91;
+  background: #fff;
   text-align: left;
 }
 
 .history-section .empty-list::before {
   margin-right: 7px;
-  color: #69d6a7;
+  color: #21a179;
   content: "●";
   font-size: 0.55rem;
   vertical-align: 0.12em;
 }
 
 .history-section .history-item {
-  border-color: #2d4056;
-  color: #d9e6f2;
-  background: #111d2c;
+  border-color: #d4e0e9;
+  color: #314158;
+  background: #fff;
 }
 
 .history-section .history-item summary {
-  color: #d9e6f2;
+  color: #314158;
 }
 
 .history-section .history-time,
 .history-section .history-summary,
 .history-section .history-file,
 .history-section .released-note {
-  color: #91a4ba;
+  color: #687b91;
 }
 
-.history-section .history-summary [data-kind="success"] { color: #69d6a7; }
-.history-section .history-summary [data-kind="failed"] { color: #ff8e98; }
-.history-section .history-details { border-color: #2a3a50; }
+.history-section .history-summary [data-kind="success"] { color: #16705a; }
+.history-section .history-summary [data-kind="failed"] { color: #a02e37; }
+.history-section .history-details { border-color: #e1e9ef; }
 
 .history-section .history-actions .release-result {
-  color: #ff9aa3;
+  color: #a02e37;
 }
 
 .page-card[draggable="true"] {
@@ -966,6 +985,10 @@ body.is-native-sorting .page-card:hover {
   .card,
   .status.is-success-toast {
     transition: none;
+    animation: none;
+  }
+
+  .history-section .queue-heading h3::after {
     animation: none;
   }
 
