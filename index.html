@@ -6,15 +6,17 @@
     <meta name="description" content="完全在瀏覽器本機處理 PDF 的多功能工具" />
     <title>PDF 本機工具箱</title>
     <script type="module" crossorigin src="./assets/index-XfCSYlnY.js"></script>
+    <script type="module" src="./assets/ui-polish.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CFPIHGYZ.css">
     <link rel="stylesheet" href="./assets/layout-DH4mL2.css">
+    <link rel="stylesheet" href="./assets/ui-polish.css">
   </head>
   <body>
     <main class="app-shell">
       <section class="card" aria-labelledby="page-title">
-        <div class="eyebrow">Browser-only PDF toolbox</div>
+        <div class="eyebrow">本機瀏覽器 PDF 工具</div>
         <h1 id="page-title">PDF 本機工具箱</h1>
-        <p class="privacy-note">所有檔案均在您的瀏覽器本機處理，不會上傳至任何伺服器。</p>
+        <p class="privacy-note"><span class="privacy-badge">✓ 100% 本機處理</span><span>檔案不會上傳至任何伺服器</span></p>
 
         <div class="mobile-tool-picker">
           <label for="tool-select">選擇工具</label>
@@ -60,7 +62,7 @@
               <div id="password-section">
                 <label class="field-label" for="password">PDF 密碼</label>
                 <div class="password-field">
-                  <input id="password" type="password" autocomplete="off" placeholder="輸入 PDF 密碼" />
+                  <input id="password" type="password" name="pdf-password" autocomplete="new-password" data-1p-ignore placeholder="輸入 PDF 密碼" />
                   <button id="toggle-password" class="text-button" type="button" aria-pressed="false">顯示</button>
                 </div>
               </div>
@@ -118,10 +120,13 @@
                 <ul id="file-list" class="file-list"></ul>
               </section>
 
-              <section id="history-section" class="history-section" aria-labelledby="history-title">
+              <section id="history-section" class="history-section is-collapsed" aria-labelledby="history-title">
                 <div class="queue-heading">
                   <div><span class="section-kicker">Session history</span><h3 id="history-title">處理歷程</h3></div>
-                  <button id="clear-history" class="text-button compact" type="button">全部釋放</button>
+                  <div class="history-actions">
+                    <button id="toggle-history" class="text-button compact" type="button" aria-expanded="false" aria-controls="history-list">展開</button>
+                    <button id="clear-history" class="text-button compact" type="button">全部釋放</button>
+                  </div>
                 </div>
                 <ol id="history-list" class="history-list"></ol>
               </section>
@@ -148,7 +153,7 @@
         <footer class="site-footer">
           <span>© 2026 Bruce</span>
           <span aria-hidden="true">·</span>
-          <span>Built with OpenAI Codex AI</span>
+          <a href="https://github.com/bruce-yang-422/pdf-batch-unlock">GitHub</a>
         </footer>
       </section>
     </main>
