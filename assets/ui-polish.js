@@ -27,6 +27,18 @@ const addPageNumbers = document.querySelector('#add-page-numbers');
 const pageNumberOptions = document.querySelector('#page-number-options');
 const pageNumberSize = document.querySelector('#page-number-size');
 const pageNumberSizeValue = document.querySelector('#page-number-size-value');
+const watermarkText = document.querySelector('#watermark-text');
+const watermarkFont = document.querySelector('#watermark-font');
+const watermarkOpacity = document.querySelector('#watermark-opacity');
+const watermarkAngle = document.querySelector('#watermark-angle');
+const pageNumberFont = document.querySelector('#page-number-font');
+const previewWatermarkLayer = document.querySelector('#preview-watermark-layer');
+const previewPageNumber = document.querySelector('#preview-page-number');
+const errorNotice = document.querySelector('#error-notice');
+const errorSummary = document.querySelector('#error-summary');
+const errorReason = document.querySelector('#error-reason');
+const errorActions = document.querySelector('#error-actions');
+const dismissError = document.querySelector('#dismiss-error');
 
 const pageManagerHome = document.createComment('page-manager-home');
 const processButtonHome = document.createComment('process-button-home');
@@ -37,6 +49,9 @@ let toastTimer;
 let touchSort = null;
 let touchSortTimer = null;
 let suppressPageClickUntil = 0;
+let previewImageUrl = null;
+let previewImageToken = 0;
+let lastCoreError = null;
 
 function activeTool() {
   return tabs.find((tab) => tab.classList.contains('is-active'))?.dataset.tool ?? 'unlock';
@@ -71,7 +86,167 @@ function updateStatusPresentation() {
       status.classList.remove('is-success-toast');
       status.classList.add('is-toast-hidden');
     }, 4200);
+    hideErrorNotice();
+  } else if (status.dataset.kind === 'working') {
+    lastCoreError = null;
+    hideErrorNotice();
+  } else if (status.dataset.kind === 'error') {
+    showErrorNotice(status.textContent, lastCoreError?.message);
   }
+}
+
+function errorExplanation(message = '') {
+  const text = message.toLowerCase();
+  if (/password|密碼/.test(text)) return {
+    reason: 'PDF 密碼不正確，或檔案使用目前工具無法處理的加密方式。',
+    actions: ['重新確認密碼及大小寫。', '先使用「移除密碼」產生未加密 PDF，再執行其他工具。'],
+  };
+  if (/encrypt|加密/.test(text)) return {
+    reason: '這份 PDF 仍受密碼或權限保護。',
+    actions: ['先切換到「移除密碼」。', '使用解密後下載的 PDF 再試一次。'],
+  };
+  if (/memory|allocation|out of bounds|記憶體/.test(text)) return {
+    reason: '瀏覽器可用記憶體不足，通常是頁數、圖片尺寸或輸出解析度太高。',
+    actions: ['降低 JPG DPI 或浮水印圖片尺寸。', '分批處理頁面，並關閉其他占用記憶體的分頁。'],
+  };
+  if (/svg|doctype/.test(text)) return {
+    reason: message || 'SVG 格式無效，或包含不允許的外部內容。',
+    actions: ['確認檔案是有效 SVG。', '移除 DOCTYPE、外部圖片、腳本或 foreignObject 後再試。', '也可以先將 SVG 匯出成透明 PNG。'],
+  };
+  if (/png|jpe?g|image|圖片|浮水印/.test(text)) return {
+    reason: message || '圖片格式無法解碼、檔案損毀，或超過 20 MB。',
+    actions: ['重新匯出為 PNG 或 JPG。', '確認副檔名與實際格式一致，且檔案不超過 20 MB。'],
+  };
+  if (/invalid|parse|header|format|corrupt|損毀|格式/.test(text)) return {
+    reason: '檔案格式無效、內容不完整，或 PDF 已經損毀。',
+    actions: ['嘗試用 PDF 閱讀器重新另存一份。', '確認檔案可以正常開啟後再加入。'],
+  };
+  if (/download|下載/.test(text)) return {
+    reason: '瀏覽器可能阻擋下載，或裝置儲存空間不足。',
+    actions: ['允許此網站下載檔案。', '確認裝置有足夠空間後重試。'],
+  };
+  return {
+    reason: message || '處理時發生未預期的錯誤。',
+    actions: ['確認輸入檔案可以正常開啟。', '重新整理頁面後再試；若仍失敗，可改用較小的檔案。'],
+  };
+}
+
+function showErrorNotice(summary, rawMessage = '') {
+  const explanation = errorExplanation(rawMessage || summary);
+  errorSummary.textContent = summary || '處理失敗。';
+  errorReason.textContent = `可能原因：${explanation.reason}`;
+  errorActions.replaceChildren(...explanation.actions.map((action) => {
+    const item = document.createElement('li');
+    item.textContent = action;
+    return item;
+  }));
+  errorNotice.hidden = false;
+}
+
+function hideErrorNotice() {
+  errorNotice.hidden = true;
+}
+
+function previewPosition() {
+  return {
+    center: { left: '50%', top: '50%', translate: 'translate(-50%, -50%)' },
+    'top-left': { left: '11%', top: '11%', translate: 'translate(0, 0)' },
+    'top-right': { left: '89%', top: '11%', translate: 'translate(-100%, 0)' },
+    'bottom-left': { left: '11%', top: '89%', translate: 'translate(0, -100%)' },
+    'bottom-right': { left: '89%', top: '89%', translate: 'translate(-100%, -100%)' },
+  }[watermarkPosition.value];
+}
+
+function createPreviewMark({ repeated = false } = {}) {
+  const imageMode = watermarkSource.value === 'image';
+  if (imageMode && !previewImageUrl) return null;
+  if (!imageMode && !watermarkText.value.trim()) return null;
+
+  const mark = document.createElement('div');
+  mark.className = 'preview-watermark-mark';
+  if (imageMode) {
+    const image = document.createElement('img');
+    image.src = previewImageUrl;
+    image.alt = '';
+    mark.append(image);
+  } else {
+    mark.textContent = watermarkText.value.trim();
+    mark.style.fontFamily = watermarkFont.value;
+    const baseSize = 9 + (Number(watermarkSize.value) - 12) / 148 * 27;
+    mark.style.fontSize = `${Math.max(8, baseSize * (repeated ? 0.72 : 1))}px`;
+  }
+  return mark;
+}
+
+function renderDecorationPreview() {
+  if (!previewWatermarkLayer) return;
+  previewWatermarkLayer.replaceChildren();
+  previewWatermarkLayer.classList.toggle('is-repeat', watermarkLayout.value === 'repeat');
+  previewWatermarkLayer.style.opacity = String(Number(watermarkOpacity.value) / 100);
+  previewWatermarkLayer.style.transform = '';
+  const angle = Number(watermarkAngle.value);
+  const scale = Number(watermarkScale.value) / 100;
+
+  if (watermarkLayout.value === 'repeat') {
+    previewWatermarkLayer.style.transform = `rotate(${angle}deg) scale(${Math.min(1.35, Math.max(0.65, scale))})`;
+    for (let index = 0; index < 15; index += 1) {
+      const mark = createPreviewMark({ repeated: true });
+      if (!mark) break;
+      if (watermarkSource.value === 'image') mark.style.width = `${Math.min(95, Math.max(30, 48 * scale))}%`;
+      previewWatermarkLayer.append(mark);
+    }
+  } else {
+    const mark = createPreviewMark();
+    if (mark) {
+      const position = previewPosition();
+      mark.style.left = position.left;
+      mark.style.top = position.top;
+      if (watermarkSource.value === 'image') mark.style.width = `${Math.min(82, Math.max(8, 30 * scale))}%`;
+      const textScale = watermarkSource.value === 'text' ? Math.min(3, Math.max(0.25, scale)) : 1;
+      mark.style.transform = `${position.translate} rotate(${angle}deg) scale(${textScale})`;
+      previewWatermarkLayer.append(mark);
+    }
+  }
+
+  previewPageNumber.textContent = addPageNumbers.checked ? '1' : '';
+  previewPageNumber.style.fontFamily = {
+    helvetica: 'Arial, sans-serif',
+    times: 'Times New Roman, serif',
+    courier: 'Courier New, monospace',
+  }[pageNumberFont.value];
+  previewPageNumber.style.fontSize = `${8 + (Number(pageNumberSize.value) - 8) / 2}px`;
+}
+
+async function updatePreviewImage() {
+  const token = ++previewImageToken;
+  if (previewImageUrl) URL.revokeObjectURL(previewImageUrl);
+  previewImageUrl = null;
+  if (!validateWatermarkImage()) {
+    renderDecorationPreview();
+    return;
+  }
+  const file = watermarkImage.files?.[0];
+  if (!file) {
+    renderDecorationPreview();
+    return;
+  }
+  try {
+    const prepared = await globalThis.__preparePdfWatermarkImage(file);
+    if (token !== previewImageToken) return;
+    const url = URL.createObjectURL(new Blob([prepared.bytes], { type: prepared.type }));
+    const image = new Image();
+    image.src = url;
+    await image.decode();
+    if (token !== previewImageToken) {
+      URL.revokeObjectURL(url);
+      return;
+    }
+    previewImageUrl = url;
+    hideErrorNotice();
+  } catch (error) {
+    showErrorNotice('無法建立圖片浮水印預覽。', error?.message ?? String(error));
+  }
+  renderDecorationPreview();
 }
 
 function updateDecorationOptions() {
@@ -89,6 +264,7 @@ function updateDecorationOptions() {
   watermarkScaleValue.textContent = `${watermarkScale.value}%`;
   pageNumberOptions.hidden = !addPageNumbers.checked;
   pageNumberSizeValue.textContent = `${pageNumberSize.value} pt`;
+  renderDecorationPreview();
 }
 
 function removeUnsafeSvgContent(svgDocument) {
@@ -182,17 +358,19 @@ function validateWatermarkImage() {
   if (!file) {
     watermarkImageFeedback.textContent = '支援 PNG、JPG、SVG，建議使用透明背景 PNG 或 SVG，最大 20 MB。';
     watermarkImageFeedback.dataset.kind = '';
-    return;
+    return true;
   }
   const validType = /\.(png|jpe?g|svg)$/i.test(file.name) || ['image/png', 'image/jpeg', 'image/svg+xml'].includes(file.type);
   if (!validType || file.size > 20 * 1024 * 1024) {
     watermarkImage.value = '';
     watermarkImageFeedback.textContent = validType ? '圖片不可超過 20 MB。' : '只支援 PNG、JPG 或 SVG。';
     watermarkImageFeedback.dataset.kind = 'error';
-    return;
+    showErrorNotice('浮水印圖片無法使用。', watermarkImageFeedback.textContent);
+    return false;
   }
   watermarkImageFeedback.textContent = `已選擇：${file.name}`;
   watermarkImageFeedback.dataset.kind = 'success';
+  return true;
 }
 
 function dispatchSortEvent(target, type) {
@@ -300,11 +478,33 @@ historyToggle.addEventListener('click', () => {
 
 watermarkLayout?.addEventListener('change', updateDecorationOptions);
 watermarkSource?.addEventListener('change', updateDecorationOptions);
-watermarkImage?.addEventListener('change', validateWatermarkImage);
+watermarkImage?.addEventListener('change', updatePreviewImage);
+watermarkText?.addEventListener('input', renderDecorationPreview);
+watermarkFont?.addEventListener('change', renderDecorationPreview);
 watermarkSize?.addEventListener('input', updateDecorationOptions);
 watermarkScale?.addEventListener('input', updateDecorationOptions);
+watermarkOpacity?.addEventListener('input', renderDecorationPreview);
+watermarkPosition?.addEventListener('change', renderDecorationPreview);
+watermarkAngle?.addEventListener('change', renderDecorationPreview);
 addPageNumbers?.addEventListener('change', updateDecorationOptions);
+pageNumberFont?.addEventListener('change', renderDecorationPreview);
 pageNumberSize?.addEventListener('input', updateDecorationOptions);
+dismissError?.addEventListener('click', hideErrorNotice);
+
+globalThis.addEventListener('pdf-tool-error', (event) => {
+  lastCoreError = event.detail ?? null;
+  showErrorNotice('PDF 處理失敗。', lastCoreError?.message);
+});
+
+globalThis.addEventListener('error', (event) => {
+  if (!event.error) return;
+  showErrorNotice('頁面執行時發生錯誤。', event.error?.message ?? event.message);
+});
+
+globalThis.addEventListener('unhandledrejection', (event) => {
+  const message = event.reason?.message ?? String(event.reason ?? '未知錯誤');
+  showErrorNotice('頁面執行時發生未預期的錯誤。', message);
+});
 
 const tabObserver = new MutationObserver(updateResponsiveLayout);
 tabs.forEach((tab) => tabObserver.observe(tab, { attributes: true, attributeFilter: ['class'] }));

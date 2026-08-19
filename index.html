@@ -96,7 +96,7 @@
                     <select id="watermark-font">
                       <option value="system-ui, sans-serif">系統黑體</option>
                       <option value="&quot;Microsoft JhengHei&quot;, &quot;PingFang TC&quot;, sans-serif" selected>繁中黑體</option>
-                      <option value="&quot;DFKai-SB&quot;, &quot;BiauKai&quot;, &quot;KaiTi&quot;, &quot;STKaiti&quot;, &quot;標楷體&quot;, cursive">標楷體（公文）</option>
+                      <option value="&quot;DFKai-SB&quot;, &quot;BiauKai&quot;, &quot;KaiTi&quot;, &quot;STKaiti&quot;, &quot;標楷體&quot;, cursive">標楷體</option>
                       <option value="serif">明體</option>
                       <option value="monospace">等寬字型</option>
                     </select>
@@ -154,10 +154,33 @@
                     <output id="page-number-size-value" for="page-number-size">10 pt</output>
                   </label>
                 </div>
+                <section class="decoration-preview" aria-labelledby="decoration-preview-title">
+                  <div class="decoration-preview-heading">
+                    <strong id="decoration-preview-title">效果預覽</strong>
+                    <span>示意畫面</span>
+                  </div>
+                  <div id="decoration-preview-paper" class="decoration-preview-paper" aria-label="浮水印與頁碼效果預覽">
+                    <div class="preview-document-content" aria-hidden="true">
+                      <span></span><span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <div id="preview-watermark-layer" class="preview-watermark-layer" aria-hidden="true"></div>
+                    <span id="preview-page-number" class="preview-page-number" aria-hidden="true"></span>
+                  </div>
+                  <p class="option-help">預覽用來確認版面與比例；實際位置會依 PDF 頁面尺寸略有不同。</p>
+                </section>
               </div>
 
               <button id="process-button" class="primary-button" type="submit">全部移除密碼並下載</button>
               <div id="status" class="status" role="status" aria-live="polite">準備就緒</div>
+              <section id="error-notice" class="error-notice" role="alert" aria-labelledby="error-notice-title" hidden>
+                <div class="error-notice-heading">
+                  <strong id="error-notice-title">處理時發生錯誤</strong>
+                  <button id="dismiss-error" type="button" aria-label="關閉錯誤提醒">×</button>
+                </div>
+                <p id="error-summary"></p>
+                <p id="error-reason" class="error-reason"></p>
+                <ul id="error-actions"></ul>
+              </section>
               <p id="limit-note" class="limit-note">檔案會逐一處理；多檔結果會打包成單一 ZIP 下載。</p>
             </div>
 
@@ -206,6 +229,7 @@
           <a href="https://github.com/bruce-yang-422/pdf-batch-unlock">GitHub</a>
         </footer>
       </section>
-    </main>
+    </main>
+
   </body>
 </html>
