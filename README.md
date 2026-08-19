@@ -2,11 +2,15 @@
 
 前台網址：<https://bruce-yang-422.github.io/pdf-batch-unlock/>
 
+正式網址：<https://pdf.stack-base.com/>
+
 純前端的 PDF 多功能工具。所有 PDF、圖片與密碼只會在瀏覽器本機處理，不會上傳、儲存或傳送至任何伺服器。
 
 介面支援電腦與手機瀏覽器。電腦版使用頁籤切換工具，手機版則使用下拉選單；頁面管理工作區、檔案清單與主要操作按鈕也會依螢幕寬度自動調整。
 
 介面提供正體中文、英文、日文、韓文、西班牙文、德文與法文。首次開啟會依瀏覽器系統語言自動選擇，使用者切換後會在此瀏覽器記住偏好。
+
+各語言另有可被搜尋引擎辨識及分享的固定網址：`?lang=zh-Hant`、`?lang=en`、`?lang=ja`、`?lang=ko`、`?lang=es`、`?lang=de`、`?lang=fr`。頁面會同步更新標題、摘要、Open Graph、Twitter Card、canonical 與結構化資料，並以 `hreflang` 標示語言版本；SEO 文案均明確說明檔案只在瀏覽器本機處理、不需上傳伺服器。
 
 電腦版採左右雙欄工作區：左側匯入與設定，右側顯示目前檔案及本次瀏覽器工作階段的處理歷程。歷程不保存檔案內容，重新整理頁面後即清除。
 
@@ -80,10 +84,13 @@ Repository 只保留可直接部署的正式靜態網站：
 CNAME
 README.md
 index.html
+robots.txt
+sitemap.xml
 assets/
 ├─ index-*.css
 ├─ index-*.js
 ├─ layout-*.css
+├─ i18n.js
 ├─ ui-polish.css
 ├─ ui-polish.js
 ├─ pdf.worker.min-*.mjs

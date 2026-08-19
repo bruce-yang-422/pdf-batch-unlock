@@ -5,6 +5,11 @@ const STORAGE_KEY = 'pdf-tool-language';
 const rows = [
   ['語言', 'Language', '言語', '언어', 'Idioma', 'Sprache', 'Langue'],
   ['選擇介面語言', 'Select interface language', '表示言語を選択', '인터페이스 언어 선택', 'Seleccionar idioma de la interfaz', 'Oberflächensprache wählen', "Choisir la langue de l’interface"],
+  ['PDF 本機工具箱｜免上傳伺服器的免費 PDF 工具', 'Local PDF Toolbox | Free PDF tools with no server uploads', 'ローカル PDF ツールボックス｜サーバーへ送信しない無料 PDF ツール', '로컬 PDF 도구함 | 서버 업로드 없는 무료 PDF 도구', 'Herramientas PDF locales | Gratis y sin subir archivos al servidor', 'Lokale PDF-Werkzeugbox | Kostenlos und ohne Server-Upload', 'Boîte à outils PDF locale | Gratuite et sans envoi au serveur'],
+  ['免費 PDF 本機工具箱：移除密碼、合併、拆分、轉檔、頁面管理、浮水印與頁碼。所有檔案只在瀏覽器處理，不需上傳伺服器。', 'Free PDF tools to remove passwords, merge, split, convert, manage pages and add watermarks. Files are processed in your browser, never uploaded to a server.', 'パスワード解除、結合、分割、変換、ページ管理、透かしに対応した無料 PDF ツール。ファイルはブラウザー内で処理され、サーバーへ送信されません。', '암호 제거, 병합, 분할, 변환, 페이지 관리와 워터마크를 위한 무료 PDF 도구입니다. 파일은 브라우저에서 처리되며 서버에 업로드되지 않습니다.', 'Herramientas PDF gratis para quitar contraseñas, combinar, dividir, convertir y añadir marcas de agua. Todo se procesa en tu navegador, sin subir archivos al servidor.', 'Kostenlose PDF-Werkzeuge zum Entsperren, Zusammenführen, Teilen, Konvertieren und für Wasserzeichen. Alles bleibt im Browser, ohne Upload auf einen Server.', 'Outils PDF gratuits pour déverrouiller, fusionner, diviser, convertir et ajouter des filigranes. Tout reste dans le navigateur, sans envoi vers un serveur.'],
+  ['PDF 工具, PDF 本機處理, PDF 免上傳, PDF 合併, PDF 拆分, PDF 移除密碼, PDF 浮水印, PDF 轉 JPG', 'PDF tools, local PDF processing, no-upload PDF, merge PDF, split PDF, remove PDF password, PDF watermark, PDF to JPG', 'PDF ツール, ローカル PDF, アップロード不要 PDF, PDF 結合, PDF 分割, PDF パスワード解除, PDF 透かし, PDF JPG 変換', 'PDF 도구, 로컬 PDF 처리, 업로드 없는 PDF, PDF 병합, PDF 분할, PDF 암호 제거, PDF 워터마크, PDF JPG 변환', 'herramientas PDF, PDF local, PDF sin subir, combinar PDF, dividir PDF, quitar contraseña PDF, marca de agua PDF, PDF a JPG', 'PDF-Werkzeuge, PDF lokal, PDF ohne Upload, PDF zusammenführen, PDF teilen, PDF-Passwort entfernen, PDF-Wasserzeichen, PDF zu JPG', 'outils PDF, PDF local, PDF sans envoi, fusionner PDF, diviser PDF, supprimer mot de passe PDF, filigrane PDF, PDF vers JPG'],
+  ['免費 PDF 本機工具箱：所有檔案只在瀏覽器處理，不需上傳伺服器。', 'Free local PDF toolbox: files stay in your browser and are never uploaded to a server.', '無料のローカル PDF ツール。ファイルはブラウザー内で処理され、サーバーへアップロードされません。', '무료 로컬 PDF 도구입니다. 파일은 브라우저에서 처리되며 서버에 업로드되지 않습니다.', 'Herramientas PDF locales y gratuitas: los archivos permanecen en tu navegador y nunca se suben a un servidor.', 'Kostenlose lokale PDF-Werkzeuge: Dateien bleiben im Browser und werden nie auf einen Server hochgeladen.', 'Boîte à outils PDF locale et gratuite : les fichiers restent dans le navigateur et ne sont jamais envoyés sur un serveur.'],
+  ['需要支援 JavaScript 與 WebAssembly 的現代瀏覽器', 'Requires a modern browser with JavaScript and WebAssembly support', 'JavaScript と WebAssembly に対応した最新ブラウザーが必要です', 'JavaScript 및 WebAssembly를 지원하는 최신 브라우저가 필요합니다', 'Requiere un navegador moderno compatible con JavaScript y WebAssembly', 'Erfordert einen modernen Browser mit JavaScript- und WebAssembly-Unterstützung', 'Nécessite un navigateur moderne compatible avec JavaScript et WebAssembly'],
   ['完全在瀏覽器本機處理 PDF 的多功能工具', 'A multifunction PDF toolkit that runs entirely in your browser', 'ブラウザー内だけで動作する多機能 PDF ツール', '브라우저에서만 작동하는 다기능 PDF 도구', 'Herramientas PDF multifunción que funcionan íntegramente en el navegador', 'Multifunktionale PDF-Werkzeuge, die vollständig im Browser laufen', 'Boîte à outils PDF multifonction exécutée entièrement dans le navigateur'],
   ['本機瀏覽器 PDF 工具', 'LOCAL BROWSER PDF TOOLS', 'ブラウザー内 PDF ツール', '브라우저 PDF 도구', 'HERRAMIENTAS PDF LOCALES', 'LOKALE BROWSER-PDF-WERKZEUGE', 'OUTILS PDF LOCAUX'],
   ['PDF 本機工具箱', 'Local PDF Toolbox', 'ローカル PDF ツールボックス', '로컬 PDF 도구함', 'Herramientas PDF locales', 'Lokale PDF-Werkzeugbox', 'Boîte à outils PDF locale'],
@@ -179,8 +184,23 @@ const rows = [
 const localeIndex = new Map(LOCALES.map((locale, index) => [locale, index]));
 const rowsByCanonical = new Map(rows.map((row) => [row[0], row]));
 const canonicalByTranslation = new Map();
+const BASE_URL = 'https://pdf.stack-base.com/';
+const OPEN_GRAPH_LOCALES = {
+  'zh-Hant': 'zh_TW',
+  en: 'en_US',
+  ja: 'ja_JP',
+  ko: 'ko_KR',
+  es: 'es_ES',
+  de: 'de_DE',
+  fr: 'fr_FR',
+};
 for (const row of rows) {
   for (const value of row) canonicalByTranslation.set(value, row[0]);
+}
+
+function requestedLocale() {
+  const requested = new URLSearchParams(location.search).get('lang');
+  return LOCALES.includes(requested) ? requested : null;
 }
 
 function systemLocale() {
@@ -202,7 +222,8 @@ function storedLocale() {
   }
 }
 
-let currentLocale = storedLocale() ?? systemLocale();
+let hasExplicitLocale = requestedLocale() !== null;
+let currentLocale = requestedLocale() ?? storedLocale() ?? systemLocale();
 const sourceByTextNode = new WeakMap();
 const lastOutputByTextNode = new WeakMap();
 
@@ -289,15 +310,86 @@ function persistLocale(locale) {
   }
 }
 
+function setMetaContent(selector, content) {
+  const element = document.querySelector(selector);
+  if (element) element.setAttribute('content', content);
+}
+
+function updateSeoMetadata() {
+  const title = translateText('PDF 本機工具箱｜免上傳伺服器的免費 PDF 工具');
+  const description = translateText('免費 PDF 本機工具箱：移除密碼、合併、拆分、轉檔、頁面管理、浮水印與頁碼。所有檔案只在瀏覽器處理，不需上傳伺服器。');
+  const shortDescription = translateText('免費 PDF 本機工具箱：所有檔案只在瀏覽器處理，不需上傳伺服器。');
+  const keywords = translateText('PDF 工具, PDF 本機處理, PDF 免上傳, PDF 合併, PDF 拆分, PDF 移除密碼, PDF 浮水印, PDF 轉 JPG');
+  const canonicalUrl = hasExplicitLocale ? `${BASE_URL}?lang=${encodeURIComponent(currentLocale)}` : BASE_URL;
+
+  document.title = title;
+  setMetaContent('meta[name="description"]', description);
+  setMetaContent('meta[name="keywords"]', keywords);
+  setMetaContent('meta[name="application-name"]', translateText('PDF 本機工具箱'));
+  setMetaContent('meta[property="og:site_name"]', translateText('PDF 本機工具箱'));
+  setMetaContent('meta[property="og:title"]', title);
+  setMetaContent('meta[property="og:description"]', description);
+  setMetaContent('meta[property="og:url"]', canonicalUrl);
+  setMetaContent('meta[property="og:locale"]', OPEN_GRAPH_LOCALES[currentLocale]);
+  setMetaContent('meta[name="twitter:title"]', title);
+  setMetaContent('meta[name="twitter:description"]', shortDescription);
+
+  for (const element of document.querySelectorAll('meta[property="og:locale:alternate"]')) element.remove();
+  for (const locale of LOCALES) {
+    if (locale === currentLocale) continue;
+    const alternate = document.createElement('meta');
+    alternate.setAttribute('property', 'og:locale:alternate');
+    alternate.setAttribute('content', OPEN_GRAPH_LOCALES[locale]);
+    document.head.append(alternate);
+  }
+
+  const canonical = document.querySelector('#canonical-link');
+  if (canonical) canonical.href = canonicalUrl;
+
+  const structuredData = document.querySelector('#structured-data');
+  if (structuredData) {
+    structuredData.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebApplication',
+      name: translateText('PDF 本機工具箱'),
+      url: canonicalUrl,
+      description,
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Any',
+      browserRequirements: translateText('需要支援 JavaScript 與 WebAssembly 的現代瀏覽器'),
+      isAccessibleForFree: true,
+      inLanguage: LOCALES,
+      featureList: [
+        translateText('移除密碼'),
+        translateText('合併 PDF'),
+        translateText('拆分 PDF'),
+        translateText('JPG 轉 PDF'),
+        translateText('PDF 轉 JPG'),
+        translateText('頁面管理'),
+        translateText('浮水印／頁碼'),
+      ],
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+      },
+    });
+  }
+}
+
 function applyLanguage(locale, { persist = false } = {}) {
   currentLocale = LOCALES.includes(locale) ? locale : 'en';
+  if (persist) {
+    const url = new URL(location.href);
+    url.searchParams.set('lang', currentLocale);
+    history.replaceState(null, '', url);
+    hasExplicitLocale = true;
+  }
   document.documentElement.lang = currentLocale;
   const languageSelect = document.querySelector('#language-select');
   languageSelect.value = currentLocale;
   languageSelect.setAttribute('aria-label', translateText('選擇介面語言'));
-  document.title = translateText('PDF 本機工具箱');
-  const description = document.querySelector('meta[name="description"]');
-  if (description) description.content = translateText('完全在瀏覽器本機處理 PDF 的多功能工具');
+  updateSeoMetadata();
   translateTree(document.body);
   if (persist) persistLocale(currentLocale);
   globalThis.dispatchEvent(new CustomEvent('pdf-tool-language-change', { detail: { locale: currentLocale } }));
