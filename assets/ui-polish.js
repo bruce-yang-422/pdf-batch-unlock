@@ -9,14 +9,19 @@ const processButton = document.querySelector('#process-button');
 const historySection = document.querySelector('#history-section');
 const historyToggle = document.querySelector('#toggle-history');
 const status = document.querySelector('#status');
+const dropTitle = document.querySelector('#drop-title');
+const dropHint = document.querySelector('#drop-hint');
 const mobileQuery = window.matchMedia('(max-width: 640px)');
 const desktopQuery = window.matchMedia('(min-width: 901px)');
+const compactUploadQuery = window.matchMedia('(max-width: 900px), (pointer: coarse)');
 const watermarkLayout = document.querySelector('#watermark-layout');
 const watermarkSource = document.querySelector('#watermark-source');
 const watermarkTextOptions = document.querySelector('#watermark-text-options');
 const watermarkImageOptions = document.querySelector('#watermark-image-options');
 const watermarkImage = document.querySelector('#watermark-image');
 const watermarkImageDropzone = document.querySelector('#watermark-image-dropzone');
+const watermarkUploadTitle = watermarkImageDropzone.querySelector('.watermark-upload-copy strong');
+const watermarkUploadHint = watermarkImageDropzone.querySelector('.watermark-upload-copy span');
 const watermarkImageFeedback = document.querySelector('#watermark-image-feedback');
 const watermarkFontLabel = document.querySelector('#watermark-font-label');
 const watermarkSizeLabel = document.querySelector('#watermark-size-label');
@@ -63,6 +68,27 @@ function activeTool() {
   return tabs.find((tab) => tab.classList.contains('is-active'))?.dataset.tool ?? 'unlock';
 }
 
+function updateUploadMode() {
+  const clickOnly = compactUploadQuery.matches;
+  card.classList.toggle('click-only-upload', clickOnly);
+
+  if (clickOnly) {
+    if (dropTitle.textContent !== '點一下選擇檔案') dropTitle.dataset.desktopCopy = dropTitle.textContent;
+    if (dropHint.textContent !== '從裝置中選擇要處理的檔案') dropHint.dataset.desktopCopy = dropHint.textContent;
+    dropTitle.textContent = '點一下選擇檔案';
+    dropHint.textContent = '從裝置中選擇要處理的檔案';
+    watermarkUploadTitle.textContent = '點一下選擇圖片';
+    watermarkUploadHint.textContent = '從裝置中選擇 PNG、JPG 或 SVG';
+  } else {
+    if (dropTitle.dataset.desktopCopy) dropTitle.textContent = dropTitle.dataset.desktopCopy;
+    if (dropHint.dataset.desktopCopy) dropHint.textContent = dropHint.dataset.desktopCopy;
+    delete dropTitle.dataset.desktopCopy;
+    delete dropHint.dataset.desktopCopy;
+    watermarkUploadTitle.textContent = '拖放圖片到這裡';
+    watermarkUploadHint.textContent = '或點一下選擇圖片';
+  }
+}
+
 function updateResponsiveLayout() {
   const pageMode = activeTool() === 'pages';
   const decorateMode = activeTool() === 'decorate';
@@ -83,6 +109,8 @@ function updateResponsiveLayout() {
     pageManagerHome.after(pageManager);
     processButtonHome.after(processButton);
   }
+
+  updateUploadMode();
 }
 
 function updateHistoryState(expanded) {
@@ -395,6 +423,17 @@ function isFileDrag(event) {
   return [...(event.dataTransfer?.types ?? [])].includes('Files');
 }
 
+function blockCompactFileDrop(event) {
+  if (!compactUploadQuery.matches || !isFileDrag(event)) return;
+  const target = event.target instanceof Element
+    ? event.target.closest('#drop-zone, #watermark-image-dropzone')
+    : null;
+  if (!target) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  target.classList.remove('is-dragging', 'is-dragover');
+}
+
 function handleWatermarkImageDrag(event) {
   if (!isFileDrag(event)) return;
   event.preventDefault();
@@ -532,6 +571,9 @@ watermarkImageDropzone?.addEventListener('dragenter', handleWatermarkImageDrag);
 watermarkImageDropzone?.addEventListener('dragover', handleWatermarkImageDrag);
 watermarkImageDropzone?.addEventListener('dragleave', clearWatermarkImageDrag);
 watermarkImageDropzone?.addEventListener('drop', dropWatermarkImage);
+for (const eventName of ['dragenter', 'dragover', 'drop']) {
+  document.addEventListener(eventName, blockCompactFileDrop, { capture: true });
+}
 watermarkText?.addEventListener('input', renderDecorationPreview);
 watermarkFont?.addEventListener('change', renderDecorationPreview);
 watermarkSize?.addEventListener('input', updateDecorationOptions);
@@ -567,6 +609,7 @@ statusObserver.observe(status, { attributes: true, attributeFilter: ['data-kind'
 
 mobileQuery.addEventListener?.('change', updateResponsiveLayout);
 desktopQuery.addEventListener?.('change', updateResponsiveLayout);
+compactUploadQuery.addEventListener?.('change', updateUploadMode);
 updateHistoryState(false);
 updateResponsiveLayout();
 updateStatusPresentation();
