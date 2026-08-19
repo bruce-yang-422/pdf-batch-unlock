@@ -87,8 +87,22 @@
                   <input id="watermark-text" type="text" maxlength="80" placeholder="例如：機密文件（可留空）" />
                 </div>
                 <div id="watermark-image-options" class="watermark-source-options" hidden>
-                  <label for="watermark-image">浮水印圖片</label>
-                  <input id="watermark-image" type="file" accept="image/png,image/jpeg,image/svg+xml,.png,.jpg,.jpeg,.svg" />
+                  <span class="option-label">浮水印圖片</span>
+                  <label id="watermark-image-dropzone" class="watermark-image-upload" for="watermark-image">
+                    <input id="watermark-image" class="visually-hidden-file" type="file" accept="image/png,image/jpeg,image/svg+xml,.png,.jpg,.jpeg,.svg" />
+                    <span class="watermark-upload-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 16V4" />
+                        <path d="m7 9 5-5 5 5" />
+                        <path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
+                      </svg>
+                    </span>
+                    <span class="watermark-upload-copy">
+                      <strong>拖放圖片到這裡</strong>
+                      <span>或點一下選擇圖片</span>
+                    </span>
+                    <span class="watermark-upload-button" aria-hidden="true">選擇圖片</span>
+                  </label>
                   <p id="watermark-image-feedback" class="option-help">支援 PNG、JPG、SVG，建議使用透明背景 PNG 或 SVG，最大 20 MB。</p>
                 </div>
                 <div class="option-grid watermark-type-options">

@@ -2,6 +2,7 @@ const card = document.querySelector('.card');
 const tabs = [...document.querySelectorAll('.tool-tab')];
 const workspace = document.querySelector('.workspace');
 const activityPanel = document.querySelector('.activity-panel');
+const queueSection = document.querySelector('#queue-section');
 const pageManager = document.querySelector('#page-manager-section');
 const pageGrid = document.querySelector('#page-grid');
 const processButton = document.querySelector('#process-button');
@@ -9,11 +10,13 @@ const historySection = document.querySelector('#history-section');
 const historyToggle = document.querySelector('#toggle-history');
 const status = document.querySelector('#status');
 const mobileQuery = window.matchMedia('(max-width: 640px)');
+const desktopQuery = window.matchMedia('(min-width: 901px)');
 const watermarkLayout = document.querySelector('#watermark-layout');
 const watermarkSource = document.querySelector('#watermark-source');
 const watermarkTextOptions = document.querySelector('#watermark-text-options');
 const watermarkImageOptions = document.querySelector('#watermark-image-options');
 const watermarkImage = document.querySelector('#watermark-image');
+const watermarkImageDropzone = document.querySelector('#watermark-image-dropzone');
 const watermarkImageFeedback = document.querySelector('#watermark-image-feedback');
 const watermarkFontLabel = document.querySelector('#watermark-font-label');
 const watermarkSizeLabel = document.querySelector('#watermark-size-label');
@@ -34,6 +37,7 @@ const watermarkAngle = document.querySelector('#watermark-angle');
 const pageNumberFont = document.querySelector('#page-number-font');
 const previewWatermarkLayer = document.querySelector('#preview-watermark-layer');
 const previewPageNumber = document.querySelector('#preview-page-number');
+const decorationPreview = document.querySelector('.decoration-preview');
 const errorNotice = document.querySelector('#error-notice');
 const errorSummary = document.querySelector('#error-summary');
 const errorReason = document.querySelector('#error-reason');
@@ -42,8 +46,10 @@ const dismissError = document.querySelector('#dismiss-error');
 
 const pageManagerHome = document.createComment('page-manager-home');
 const processButtonHome = document.createComment('process-button-home');
+const decorationPreviewHome = document.createComment('decoration-preview-home');
 pageManager.before(pageManagerHome);
 processButton.before(processButtonHome);
+decorationPreview.before(decorationPreviewHome);
 
 let toastTimer;
 let touchSort = null;
@@ -59,7 +65,16 @@ function activeTool() {
 
 function updateResponsiveLayout() {
   const pageMode = activeTool() === 'pages';
+  const decorateMode = activeTool() === 'decorate';
   card.classList.toggle('page-manager-mode', pageMode);
+  card.classList.toggle('decorate-mode', decorateMode);
+  decorationPreview.hidden = !decorateMode;
+
+  if (decorateMode && desktopQuery.matches) {
+    queueSection.before(decorationPreview);
+  } else {
+    decorationPreviewHome.after(decorationPreview);
+  }
 
   if (mobileQuery.matches && pageMode) {
     activityPanel.before(pageManager);
@@ -368,9 +383,43 @@ function validateWatermarkImage() {
     showErrorNotice('浮水印圖片無法使用。', watermarkImageFeedback.textContent);
     return false;
   }
-  watermarkImageFeedback.textContent = `已選擇：${file.name}`;
+  const formattedSize = file.size >= 1024 * 1024
+    ? `${(file.size / (1024 * 1024)).toFixed(2)} MB`
+    : `${Math.max(1, Math.round(file.size / 1024))} KB`;
+  watermarkImageFeedback.textContent = `已選擇：${file.name}（${formattedSize}）`;
   watermarkImageFeedback.dataset.kind = 'success';
   return true;
+}
+
+function isFileDrag(event) {
+  return [...(event.dataTransfer?.types ?? [])].includes('Files');
+}
+
+function handleWatermarkImageDrag(event) {
+  if (!isFileDrag(event)) return;
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'copy';
+  watermarkImageDropzone.classList.add('is-dragover');
+}
+
+function clearWatermarkImageDrag(event) {
+  if (event.type === 'dragleave' && watermarkImageDropzone.contains(event.relatedTarget)) return;
+  watermarkImageDropzone.classList.remove('is-dragover');
+}
+
+function dropWatermarkImage(event) {
+  if (!isFileDrag(event)) return;
+  event.preventDefault();
+  clearWatermarkImageDrag(event);
+  const files = [...(event.dataTransfer?.files ?? [])];
+  if (files.length !== 1) {
+    showErrorNotice('無法加入浮水印圖片。', '一次只能上傳一張 PNG、JPG 或 SVG 圖片。');
+    return;
+  }
+  const transfer = new DataTransfer();
+  transfer.items.add(files[0]);
+  watermarkImage.files = transfer.files;
+  updatePreviewImage();
 }
 
 function dispatchSortEvent(target, type) {
@@ -479,6 +528,10 @@ historyToggle.addEventListener('click', () => {
 watermarkLayout?.addEventListener('change', updateDecorationOptions);
 watermarkSource?.addEventListener('change', updateDecorationOptions);
 watermarkImage?.addEventListener('change', updatePreviewImage);
+watermarkImageDropzone?.addEventListener('dragenter', handleWatermarkImageDrag);
+watermarkImageDropzone?.addEventListener('dragover', handleWatermarkImageDrag);
+watermarkImageDropzone?.addEventListener('dragleave', clearWatermarkImageDrag);
+watermarkImageDropzone?.addEventListener('drop', dropWatermarkImage);
 watermarkText?.addEventListener('input', renderDecorationPreview);
 watermarkFont?.addEventListener('change', renderDecorationPreview);
 watermarkSize?.addEventListener('input', updateDecorationOptions);
@@ -513,6 +566,7 @@ const statusObserver = new MutationObserver(updateStatusPresentation);
 statusObserver.observe(status, { attributes: true, attributeFilter: ['data-kind'], childList: true, characterData: true, subtree: true });
 
 mobileQuery.addEventListener?.('change', updateResponsiveLayout);
+desktopQuery.addEventListener?.('change', updateResponsiveLayout);
 updateHistoryState(false);
 updateResponsiveLayout();
 updateStatusPresentation();
