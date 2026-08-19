@@ -77,13 +77,26 @@
               </div>
 
               <div id="decorate-options" class="options decorate-options" hidden>
-                <label for="watermark-text">浮水印文字</label>
-                <input id="watermark-text" type="text" maxlength="80" placeholder="例如：機密文件（可留空）" />
+                <label for="watermark-source">浮水印類型</label>
+                <select id="watermark-source">
+                  <option value="text" selected>文字浮水印</option>
+                  <option value="image">圖片浮水印</option>
+                </select>
+                <div id="watermark-text-options" class="watermark-source-options">
+                  <label for="watermark-text">浮水印文字</label>
+                  <input id="watermark-text" type="text" maxlength="80" placeholder="例如：機密文件（可留空）" />
+                </div>
+                <div id="watermark-image-options" class="watermark-source-options" hidden>
+                  <label for="watermark-image">浮水印圖片</label>
+                  <input id="watermark-image" type="file" accept="image/png,image/jpeg,image/svg+xml,.png,.jpg,.jpeg,.svg" />
+                  <p id="watermark-image-feedback" class="option-help">支援 PNG、JPG、SVG，建議使用透明背景 PNG 或 SVG，最大 20 MB。</p>
+                </div>
                 <div class="option-grid watermark-type-options">
-                  <label for="watermark-font">文字字型
+                  <label id="watermark-font-label" for="watermark-font">文字字型
                     <select id="watermark-font">
                       <option value="system-ui, sans-serif">系統黑體</option>
                       <option value="&quot;Microsoft JhengHei&quot;, &quot;PingFang TC&quot;, sans-serif" selected>繁中黑體</option>
+                      <option value="&quot;DFKai-SB&quot;, &quot;BiauKai&quot;, &quot;KaiTi&quot;, &quot;STKaiti&quot;, &quot;標楷體&quot;, cursive">標楷體（公文）</option>
                       <option value="serif">明體</option>
                       <option value="monospace">等寬字型</option>
                     </select>
@@ -94,7 +107,7 @@
                       <option value="repeat">重複鋪滿頁面</option>
                     </select>
                   </label>
-                  <label>文字大小
+                  <label id="watermark-size-label">文字大小
                     <input id="watermark-size" type="range" min="12" max="160" step="1" value="42" />
                     <output id="watermark-size-value" for="watermark-size">42 pt</output>
                   </label>

@@ -10,6 +10,13 @@ const historyToggle = document.querySelector('#toggle-history');
 const status = document.querySelector('#status');
 const mobileQuery = window.matchMedia('(max-width: 640px)');
 const watermarkLayout = document.querySelector('#watermark-layout');
+const watermarkSource = document.querySelector('#watermark-source');
+const watermarkTextOptions = document.querySelector('#watermark-text-options');
+const watermarkImageOptions = document.querySelector('#watermark-image-options');
+const watermarkImage = document.querySelector('#watermark-image');
+const watermarkImageFeedback = document.querySelector('#watermark-image-feedback');
+const watermarkFontLabel = document.querySelector('#watermark-font-label');
+const watermarkSizeLabel = document.querySelector('#watermark-size-label');
 const watermarkPosition = document.querySelector('#watermark-position');
 const watermarkPositionLabel = document.querySelector('#watermark-position-label');
 const watermarkSize = document.querySelector('#watermark-size');
@@ -69,7 +76,12 @@ function updateStatusPresentation() {
 
 function updateDecorationOptions() {
   if (!watermarkLayout) return;
+  const imageMode = watermarkSource.value === 'image';
   const repeated = watermarkLayout.value === 'repeat';
+  watermarkTextOptions.hidden = imageMode;
+  watermarkImageOptions.hidden = !imageMode;
+  watermarkFontLabel.hidden = imageMode;
+  watermarkSizeLabel.hidden = imageMode;
   watermarkPosition.disabled = repeated;
   watermarkPositionLabel.classList.toggle('is-disabled-option', repeated);
   watermarkPositionLabel.title = repeated ? '重複模式會自動鋪滿頁面，不使用單一位置。' : '';
@@ -77,6 +89,110 @@ function updateDecorationOptions() {
   watermarkScaleValue.textContent = `${watermarkScale.value}%`;
   pageNumberOptions.hidden = !addPageNumbers.checked;
   pageNumberSizeValue.textContent = `${pageNumberSize.value} pt`;
+}
+
+function removeUnsafeSvgContent(svgDocument) {
+  svgDocument.querySelectorAll('script, foreignObject').forEach((node) => node.remove());
+  svgDocument.querySelectorAll('*').forEach((node) => {
+    for (const attribute of [...node.attributes]) {
+      const name = attribute.name.toLowerCase();
+      const value = attribute.value.trim();
+      if (name.startsWith('on')) {
+        node.removeAttribute(attribute.name);
+        continue;
+      }
+      if ((name === 'href' || name === 'xlink:href') && !value.startsWith('#') && !value.startsWith('data:image/')) {
+        node.removeAttribute(attribute.name);
+        continue;
+      }
+      if (/url\(\s*['"]?(?:https?:|\/\/)/i.test(value) || /@import/i.test(value)) {
+        node.removeAttribute(attribute.name);
+      }
+    }
+  });
+  svgDocument.querySelectorAll('style').forEach((style) => {
+    style.textContent = style.textContent
+      .replace(/@import[^;]+;?/gi, '')
+      .replace(/url\(\s*['"]?(?:https?:|\/\/)[^)]+\)/gi, 'none');
+  });
+}
+
+function svgCanvasSize(svg) {
+  const viewBox = (svg.getAttribute('viewBox') ?? '').trim().split(/[\s,]+/).map(Number);
+  const widthAttribute = svg.getAttribute('width') ?? '';
+  const heightAttribute = svg.getAttribute('height') ?? '';
+  let width = widthAttribute.trim().endsWith('%') ? Number.NaN : Number.parseFloat(widthAttribute);
+  let height = heightAttribute.trim().endsWith('%') ? Number.NaN : Number.parseFloat(heightAttribute);
+  if ((!Number.isFinite(width) || width <= 0) && viewBox.length === 4) width = viewBox[2];
+  if ((!Number.isFinite(height) || height <= 0) && viewBox.length === 4) height = viewBox[3];
+  if (!Number.isFinite(width) || width <= 0) width = 1200;
+  if (!Number.isFinite(height) || height <= 0) height = 800;
+  const scale = Math.min(1, 2400 / Math.max(width, height));
+  return { width: Math.max(1, Math.round(width * scale)), height: Math.max(1, Math.round(height * scale)) };
+}
+
+async function svgFileToPng(file) {
+  const source = await file.text();
+  if (/<!DOCTYPE/i.test(source)) throw new Error('SVG 不支援 DOCTYPE。');
+  const svgDocument = new DOMParser().parseFromString(source, 'image/svg+xml');
+  if (svgDocument.querySelector('parsererror') || svgDocument.documentElement.localName !== 'svg') {
+    throw new Error('SVG 格式無效。');
+  }
+  removeUnsafeSvgContent(svgDocument);
+  if (!svgDocument.documentElement.hasAttribute('xmlns')) {
+    svgDocument.documentElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  }
+  const { width, height } = svgCanvasSize(svgDocument.documentElement);
+  const safeSvg = new XMLSerializer().serializeToString(svgDocument.documentElement);
+  const url = URL.createObjectURL(new Blob([safeSvg], { type: 'image/svg+xml' }));
+  try {
+    const image = new Image();
+    image.decoding = 'async';
+    image.src = url;
+    await image.decode();
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d');
+    context.drawImage(image, 0, 0, width, height);
+    const blob = await new Promise((resolve, reject) => {
+      canvas.toBlob((result) => result ? resolve(result) : reject(new Error('無法轉換 SVG。')), 'image/png');
+    });
+    canvas.width = 0;
+    canvas.height = 0;
+    return { bytes: await blob.arrayBuffer(), type: 'image/png' };
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+globalThis.__preparePdfWatermarkImage = async (file) => {
+  if (!file || file.size > 20 * 1024 * 1024) throw new Error('浮水印圖片不可超過 20 MB。');
+  const extension = file.name.split('.').pop()?.toLowerCase();
+  if (file.type === 'image/svg+xml' || extension === 'svg') return svgFileToPng(file);
+  if (file.type === 'image/png' || extension === 'png') return { bytes: await file.arrayBuffer(), type: 'image/png' };
+  if (file.type === 'image/jpeg' || extension === 'jpg' || extension === 'jpeg') {
+    return { bytes: await file.arrayBuffer(), type: 'image/jpeg' };
+  }
+  throw new Error('只支援 PNG、JPG 或 SVG 浮水印圖片。');
+};
+
+function validateWatermarkImage() {
+  const file = watermarkImage.files?.[0];
+  if (!file) {
+    watermarkImageFeedback.textContent = '支援 PNG、JPG、SVG，建議使用透明背景 PNG 或 SVG，最大 20 MB。';
+    watermarkImageFeedback.dataset.kind = '';
+    return;
+  }
+  const validType = /\.(png|jpe?g|svg)$/i.test(file.name) || ['image/png', 'image/jpeg', 'image/svg+xml'].includes(file.type);
+  if (!validType || file.size > 20 * 1024 * 1024) {
+    watermarkImage.value = '';
+    watermarkImageFeedback.textContent = validType ? '圖片不可超過 20 MB。' : '只支援 PNG、JPG 或 SVG。';
+    watermarkImageFeedback.dataset.kind = 'error';
+    return;
+  }
+  watermarkImageFeedback.textContent = `已選擇：${file.name}`;
+  watermarkImageFeedback.dataset.kind = 'success';
 }
 
 function dispatchSortEvent(target, type) {
@@ -183,6 +299,8 @@ historyToggle.addEventListener('click', () => {
 });
 
 watermarkLayout?.addEventListener('change', updateDecorationOptions);
+watermarkSource?.addEventListener('change', updateDecorationOptions);
+watermarkImage?.addEventListener('change', validateWatermarkImage);
 watermarkSize?.addEventListener('input', updateDecorationOptions);
 watermarkScale?.addEventListener('input', updateDecorationOptions);
 addPageNumbers?.addEventListener('change', updateDecorationOptions);
