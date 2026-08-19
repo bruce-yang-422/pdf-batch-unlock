@@ -1,5 +1,12 @@
 # PDF 本機工具箱
 
+[![Website](https://img.shields.io/badge/Website-pdf.stack--base.com-147d6f?style=flat-square)](https://pdf.stack-base.com/)
+[![GitHub Pages](https://img.shields.io/github/deployments/bruce-yang-422/pdf-batch-unlock/github-pages?label=GitHub%20Pages&style=flat-square)](https://bruce-yang-422.github.io/pdf-batch-unlock/)
+[![License: MIT](https://img.shields.io/github/license/bruce-yang-422/pdf-batch-unlock?style=flat-square)](LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/bruce-yang-422/pdf-batch-unlock?style=flat-square)](https://github.com/bruce-yang-422/pdf-batch-unlock/commits/main/)
+[![GitHub Stars](https://img.shields.io/github/stars/bruce-yang-422/pdf-batch-unlock?style=flat-square)](https://github.com/bruce-yang-422/pdf-batch-unlock/stargazers)
+[![Browser Only](https://img.shields.io/badge/Processing-100%25%20Browser%20Only-0f766e?style=flat-square)](https://pdf.stack-base.com/privacy/)
+
 前台網址：<https://bruce-yang-422.github.io/pdf-batch-unlock/>
 
 正式網址：<https://pdf.stack-base.com/>
