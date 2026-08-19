@@ -1,0 +1,154 @@
+:root {
+  color: #172033;
+  background: #eef3f8;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 15% 10%, rgb(27 117 188 / 14%), transparent 34%),
+    radial-gradient(circle at 90% 90%, rgb(36 166 126 / 12%), transparent 32%),
+    #eef3f8;
+}
+
+a { color: #236a9f; text-underline-offset: 3px; }
+a:hover { color: #16705a; }
+
+.legal-shell {
+  width: min(calc(100% - 36px), 920px);
+  margin: 32px auto 48px;
+  padding: clamp(26px, 5vw, 52px);
+  border: 1px solid rgb(23 32 51 / 8%);
+  border-radius: 24px;
+  background: rgb(255 255 255 / 95%);
+  box-shadow: 0 24px 70px rgb(38 55 78 / 13%);
+}
+
+.legal-header {
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e2e8ef;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.eyebrow {
+  margin-top: 26px;
+  color: #16705a;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 8px 0 10px;
+  font-size: clamp(2rem, 7vw, 3rem);
+  line-height: 1.1;
+}
+
+.summary {
+  max-width: 720px;
+  margin: 0;
+  color: #59677c;
+  line-height: 1.75;
+}
+
+.updated {
+  display: block;
+  margin-top: 12px;
+  color: #7a8698;
+  font-size: 0.76rem;
+}
+
+.legal-content { padding-top: 10px; }
+
+.legal-content section {
+  padding: 22px 0;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.legal-content section:last-child { border-bottom: 0; }
+
+h2 {
+  margin: 0 0 10px;
+  color: #203047;
+  font-size: 1.15rem;
+}
+
+h3 {
+  margin: 18px 0 7px;
+  font-size: 0.96rem;
+}
+
+p, li {
+  color: #526075;
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+p { margin: 8px 0; }
+ul { margin: 8px 0; padding-left: 22px; }
+
+.notice {
+  padding: 13px 15px;
+  border: 1px solid #d7e5df;
+  border-left: 4px solid #16705a;
+  border-radius: 10px;
+  background: #f2f9f6;
+}
+
+.license-card {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid #dce5ed;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.license-card h3 { margin-top: 0; }
+.license-card p:last-child { margin-bottom: 0; }
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8ef;
+  color: #778296;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.site-footer a { color: #526f8a; }
+
+@media (max-width: 640px) {
+  body { background: #fff; }
+  .legal-shell {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 22px 16px max(28px, env(safe-area-inset-bottom));
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .eyebrow { margin-top: 22px; }
+  .legal-content section { padding: 19px 0; }
+}

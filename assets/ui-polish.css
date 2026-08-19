@@ -116,25 +116,28 @@ body {
 }
 
 .password-strength-scale {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  position: relative;
+  height: 34px;
+  margin-inline: 14px;
   color: #778296;
 }
 
 .password-strength-scale span {
+  position: absolute;
+  top: 0;
+  left: var(--scale-position);
   display: grid;
   gap: 1px;
   justify-items: center;
+  transform: translateX(-50%);
   font-size: 0.68rem;
 }
 
-.password-strength-scale span:first-child {
-  justify-items: start;
-}
-
-.password-strength-scale span:last-child {
-  justify-items: end;
-}
+.password-strength-scale span:nth-child(1) { --scale-position: 0%; }
+.password-strength-scale span:nth-child(2) { --scale-position: 25%; }
+.password-strength-scale span:nth-child(3) { --scale-position: 50%; }
+.password-strength-scale span:nth-child(4) { --scale-position: 75%; }
+.password-strength-scale span:nth-child(5) { --scale-position: 100%; }
 
 .password-strength-scale b {
   color: #526075;
@@ -284,6 +287,43 @@ body {
   font-size: 0.78rem;
   font-weight: 800;
   line-height: 1;
+}
+
+.tool-heading-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+  align-items: start;
+  gap: 18px 28px;
+  margin-bottom: 18px;
+}
+
+.tool-heading-row .tool-intro {
+  margin-bottom: 0;
+}
+
+.unlock-legal-notice {
+  padding: 11px 13px;
+  border: 1px solid #d7e5df;
+  border-left: 4px solid #16705a;
+  border-radius: 10px;
+  color: #486057;
+  background: #f2f9f6;
+  font-size: 0.76rem;
+  line-height: 1.6;
+}
+
+.unlock-legal-notice[hidden] {
+  display: none;
+}
+
+.site-footer a {
+  color: #526f8a;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.site-footer a:hover {
+  color: #16705a;
 }
 
 .tool-tab:focus-visible,
@@ -740,6 +780,16 @@ body.is-native-sorting .page-card:hover {
 
   .tool-intro {
     margin-bottom: 14px;
+  }
+
+  .tool-heading-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .tool-heading-row .tool-intro {
+    margin-bottom: 0;
   }
 
   .workspace {

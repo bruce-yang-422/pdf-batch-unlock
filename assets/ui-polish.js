@@ -58,6 +58,7 @@ const passwordLabel = document.querySelector('#password-label');
 const togglePassword = document.querySelector('#toggle-password');
 const confirmPasswordSection = document.querySelector('#confirm-password-section');
 const confirmPassword = document.querySelector('#confirm-password');
+const unlockLegalNotice = document.querySelector('#unlock-legal-notice');
 const protectPasswordMode = document.querySelector('#protect-password-mode');
 const protectPasswordSources = [...document.querySelectorAll('input[name="protect-password-source"]')];
 const customPasswordOptions = document.querySelector('#custom-password-options');
@@ -124,6 +125,7 @@ function updateUploadMode() {
 function updateResponsiveLayout() {
   const pageMode = activeTool() === 'pages';
   const decorateMode = activeTool() === 'decorate';
+  unlockLegalNotice.hidden = activeTool() !== 'unlock';
   card.classList.toggle('page-manager-mode', pageMode);
   card.classList.toggle('decorate-mode', decorateMode);
   decorationPreview.hidden = !decorateMode;

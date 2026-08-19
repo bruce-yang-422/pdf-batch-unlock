@@ -97,10 +97,14 @@ README.md
 index.html
 robots.txt
 sitemap.xml
+privacy/index.html
+terms/index.html
+licenses/index.html
 assets/
 ├─ index-*.css
 ├─ index-*.js
 ├─ layout-*.css
+├─ legal-pages.css
 ├─ i18n.js
 ├─ ui-polish.css
 ├─ ui-polish.js
@@ -131,3 +135,5 @@ Branch: main / (root)
 ## 隱私
 
 本網站沒有後端、資料庫、檔案上傳 API、analytics 或追蹤程式。QPDF WebAssembly、PDF.js worker、JavaScript 與 CSS 均由同一個 GitHub Pages 網站提供。網站只會在瀏覽器 `localStorage` 儲存介面語言代碼，不會儲存檔案、密碼或 PDF 處理內容。
+
+相關頁面：[/privacy](https://pdf.stack-base.com/privacy)、[/terms](https://pdf.stack-base.com/terms)、[/licenses](https://pdf.stack-base.com/licenses)。

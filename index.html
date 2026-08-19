@@ -55,11 +55,11 @@
       }
     </script>
     <script type="module" crossorigin src="./assets/index-XfCSYlnY.js?v=20260819-3"></script>
-    <script type="module" src="./assets/ui-polish.js?v=20260819-10"></script>
-    <script type="module" src="./assets/i18n.js?v=20260819-5"></script>
+    <script type="module" src="./assets/ui-polish.js?v=20260819-11"></script>
+    <script type="module" src="./assets/i18n.js?v=20260819-6"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CFPIHGYZ.css">
     <link rel="stylesheet" href="./assets/layout-DH4mL2.css">
-    <link rel="stylesheet" href="./assets/ui-polish.css?v=20260819-9">
+    <link rel="stylesheet" href="./assets/ui-polish.css?v=20260819-11">
   </head>
   <body>
     <main class="app-shell">
@@ -107,10 +107,15 @@
           <button class="tool-tab" type="button" data-tool="jpg-to-pdf">JPG 轉 PDF</button>
         </nav>
 
-        <section class="tool-intro" aria-live="polite">
-          <h2 id="tool-title">移除 PDF 密碼</h2>
-          <p id="tool-description">加入多個使用相同密碼的 PDF；多檔結果會打包成 ZIP。</p>
-        </section>
+        <div class="tool-heading-row">
+          <section class="tool-intro" aria-live="polite">
+            <h2 id="tool-title">移除 PDF 密碼</h2>
+            <p id="tool-description">加入多個使用相同密碼的 PDF；多檔結果會打包成 ZIP。</p>
+          </section>
+          <aside id="unlock-legal-notice" class="unlock-legal-notice">
+            請僅處理您本人擁有或已取得合法授權的文件。所有檔案均在您的瀏覽器本機處理，不會主動上傳至本站伺服器。
+          </aside>
+        </div>
 
         <form id="tool-form" novalidate>
           <div class="workspace">
@@ -345,8 +350,11 @@
           </section>
         </form>
 
-        <footer class="site-footer">
-          <span>© 2026 Bruce</span>
+        <footer class="site-footer" data-i18n-skip>
+          <span>© 2026 Bruce</span><span aria-hidden="true">·</span>
+          <a href="/privacy">Privacy</a><span aria-hidden="true">·</span>
+          <a href="/terms">Terms</a><span aria-hidden="true">·</span>
+          <a href="/licenses">Open Source Licenses</a>
         </footer>
       </section>
     </main>
