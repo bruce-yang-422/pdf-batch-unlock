@@ -939,7 +939,7 @@ fileListObserver.observe(fileList, { childList: true });
 mobileQuery.addEventListener?.('change', updateResponsiveLayout);
 desktopQuery.addEventListener?.('change', updateResponsiveLayout);
 compactUploadQuery.addEventListener?.('change', updateUploadMode);
-updateHistoryState(false);
+updateHistoryState(true);
 updateResponsiveLayout();
 updateStatusPresentation();
 updateDecorationOptions();
