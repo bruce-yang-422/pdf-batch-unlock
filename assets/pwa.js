@@ -50,15 +50,18 @@ function showInstallPrompt() {
 }
 
 function suppressInstallPrompt() {
+  // Always suppress the current session as well. This keeps the prompt hidden
+  // even if persistent storage is cleared or unavailable after this click.
+  try {
+    sessionStorage.setItem('pwa-install-dismissed', 'true');
+  } catch {
+    // The prompt can still be hidden when storage is unavailable.
+  }
+
   try {
     localStorage.setItem(INSTALL_SUPPRESSION_KEY, String(Date.now() + SIXTY_DAYS_IN_MS));
   } catch {
-    // Fall back to hiding the prompt for the current session.
-    try {
-      sessionStorage.setItem('pwa-install-dismissed', 'true');
-    } catch {
-      // The prompt can still be hidden when storage is unavailable.
-    }
+    // The session flag above still prevents the prompt from returning now.
   }
   hideInstallPrompt();
 }

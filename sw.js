@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'pdf-local-toolbox-';
-const CACHE_NAME = `${CACHE_PREFIX}v3`;
+const CACHE_NAME = `${CACHE_PREFIX}v4`;
 const APP_SHELL = [
   './',
   './index.html',
@@ -84,6 +84,14 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return;
 
   if (request.mode === 'navigate') {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
+  // Query strings are used as release versions by mutable JS/CSS assets.
+  // Fetch them from the network first so an older service worker cache cannot
+  // pair a newly downloaded page with stale behavior from the previous release.
+  if (url.search) {
     event.respondWith(networkFirst(request));
     return;
   }
