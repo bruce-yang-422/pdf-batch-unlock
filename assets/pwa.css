@@ -75,12 +75,14 @@
   cursor: pointer;
 }
 
-.pwa-install-later {
+.pwa-install-later,
+.pwa-install-not-needed {
   color: #496560;
   background: transparent;
 }
 
-.pwa-install-later:hover {
+.pwa-install-later:hover,
+.pwa-install-not-needed:hover {
   background: #edf5f3;
 }
 

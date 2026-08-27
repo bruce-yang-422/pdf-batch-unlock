@@ -1,9 +1,12 @@
 const installPrompt = document.querySelector('#pwa-install-prompt');
 const installButton = document.querySelector('#pwa-install-button');
 const laterButton = document.querySelector('#pwa-install-later');
+const notNeededButton = document.querySelector('#pwa-install-not-needed');
 const installInstructions = document.querySelector('#pwa-install-instructions');
 
 let deferredInstallPrompt = null;
+const INSTALL_SUPPRESSION_KEY = 'pwa-install-suppressed-until';
+const SIXTY_DAYS_IN_MS = 60 * 24 * 60 * 60 * 1000;
 
 function isStandalone() {
   return window.matchMedia('(display-mode: standalone)').matches
@@ -24,15 +27,40 @@ function wasDismissedThisSession() {
   }
 }
 
+function isSuppressed() {
+  try {
+    const suppressedUntil = Number(localStorage.getItem(INSTALL_SUPPRESSION_KEY));
+    if (Number.isFinite(suppressedUntil) && suppressedUntil > Date.now()) return true;
+    localStorage.removeItem(INSTALL_SUPPRESSION_KEY);
+  } catch {
+    // Continue normally when persistent storage is unavailable.
+  }
+  return false;
+}
+
 function hideInstallPrompt() {
   installPrompt.hidden = true;
   installPrompt.classList.remove('is-visible');
 }
 
 function showInstallPrompt() {
-  if (isStandalone() || wasDismissedThisSession()) return;
+  if (isStandalone() || wasDismissedThisSession() || isSuppressed()) return;
   installPrompt.hidden = false;
   requestAnimationFrame(() => installPrompt.classList.add('is-visible'));
+}
+
+function suppressInstallPrompt() {
+  try {
+    localStorage.setItem(INSTALL_SUPPRESSION_KEY, String(Date.now() + SIXTY_DAYS_IN_MS));
+  } catch {
+    // Fall back to hiding the prompt for the current session.
+    try {
+      sessionStorage.setItem('pwa-install-dismissed', 'true');
+    } catch {
+      // The prompt can still be hidden when storage is unavailable.
+    }
+  }
+  hideInstallPrompt();
 }
 
 function dismissInstallPrompt() {
@@ -77,11 +105,17 @@ window.addEventListener('beforeinstallprompt', (event) => {
 
 window.addEventListener('appinstalled', () => {
   deferredInstallPrompt = null;
+  try {
+    localStorage.removeItem(INSTALL_SUPPRESSION_KEY);
+  } catch {
+    // No cleanup is needed when storage is unavailable.
+  }
   hideInstallPrompt();
 });
 
 installButton?.addEventListener('click', requestInstallation);
 laterButton?.addEventListener('click', dismissInstallPrompt);
+notNeededButton?.addEventListener('click', suppressInstallPrompt);
 
 if (isIosDevice() && !isStandalone()) showInstallPrompt();
 
