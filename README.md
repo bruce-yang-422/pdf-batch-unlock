@@ -94,6 +94,14 @@
 
 合併、拆分及 PDF 轉 JPG 不直接處理加密 PDF。請先使用「移除密碼」，再將解密後的 PDF 加入其他工具。
 
+## PWA 安裝與離線使用
+
+- 支援的桌面及 Android 瀏覽器會在符合安裝條件時顯示「安裝 App」通知。
+- iPhone 與 iPad 會提示透過瀏覽器分享選單的「加入主畫面」完成安裝。
+- 選擇「稍後」只會在目前瀏覽階段隱藏通知。
+- Service Worker 會快取應用程式介面、PDF.js worker 與 QPDF WebAssembly；安裝完成且至少成功載入一次後，主要 PDF 功能可離線使用。
+- 使用者匯入的 PDF、圖片、密碼與輸出結果不會寫入 PWA 離線快取。
+
 ## 正式部署
 
 Repository 只保留可直接部署的正式靜態網站：
@@ -106,6 +114,8 @@ README.md
 index.html
 robots.txt
 sitemap.xml
+manifest.webmanifest
+sw.js
 privacy/index.html
 terms/index.html
 licenses/index.html
@@ -117,8 +127,19 @@ assets/
 ├─ i18n.js
 ├─ ui-polish.css
 ├─ ui-polish.js
+├─ pwa.css
+├─ pwa.js
+├─ wasm/
+│  ├─ jbig2.wasm
+│  ├─ openjpeg.wasm
+│  └─ qcms_bg.wasm
 ├─ pdf.worker.min-*.mjs
 └─ qpdf-*.wasm
+icon/
+├─ favicon.ico
+├─ apple-touch-icon.png
+├─ pwa-192x192.png
+└─ pwa-512x512.png
 ```
 
 GitHub Pages 設定：
@@ -143,7 +164,7 @@ Branch: main / (root)
 
 ## 隱私
 
-本網站沒有後端、資料庫、檔案上傳 API、analytics 或追蹤程式。QPDF WebAssembly、PDF.js worker、JavaScript 與 CSS 均由同一個 GitHub Pages 網站提供。網站只會在瀏覽器 `localStorage` 儲存介面語言代碼，不會儲存檔案、密碼或 PDF 處理內容。
+本網站沒有後端、資料庫、檔案上傳 API、analytics 或追蹤程式。QPDF WebAssembly、PDF.js worker、JavaScript 與 CSS 均由同一個 GitHub Pages 網站提供。網站會在 `localStorage` 儲存介面語言代碼、在 `sessionStorage` 暫存安裝通知狀態，並以 Cache Storage 保存 PWA 應用程式檔案；不會儲存使用者的 PDF、圖片、密碼或輸出內容。
 
 網站 Footer 提供下列資訊頁面：
 

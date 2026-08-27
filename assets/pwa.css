@@ -1,0 +1,120 @@
+.pwa-install-prompt {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 100;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px 14px;
+  width: min(430px, calc(100vw - 32px));
+  padding: 18px;
+  color: #173d38;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(20, 123, 109, 0.22);
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(20, 66, 59, 0.24);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.pwa-install-prompt[hidden] {
+  display: none;
+}
+
+.pwa-install-prompt.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pwa-install-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 13px;
+  box-shadow: 0 5px 16px rgba(20, 123, 109, 0.2);
+}
+
+.pwa-install-content {
+  min-width: 0;
+}
+
+.pwa-install-content h2 {
+  margin: 1px 0 5px;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.pwa-install-content p {
+  margin: 0;
+  color: #54716c;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.pwa-install-content .pwa-install-instructions {
+  margin-top: 8px;
+  color: #11695e;
+  font-weight: 700;
+}
+
+.pwa-install-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.pwa-install-actions button {
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.pwa-install-later {
+  color: #496560;
+  background: transparent;
+}
+
+.pwa-install-later:hover {
+  background: #edf5f3;
+}
+
+.pwa-install-button {
+  color: #fff;
+  background: #147b6d;
+  box-shadow: 0 7px 16px rgba(20, 123, 109, 0.24);
+}
+
+.pwa-install-button:hover {
+  background: #0f685c;
+}
+
+.pwa-install-actions button:focus-visible {
+  outline: 3px solid rgba(20, 123, 109, 0.3);
+  outline-offset: 2px;
+}
+
+@media (max-width: 560px) {
+  .pwa-install-prompt {
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    width: calc(100vw - 24px);
+    padding: 15px;
+    border-radius: 16px;
+  }
+
+  .pwa-install-actions button {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pwa-install-prompt {
+    transition: none;
+  }
+}

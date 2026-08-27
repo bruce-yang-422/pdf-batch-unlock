@@ -487,7 +487,10 @@ async function renderPdfPagePreview(file) {
   try {
     const bytes = new Uint8Array(await file.arrayBuffer());
     if (token !== previewPdfToken) return;
-    const loadingTask = globalThis.pdfjsLib.getDocument({ data: bytes });
+    const loadingTask = globalThis.pdfjsLib.getDocument({
+      data: bytes,
+      wasmUrl: new URL('./wasm/', import.meta.url).href,
+    });
     pdfDocument = await loadingTask.promise;
     const page = await pdfDocument.getPage(1);
     const baseViewport = page.getViewport({ scale: 1 });

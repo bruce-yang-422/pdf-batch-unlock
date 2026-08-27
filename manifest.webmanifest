@@ -1,0 +1,29 @@
+{
+  "id": "/",
+  "name": "PDF 本機工具箱",
+  "short_name": "PDF 工具箱",
+  "description": "在瀏覽器本機移除密碼、合併、拆分、轉檔與編輯 PDF，不需上傳檔案。",
+  "lang": "zh-Hant",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4f8f7",
+  "theme_color": "#147b6d",
+  "categories": ["utilities", "productivity"],
+  "icons": [
+    {
+      "src": "icon/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
