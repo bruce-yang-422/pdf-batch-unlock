@@ -169,7 +169,8 @@ function render(locale) {
   }
 }
 
-for (const locale of supported) {
+// Match the homepage: sort by language tag and display each language's self-name.
+for (const locale of [...supported].sort()) {
   const link = document.createElement('a');
   link.lang = locale;
   link.hreflang = locale;

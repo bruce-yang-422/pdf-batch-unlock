@@ -120,8 +120,6 @@
     transition: none;
   }
 }
-.app-shell .site-footer { align-items: center; }
-
 #footer-install-action:not([hidden]) {
   display: inline-flex;
   align-items: center;
@@ -137,6 +135,8 @@
 }
 
 #footer-install-button {
+  display: inline-flex;
+  align-items: center;
   padding: 3px 10px;
   border: 1px solid #a8d3c9;
   border-radius: 999px;
