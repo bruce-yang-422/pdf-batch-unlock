@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "Bộ công cụ PDF"
+  },
+  "appDescription": {
+    "message": "Xử lý PDF trên thiết bị mà không cần tải tệp lên."
+  },
+  "openApp": {
+    "message": "Bộ công cụ PDF"
+  }
+}

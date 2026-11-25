@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "PDFツールボックス"
+  },
+  "appDescription": {
+    "message": "ファイルをアップロードせず、端末内でPDFを編集できます。"
+  },
+  "openApp": {
+    "message": "PDFツールボックス"
+  }
+}

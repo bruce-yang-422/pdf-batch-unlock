@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "PDF-Werkzeuge"
+  },
+  "appDescription": {
+    "message": "PDFs direkt auf Ihrem Gerät bearbeiten, ganz ohne Upload."
+  },
+  "openApp": {
+    "message": "PDF-Werkzeuge"
+  }
+}

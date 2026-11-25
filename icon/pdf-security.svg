@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<defs>
+ <clipPath id="appIconCorners"><rect width="512" height="512" rx="88"/></clipPath>
+ <linearGradient id="bg" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#07567c"/><stop offset=".48" stop-color="#168d8a"/><stop offset="1" stop-color="#289d7c"/></linearGradient>
+ <radialGradient id="glow" cx=".44" cy="0" r=".85"><stop stop-color="#b2ead5" stop-opacity=".21"/><stop offset="1" stop-color="#b2ead5" stop-opacity="0"/></radialGradient>
+ <linearGradient id="paper" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff"/><stop offset=".56" stop-color="#f4f5f4"/><stop offset="1" stop-color="#e5ecea"/></linearGradient>
+ <linearGradient id="fold" x1="0" y1="1" x2=".65" y2="0"><stop stop-color="#e2e8e6"/><stop offset=".32" stop-color="#fafafa"/><stop offset="1" stop-color="#fff"/></linearGradient>
+ <linearGradient id="tag" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#299c98"/><stop offset="1" stop-color="#087e70"/></linearGradient>
+ <linearGradient id="line" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#9fb9b8"/><stop offset=".25" stop-color="#bcd0ce"/><stop offset="1" stop-color="#cddbd9"/></linearGradient>
+ <linearGradient id="shield" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#179c89"/><stop offset=".55" stop-color="#087b70"/><stop offset="1" stop-color="#004b50"/></linearGradient>
+ <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#dce6e4"/></linearGradient>
+ <linearGradient id="lock" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#e4ebea"/></linearGradient>
+ <filter id="paperShadow" x="-40%" y="-30%" width="180%" height="180%"><feDropShadow dx="-5" dy="14" stdDeviation="13" flood-color="#003e49" flood-opacity=".56"/></filter>
+ <filter id="foldShadow" x="-60%" y="-40%" width="220%" height="210%"><feDropShadow dx="0" dy="8" stdDeviation="7" flood-color="#466762" flood-opacity=".48"/></filter>
+ <filter id="shieldShadow" x="-40%" y="-30%" width="180%" height="180%"><feDropShadow dx="-4" dy="9" stdDeviation="9" flood-color="#003f43" flood-opacity=".5"/></filter>
+ <filter id="lockShadow" x="-40%" y="-30%" width="180%" height="180%"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#003f43" flood-opacity=".45"/></filter>
+ <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".48" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+ <clipPath id="shieldClip"><path d="M320 239 Q324 239 330 243 Q353 258 381 268 Q389 270 389 280 V314 C389 355 365 386 326 403 Q320 406 314 403 C275 387 252 354 252 314 V280 Q252 271 260 268 Q288 258 312 243 Q317 239 320 239Z"/></clipPath>
+</defs>
+<g clip-path="url(#appIconCorners)">
+<path fill="url(#bg)" d="M0 0H512V512H0Z"/><path fill="url(#glow)" d="M0 0H512V512H0Z"/><path d="M0 0H512V512H0Z" filter="url(#grain)" opacity=".035" style="mix-blend-mode:soft-light"/>
+<path d="M152 87H283Q290 87 296 94L380 178Q384 182 384 190V373Q384 413 344 413H153Q112 413 112 372V128Q112 87 152 87Z" fill="url(#paper)" stroke="#fff" stroke-width="1" filter="url(#paperShadow)"/>
+<path d="M289 90L382 183H324Q289 183 289 148Z" fill="url(#fold)" filter="url(#foldShadow)"/>
+<rect x="143" y="161" width="102" height="49" rx="10" fill="url(#tag)" stroke="#117f79" stroke-width=".7"/>
+<!-- PDF lettering as outlines, no font dependencies -->
+<g fill="#faffff" fill-rule="evenodd" transform="translate(0 .5)">
+<path d="M157 171H168.5C175.5 171 179.2 174.7 179.2 180.3S175.1 189.6 168.5 189.6H163V199H157ZM163 176V184.5H168.1Q173.3 184.5 173.3 180.3T168.1 176Z"/>
+<path d="M183 171H193.1C202.3 171 207.4 176.3 207.4 185S202.3 199 193.1 199H183ZM189 176.3V193.7H192.9C198.5 193.7 201.3 190.5 201.3 185S198.5 176.3 192.9 176.3Z"/>
+<path d="M212 171H230V176.3H218V182.7H228.6V188H218V199H212Z"/>
+</g>
+<g fill="url(#line)" stroke="#fff" stroke-width=".9"><rect x="142.5" y="233.5" width="113" height="15" rx="7.5"/><rect x="142.5" y="268.5" width="80" height="15" rx="7.5"/><rect x="142.5" y="305" width="71.5" height="15" rx="7.5"/></g>
+<path d="M320 223Q326 223 333 228Q359 245 389 255Q403 260 403 276V315C403 363 375 399 329 418Q320 422 311 418C264 399 237 363 237 315V276Q237 260 251 255Q281 245 307 228Q314 223 320 223Z" fill="url(#rim)" stroke="#fff" stroke-width="1.4" filter="url(#shieldShadow)"/>
+<path d="M320 239 Q324 239 330 243 Q353 258 381 268 Q389 270 389 280 V314 C389 355 365 386 326 403 Q320 406 314 403 C275 387 252 354 252 314 V280 Q252 271 260 268 Q288 258 312 243 Q317 239 320 239Z" fill="url(#shield)" stroke="#176e68" stroke-width=".8"/>
+<path d="M320 238H392V407H320Z" fill="#003e46" opacity=".15" clip-path="url(#shieldClip)"/>
+<g filter="url(#lockShadow)"><path d="M301.5 312V295Q301.5 276 320 276Q338.5 276 338.5 295V312" fill="none" stroke="url(#lock)" stroke-width="10.5" stroke-linecap="round"/><rect x="287.5" y="307.5" width="65" height="55" rx="9" fill="url(#lock)" stroke="#fff" stroke-width=".8"/><path d="M320 324.5C315.3 324.5 311.5 328 311.5 332.7Q311.5 337.7 316.5 340.1V343Q316.5 346.5 320 346.5T323.5 343V340.1Q328.5 337.7 328.5 332.7C328.5 328 324.7 324.5 320 324.5Z" fill="#00565a"/></g>
+</g>
+</svg>

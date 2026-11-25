@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "Outils PDF"
+  },
+  "appDescription": {
+    "message": "Traitez vos PDF sur votre appareil sans envoyer de fichiers."
+  },
+  "openApp": {
+    "message": "Outils PDF"
+  }
+}

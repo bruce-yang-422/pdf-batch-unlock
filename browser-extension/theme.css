@@ -1,0 +1,169 @@
+.extension-preferences {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+@media (max-width: 640px) {
+  .extension-preferences { flex: 1; }
+  .extension-preferences select { max-width: min(44vw, 200px); }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #111920;
+  --surface: #19242d;
+  --panel: #202e38;
+  --input: #263743;
+  --line: #405563;
+  --ink: #eef5f7;
+  --muted: #b8c9d3;
+  --link: #9bd5fa;
+  --accent: #85dcc1;
+  --success: #a9edcf;
+  --danger: #ffbec3;
+  --warning: #f8d197;
+  color: var(--ink);
+  background: var(--page);
+
+  & body,
+  & .app-shell {
+    background: var(--page);
+  }
+
+  & .card,
+  & .legal-shell {
+    background: var(--surface);
+    border-color: var(--line);
+    box-shadow: none;
+  }
+
+  & :is(.activity-panel, .tool-tabs, .file-row, .page-card, .decoration-preview, .license-card),
+  & .decorate-mode .activity-panel > .decoration-preview {
+    background: var(--panel);
+    border-color: var(--line);
+  }
+
+  & :is(.drop-zone, .page-preview, .status, .history-section, .terminal-titlebar, .history-item) {
+    background: var(--page);
+    border-color: var(--line);
+  }
+
+  & :is(.language-switcher, .drop-zone, .tool-tab, .protect-password-mode legend, .generated-password-result code,
+        .decorate-options .option-label, .options label, .mobile-tool-picker label, .history-section,
+        .history-section .queue-heading h3, .status, .legal-content h2) {
+    color: var(--ink);
+  }
+
+  & :is(.privacy-note, .tool-intro p, .drop-zone span, .file-feedback, .section-kicker, .empty-list,
+        .queued-file span, .file-state, .drag-handle, .limit-note, .selection-count, .page-manager-note,
+        .page-loading, .option-grid output, .decorate-options output, .watermark-upload-formats,
+        .decorate-options .option-help, .password-help, .password-strength-scale, .password-strength-scale b,
+        .decoration-preview-heading span, .terminal-titlebar, .history-section .history-time,
+        .history-section .history-summary, .history-section .history-file, .history-section .released-note,
+        .site-footer, .summary, .updated, .legal-content p, .legal-content li) {
+    color: var(--muted);
+  }
+
+  & :is(a, .site-footer a, .text-button, .history-section .text-button.compact, .history-section .history-actions button,
+        .order-button, .page-order-controls button) {
+    color: var(--link);
+  }
+
+  & .eyebrow,
+  & .history-section .queue-heading h3::after {
+    color: var(--accent);
+  }
+
+  & :is(.legal-header, .legal-content section, .site-footer, .page-manager-section, .history-section .history-details,
+        .history-section .empty-list, .empty-list, .watermark-image-picker) {
+    border-color: var(--line);
+  }
+
+  & :is(.language-switcher select, .options select, .options input[type="text"], .password-field, .password-field input,
+        .mobile-tool-picker option, .protect-password-mode label, .page-toolbar button,
+        .history-section .text-button.compact, .history-section .history-actions button,
+        .history-section .empty-list, .secondary-button, .order-button, .page-order-controls button,
+        .legal-languages a) {
+    color: var(--ink);
+    background: var(--input);
+    border-color: var(--line);
+  }
+
+  & :is(.tool-tab:hover, .page-toolbar button:hover:not(:disabled), .order-button:hover:not(:disabled),
+        .history-section .text-button.compact:hover, .history-section .history-actions button:hover,
+        .secondary-button:hover, .legal-languages a:hover) {
+    color: var(--ink);
+    background: #344a58;
+  }
+
+  & :is(.tool-tab.is-active, .page-toolbar .accent-button, .legal-languages a[aria-current="true"]) {
+    color: #fff;
+    background: #166658;
+    border-color: #57b69f;
+  }
+
+  & :is(.privacy-badge, .unlock-legal-notice, .generated-password-result, .legal-content .notice,
+        .protect-password-mode label:has(input:checked), .page-card.is-selected) {
+    color: var(--success);
+    background: #203e37;
+    border-color: #477e70;
+  }
+
+  & :is(.status[data-kind="success"], .status.is-success-toast) {
+    color: var(--success);
+    background: #203e37;
+    border-color: #477e70;
+  }
+
+  & .status[data-kind="success"]::before,
+  & :is(.file-row[data-status="success"] .file-state,
+        .history-section .history-summary [data-kind="success"], .decorate-options .option-help[data-kind="success"]) {
+    color: var(--success);
+  }
+
+  & :is(.drop-zone:hover, .drop-zone:focus-visible, .drop-zone.is-dragging, .page-card.is-touch-drop-target, .status[data-kind="working"]) {
+    color: var(--link);
+    background: #223848;
+    border-color: #648fa8;
+  }
+
+  & :is(.drop-zone svg) { stroke: var(--link); }
+
+  & .status[data-kind="working"]::before,
+  & .file-row[data-status="processing"] .file-state {
+    color: var(--link);
+  }
+
+  & .password-strength-warning {
+    color: var(--warning);
+    background: #40331f;
+    border-color: #745b34;
+  }
+
+  & :is(.error-notice, .status[data-kind="error"]) {
+    color: var(--danger);
+    background: #442a32;
+    border-color: #79505c;
+  }
+
+  & .status[data-kind="error"]::before,
+  & :is(.error-notice .error-reason, .error-notice ul, .error-notice-heading button,
+        .file-row[data-status="failed"] .file-state, .remove-file, .page-toolbar .danger-button,
+        .history-section .history-summary [data-kind="failed"], .history-section .history-actions .release-result,
+        .decorate-options .option-help[data-kind="error"]) {
+    color: var(--danger);
+  }
+
+  & .error-notice-heading button:hover { background: #603a45; }
+
+  /* Keep the document preview faithful to downloaded pages. */
+  & :is(.decoration-preview-paper, .page-preview img) { color-scheme: light; }
+
+  & :focus-visible {
+    outline: 2px solid var(--link);
+    outline-offset: 3px;
+  }
+}

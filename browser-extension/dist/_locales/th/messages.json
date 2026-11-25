@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "เครื่องมือ PDF"
+  },
+  "appDescription": {
+    "message": "จัดการ PDF บนอุปกรณ์ของคุณโดยไม่ต้องอัปโหลดไฟล์"
+  },
+  "openApp": {
+    "message": "เครื่องมือ PDF"
+  }
+}

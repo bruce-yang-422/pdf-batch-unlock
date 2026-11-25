@@ -4,6 +4,9 @@
 # Browser UI check profiles
 .ui-check-profile/
 
+# Locally generated browser extension release archives
+/browser-extension/release/*.zip
+
 # Editors and operating systems
 .idea/
 .vscode/

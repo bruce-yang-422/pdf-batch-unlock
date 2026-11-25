@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "PDF 本機工具箱"
+  },
+  "appDescription": {
+    "message": "在裝置上處理 PDF，無需上傳檔案。"
+  },
+  "openApp": {
+    "message": "PDF 本機工具箱"
+  }
+}

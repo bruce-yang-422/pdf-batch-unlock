@@ -103,9 +103,18 @@
 - Service Worker 會快取應用程式介面、PDF.js worker 與 QPDF WebAssembly；安裝完成且至少成功載入一次後，主要 PDF 功能可離線使用。
 - 使用者匯入的 PDF、圖片、密碼與輸出結果不會寫入 PWA 離線快取。
 
+## 圖示資產
+
+- [圖示母圖](icon/pdf-security.svg) 位於 `icon/pdf-security.svg`，採用透明圓角。首頁的 SVG 網站圖示直接引用這個檔案。
+- `icon/favicon.ico` 提供 16 至 256 px 的多尺寸網站圖示。`icon/apple-touch-icon.png` 用於 iPhone 與 iPad 的主畫面。
+- PWA 安裝圖示為 `icon/pwa-192x192.png` 與 `icon/pwa-512x512.png`，由 `manifest.webmanifest` 引用。`icon/pwa-512x512.svg` 是內嵌 512 px PNG 的預覽副本。
+- Chrome 與 Edge 外掛圖示位於 `browser-extension/icon/`，尺寸為 16、32、48、128 px。封裝時會複製到 `browser-extension/dist/icon/` 並納入發行 ZIP。
+
 ## 正式部署
 
-Repository 只保留可直接部署的正式靜態網站：
+Chrome 與 Microsoft Edge 的 Manifest V3 外掛支援深色模式與 13 種工作區語言。開發測試載入 `browser-extension/dist/`，商店上傳使用 `browser-extension/release/` 的 ZIP。詳見 [外掛安裝與封裝說明](browser-extension/README.md)。
+
+網站從 repository 根目錄的靜態檔案直接部署：
 
 ```text
 .gitignore
@@ -137,6 +146,7 @@ assets/
 ├─ pdf.worker.min-*.mjs
 └─ qpdf-*.wasm
 icon/
+├─ pdf-security.svg
 ├─ favicon.ico
 ├─ apple-touch-icon.png
 ├─ pwa-192x192.png
@@ -161,7 +171,7 @@ Branch: main / (root)
 - 大型 PDF、高解析度圖片或大量頁面可能受裝置記憶體限制，手機上尤其明顯。
 - 拆分與 PDF 轉 JPG 會在完成後產生 ZIP，因此處理期間會占用額外記憶體。
 - PDF 處理在瀏覽器執行，大型檔案可能讓介面短暫失去回應。
-- 本 repository 的最新版只保留可直接部署的正式網站檔案，不包含開發工具與測試。
+- 靜態網站可直接部署。外掛版另有同步工作區及資產的建置指令。
 
 ## 隱私
 

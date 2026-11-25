@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "PDF 도구 모음"
+  },
+  "appDescription": {
+    "message": "파일을 업로드하지 않고 기기에서 PDF를 처리하세요."
+  },
+  "openApp": {
+    "message": "PDF 도구 모음"
+  }
+}
