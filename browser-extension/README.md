@@ -11,7 +11,7 @@ Google Chrome 和 Microsoft Edge 共用同一個 Manifest V3 外掛。點擊工�
 
 1. Chrome 開啟 `chrome://extensions`，Edge 開啟 `edge://extensions`。
 2. 開啟「開發人員模式」，按下「載入未封裝」。
-3. 選取 `D:\Projects\pdf-batch-unlock\browser-extension\dist`。
+3. 選取本專案的 `browser-extension/dist/` 目錄。
 4. 從瀏覽器的擴充功能選單點擊「PDF 本機工具箱」。也可將圖示釘選到工具列。
 
 PDF 移除／加入密碼、合併、拆分、頁面管理、浮水印及 PDF／JPG 轉檔均在瀏覽器中處理。外掛自帶 PDF.js worker 和 WebAssembly，可離線使用，無需授予網站存取權限。

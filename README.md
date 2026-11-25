@@ -1,157 +1,123 @@
 # PDF 本機工具箱
 
-[![Website](https://img.shields.io/badge/Website-pdf.stack--base.com-147d6f?style=flat-square)](https://pdf.stack-base.com/)
-[![GitHub Pages](https://img.shields.io/github/deployments/bruce-yang-422/pdf-batch-unlock/github-pages?label=GitHub%20Pages&style=flat-square)](https://bruce-yang-422.github.io/pdf-batch-unlock/)
-[![License: MIT](https://img.shields.io/github/license/bruce-yang-422/pdf-batch-unlock?style=flat-square)](LICENSE)
-[![Last Commit](https://img.shields.io/github/last-commit/bruce-yang-422/pdf-batch-unlock?style=flat-square)](https://github.com/bruce-yang-422/pdf-batch-unlock/commits/main/)
-[![GitHub Stars](https://img.shields.io/github/stars/bruce-yang-422/pdf-batch-unlock?style=flat-square)](https://github.com/bruce-yang-422/pdf-batch-unlock/stargazers)
-[![Browser Only](https://img.shields.io/badge/Processing-100%25%20Browser%20Only-0f766e?style=flat-square)](https://pdf.stack-base.com/privacy/)
+[![Website](https://img.shields.io/badge/website-pdf.stack--base.com-147d6f?style=flat-square)](https://pdf.stack-base.com/)
+[![License](https://img.shields.io/github/license/bruce-yang-422/pdf-batch-unlock?style=flat-square)](LICENSE)
+[![Browser Only](https://img.shields.io/badge/processing-browser%20only-0f766e?style=flat-square)](https://pdf.stack-base.com/privacy/)
 
-前台網址：<https://bruce-yang-422.github.io/pdf-batch-unlock/>
+免費、開源、免上傳的 PDF 工具箱。所有 PDF、圖片與密碼都在瀏覽器本機處理，不會傳送至伺服器。
 
-正式網址：<https://pdf.stack-base.com/>
+**線上使用：<https://pdf.stack-base.com/>**
 
-純前端的 PDF 多功能工具。所有 PDF、圖片與密碼只會在瀏覽器本機處理，應用程式不會主動將文件內容上傳、儲存或傳送至本站伺服器。
+## 功能特色
 
-介面支援電腦與手機瀏覽器。電腦版使用頁籤切換工具，手機版則使用下拉選單；頁面管理工作區、檔案清單與主要操作按鈕也會依螢幕寬度自動調整。
+- 移除 PDF 密碼，支援批次處理與 ZIP 下載
+- 使用 AES-256 為 PDF 加上開啟密碼
+- 合併及逐頁拆分 PDF
+- 重新排序、旋轉、刪除或擷取 PDF 頁面
+- 加入文字／圖片浮水印及頁碼
+- PDF 轉 JPG，支援 96、150、300 DPI
+- JPG／JPEG 合併轉為 PDF
+- 支援 PWA 安裝與離線使用
+- 提供 Chrome／Microsoft Edge Manifest V3 擴充功能
+- 響應式介面與 13 種語言
 
-介面提供正體中文、簡體中文、英文、日文、韓文、西班牙文、德文、法文、俄文、巴西葡萄牙文、泰文、越南文與印尼文。首次開啟會依瀏覽器系統語言自動選擇，使用者切換後會在此瀏覽器記住偏好。
+## 快速開始
 
-各語言都有可分享的固定網址，使用 `?lang=` 加上語言代碼：`zh-Hant`、`zh-Hans`、`en`、`ja`、`ko`、`es`、`de`、`fr`、`ru`、`pt-BR`、`th`、`vi`、`id`。頁面會同步更新標題、摘要、Open Graph、Twitter Card、canonical 與結構化資料，並以 `hreflang` 標示語言版本；SEO 文案均明確說明檔案只在瀏覽器本機處理、不需上傳伺服器。
+本專案是已建置完成的靜態網站，不需要安裝 npm 套件。下載或 clone repository 後，在專案根目錄啟動靜態伺服器：
 
-電腦版採左右雙欄工作區：左側匯入與設定，右側顯示目前檔案及本次瀏覽器工作階段的活動紀錄。紀錄與輸出只暫存在目前分頁的記憶體，重新整理或關閉頁面後即清除。
+```bash
+git clone https://github.com/bruce-yang-422/pdf-batch-unlock.git
+cd pdf-batch-unlock
+python -m http.server 8080
+```
 
-活動紀錄預設展開，使用亮色終端機視窗呈現，可查看逐檔結果、輸出檔名與耗時，並可在重新整理前再次下載。使用者仍可手動收合，輸出資料也可逐筆或一次全部釋放。
+開啟 <http://localhost:8080/>。
 
-## 功能
-
-### 移除密碼
-
-- 一次選擇或拖入多個使用相同密碼的 PDF
-- 逐檔移除密碼；兩個以上檔案會將成功結果打包為單一 ZIP 下載
-- 單一檔案失敗不會中止其他檔案
-- 工具旁固定顯示合法使用提醒，請僅處理本人擁有或已取得合法授權的文件
-
-### 加上密碼
-
-- 為一個或多個未加密 PDF 設定相同的開啟密碼
-- 可自行設定密碼，並再次輸入確認，避免因輸入錯誤而無法開啟輸出檔
-- 也可由系統使用瀏覽器加密安全亂數產生密碼，長度可選 8–40 字元（每次增加 4 字元、預設及建議值為 24），並可決定是否包含特殊符號
-- 選擇 8 或 12 字元時會顯示低安全性提醒
-- 系統產生的密碼會顯示在畫面上，並提供重新產生與複製按鈕
-- 使用 QPDF WebAssembly 在瀏覽器本機進行 AES-256 加密
-- 單檔直接下載；多檔會將成功結果打包為 `protected-pdfs.zip`
-- 使用系統產生密碼時，另行下載包含相同密碼與檔案清單的 TXT，並將加密結果與 TXT 都保留在本次處理歷程供再次下載
-
-### 合併 PDF
-
-- 依檔案加入順序合併兩個以上 PDF
-- 可拖曳檔案，或使用上移／下移按鈕調整合併順序
-- 輸出單一 `merged.pdf`
-
-### 拆分 PDF
-
-- 將 PDF 的每一頁拆成獨立 PDF
-- 全部結果打包為 `原檔名-split.zip`
-
-### JPG 轉 PDF
-
-- 支援一張或多張 JPG／JPEG
-- 每張圖片建立為一頁 PDF
-- 保留原始圖片比例，不需要額外設定 DPI
-- 輸出單一 `images.pdf`
-
-### PDF 轉 JPG
-
-- 將 PDF 每一頁渲染為 JPG
-- 可選擇螢幕（96 DPI）、清晰（150 DPI）或高畫質（300 DPI）
-- 全部圖片打包為 `原檔名-jpg.zip`
-
-### PDF 頁面管理器
-
-- 建立每頁縮圖；電腦可用滑鼠拖曳，手機可長按後用手指拖動，也可使用方向按鈕調整順序
-- 可選取頁面後旋轉、刪除或擷取成獨立 PDF
-- 套用目前頁面順序與旋轉角度後輸出新 PDF
-
-### 浮水印與頁碼
-
-- 加入文字浮水印並設定字型、文字大小、縮放比例、透明度、位置與旋轉角度
-- 提供繁中黑體、標楷體（公文）、明體及等寬字型
-- 可點擊選擇 PNG、JPG 或 SVG 作為圖片浮水印；SVG 會先移除外部內容並在本機轉成 PNG
-- 浮水印可選擇單一顯示或重複鋪滿整個頁面
-- 加入 PDF 後以第一頁實際畫面提供即時預覽，顯示浮水印版面、比例、透明度、角度與頁碼效果
-- 支援中文浮水印，使用瀏覽器本機字型繪製
-- 可自動在每頁下方加入頁碼，並選擇頁碼字型及大小
-
-操作失敗時會顯示錯誤摘要、可能原因與建議處理方式；錯誤提醒會保留到使用者關閉或開始下一次處理。
+> 不建議直接以 `file://` 開啟 `index.html`，因為 Service Worker、Web Worker 與 WebAssembly 需要 HTTP 環境。
 
 ## 使用方式
 
-1. 從上方頁籤選擇工具；手機版請使用「選擇工具」下拉選單。
-2. 電腦可將檔案拖入虛線框或點擊選擇；手機與平板使用點選方式從裝置選取檔案。
-3. 檢查檔案清單及所需選項。
-4. 點擊處理按鈕並下載結果。
+1. 選擇需要的 PDF 工具。
+2. 拖入檔案，或點擊上傳區選取檔案。
+3. 視需要調整檔案順序與處理選項。
+4. 執行處理並下載結果。
 
-合併、拆分及 PDF 轉 JPG 不直接處理加密 PDF。請先使用「移除密碼」，再將解密後的 PDF 加入其他工具。
+合併、拆分及 PDF 轉 JPG 不直接支援加密 PDF。請先使用「移除密碼」，再處理解密後的副本。
 
-## PWA 安裝與離線使用
+## 支援語言
 
-- 支援的桌面及 Android 瀏覽器會在符合安裝條件時顯示「安裝 App」通知。
-- iPhone 與 iPad 會提示透過瀏覽器分享選單的「加入主畫面」完成安裝。
-- 選擇「稍後」只會在目前瀏覽階段隱藏通知。
-- 選擇「不需要」後，60 天內不再顯示安裝通知。
-- Service Worker 會快取應用程式介面、PDF.js worker 與 QPDF WebAssembly；安裝完成且至少成功載入一次後，主要 PDF 功能可離線使用。
-- 使用者匯入的 PDF、圖片、密碼與輸出結果不會寫入 PWA 離線快取。
+正體中文、簡體中文、英文、日文、韓文、西班牙文、德文、法文、俄文、巴西葡萄牙文、泰文、越南文及印尼文。
 
-## 圖示資產
-
-- [圖示母圖](icon/pdf-security.svg) 位於 `icon/pdf-security.svg`，採用透明圓角。首頁的 SVG 網站圖示直接引用這個檔案。
-- `icon/favicon.ico` 提供 16 至 256 px 的多尺寸網站圖示。`icon/apple-touch-icon.png` 用於 iPhone 與 iPad 的主畫面。
-- PWA 安裝圖示為 `icon/pwa-192x192.png` 與 `icon/pwa-512x512.png`，由 `manifest.webmanifest` 引用。`icon/pwa-512x512.svg` 是內嵌 512 px PNG 的預覽副本。
-- Chrome 與 Edge 外掛圖示位於 `browser-extension/icon/`，尺寸為 16、32、48、128 px。封裝時會複製到 `browser-extension/dist/icon/` 並納入發行 ZIP。
-
-## 正式部署
-
-Chrome 與 Microsoft Edge 的 Manifest V3 外掛支援深色模式與 13 種工作區語言。開發測試載入 `browser-extension/dist/`，商店上傳使用 `browser-extension/release/` 的 ZIP。詳見 [外掛安裝與封裝說明](browser-extension/README.md)。
-
-網站從 repository 根目錄的靜態檔案直接部署：
+可透過 `?lang=` 指定介面語言：
 
 ```text
-.gitignore
-CNAME
-LICENSE
-README.md
-index.html
-robots.txt
-sitemap.xml
-manifest.webmanifest
-sw.js
-privacy/index.html
-terms/index.html
-licenses/index.html
-assets/
-├─ index-*.css
-├─ index-*.js
-├─ layout-*.css
-├─ legal-pages.css
-├─ i18n.js
-├─ ui-polish.css
-├─ ui-polish.js
-├─ pwa.css
-├─ pwa.js
-├─ wasm/
-│  ├─ jbig2.wasm
-│  ├─ openjpeg.wasm
-│  └─ qcms_bg.wasm
-├─ pdf.worker.min-*.mjs
-└─ qpdf-*.wasm
-icon/
-├─ pdf-security.svg
-├─ favicon.ico
-├─ apple-touch-icon.png
-├─ pwa-192x192.png
-└─ pwa-512x512.png
+https://pdf.stack-base.com/?lang=zh-Hant
+https://pdf.stack-base.com/?lang=en
 ```
+
+支援的語言代碼：`zh-Hant`、`zh-Hans`、`en`、`ja`、`ko`、`es`、`de`、`fr`、`ru`、`pt-BR`、`th`、`vi`、`id`。
+
+## 瀏覽器擴充功能
+
+repository 已包含可直接載入的未封裝版本：
+
+1. Chrome 開啟 `chrome://extensions`；Edge 開啟 `edge://extensions`。
+2. 開啟「開發人員模式」。
+3. 選擇「載入未封裝」。
+4. 選取本專案的 `browser-extension/dist/` 目錄。
+
+主站資產更新後，使用 Node.js 22 重新建置擴充功能：
+
+```bash
+node browser-extension/build.mjs
+```
+
+建立商店上傳用 ZIP：
+
+```powershell
+pwsh -File browser-extension/package.ps1
+```
+
+ZIP 會輸出至 `browser-extension/release/pdf-toolbox-<version>.zip`。發行前請先更新 `browser-extension/manifest.json` 的版本號。完整說明請見 [browser-extension/README.md](browser-extension/README.md)。
+
+## 技術棧
+
+| 技術 | 用途 |
+| --- | --- |
+| QPDF WebAssembly | 移除密碼及 AES-256 加密 |
+| pdf-lib | 合併、拆分、頁面編排、浮水印及 JPG 轉 PDF |
+| PDF.js | 頁面預覽、縮圖及 PDF 轉 JPG |
+| JSZip | 封裝多檔處理結果 |
+| Web Crypto API | 產生加密安全的隨機密碼 |
+| Service Worker | PWA 與離線快取 |
+
+所有執行階段資產均由網站或擴充功能本身提供，不依賴後端服務或 API key。
+
+## 專案結構
+
+```text
+.
+├── index.html                 # 網站入口
+├── assets/                    # JavaScript、CSS、PDF worker 與 WASM
+├── icon/                      # 網站與 PWA 圖示
+├── privacy/                   # 隱私權政策
+├── terms/                     # 使用條款
+├── licenses/                  # 第三方開源授權
+├── manifest.webmanifest       # PWA manifest
+├── sw.js                      # Service Worker
+└── browser-extension/
+    ├── manifest.json          # Manifest V3 設定
+    ├── build.mjs              # 擴充功能建置腳本
+    ├── package.ps1            # 發行封裝腳本
+    ├── dist/                  # 生成的未封裝擴充功能
+    └── README.md              # 擴充功能文件
+```
+
+`browser-extension/dist/` 是生成內容，請勿直接修改。網站工作區、翻譯或法律頁更新後，請重新執行 `build.mjs`。
+
+## 部署
+
+網站可直接部署 repository 根目錄，不需要建置流程、後端或 API key。
 
 GitHub Pages 設定：
 
@@ -161,30 +127,38 @@ Source: Deploy from a branch
 Branch: main / (root)
 ```
 
-不需要 Node.js、npm、GitHub Actions、後端或 API key。`index.html` 會直接載入根目錄 `assets/` 中的正式檔案，網址不會導向 `/docs/`。
+自訂網域設定於 `CNAME`。部署時請確認 `sw.js` 的 `APP_SHELL` 與 `CACHE_NAME` 已配合正式資產檔名更新。
 
-## 注意事項
+## 開發與驗證
 
-- 移除密碼時，所有 PDF 必須使用相同密碼。
-- JPG 轉 PDF 的 DPI 不會提升原始圖片畫質，因此不提供 DPI 設定。
-- PDF 轉 JPG 的 DPI 會決定輸出像素尺寸；300 DPI 會使用較多記憶體與儲存空間。
-- 大型 PDF、高解析度圖片或大量頁面可能受裝置記憶體限制，手機上尤其明顯。
-- 拆分與 PDF 轉 JPG 會在完成後產生 ZIP，因此處理期間會占用額外記憶體。
-- PDF 處理在瀏覽器執行，大型檔案可能讓介面短暫失去回應。
-- 靜態網站可直接部署。外掛版另有同步工作區及資產的建置指令。
+本專案目前沒有自動化測試套件。提交變更前，建議：
 
-## 隱私
+```bash
+# 重建擴充功能
+node browser-extension/build.mjs
 
-本網站沒有後端、資料庫、檔案上傳 API、analytics 或追蹤程式。QPDF WebAssembly、PDF.js worker、JavaScript 與 CSS 均由同一個 GitHub Pages 網站提供。網站會在 `localStorage` 儲存介面語言代碼及「不需要」安裝通知的 60 天期限、在 `sessionStorage` 暫存「稍後」狀態，並以 Cache Storage 保存 PWA 應用程式檔案；不會儲存使用者的 PDF、圖片、密碼或輸出內容。
+# 檢查生成內容
+git diff -- browser-extension/dist
 
-網站 Footer 提供下列資訊頁面：
+# 啟動本機網站進行功能測試
+python -m http.server 8080
+```
 
-隱私權政策與使用條款跟主介面一樣提供 13 種語言；開源軟體授權提供正體中文、英文與日文。各頁可用膠囊式語言選單切換，並分享帶有 `?lang=` 的網址。
+請手動驗證各 PDF 工具、語言切換、PWA 離線模式，以及 Chrome／Edge 未封裝擴充功能。
 
-- [Privacy](https://pdf.stack-base.com/privacy)：本機文件處理、語言偏好與一般網站連線資料說明
-- [Terms](https://pdf.stack-base.com/terms)：合法使用、文件與密碼責任、服務現況及責任限制
-- [Open Source Licenses](https://pdf.stack-base.com/licenses)：PDF.js、pdf-lib、JSZip 與 QPDF 的第三方授權資訊
+## 隱私與安全
+
+- 沒有後端、資料庫、帳號系統、analytics 或追蹤程式。
+- 文件、圖片與密碼只存在目前瀏覽器工作階段的記憶體中。
+- `localStorage` 只保存語言及 PWA 提示偏好。
+- `sessionStorage` 只保存當次瀏覽階段的 PWA 提示狀態。
+- Cache Storage 只保存應用程式資產，不保存使用者文件或輸出結果。
+- 活動紀錄與輸出檔在重新整理或關閉分頁後清除。
+
+大型 PDF、高解析度圖片或大量頁面仍可能受到裝置記憶體限制；300 DPI 轉圖、拆分及 ZIP 封裝尤其需要較多記憶體。
+
+更多資訊請參閱[隱私權政策](https://pdf.stack-base.com/privacy/)、[使用條款](https://pdf.stack-base.com/terms/)及[開源軟體授權](https://pdf.stack-base.com/licenses/)。
 
 ## 授權
 
-本專案由 Bruce Yang 以 [MIT License](LICENSE) 授權。第三方元件仍依各自的授權條款提供，詳見 [Open Source Licenses](https://pdf.stack-base.com/licenses)。
+本專案採用 [MIT License](LICENSE)。第三方元件仍依各自的授權條款提供。
