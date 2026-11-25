@@ -120,10 +120,20 @@
     transition: none;
   }
 }
+.app-shell .site-footer { align-items: center; }
+
 #footer-install-action:not([hidden]) {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  margin-inline-start: 8px;
+}
+
+@media (max-width: 640px) {
+  #footer-install-action:not([hidden]) {
+    flex-basis: 100%;
+    margin-inline-start: 0;
+  }
 }
 
 #footer-install-button {
