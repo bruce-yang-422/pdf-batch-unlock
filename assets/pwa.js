@@ -3,6 +3,19 @@ const installButton = document.querySelector('#pwa-install-button');
 const laterButton = document.querySelector('#pwa-install-later');
 const notNeededButton = document.querySelector('#pwa-install-not-needed');
 const installInstructions = document.querySelector('#pwa-install-instructions');
+const footerInstallAction = document.querySelector('#footer-install-action');
+const footerInstallButton = document.querySelector('#footer-install-button');
+
+const installLabels = {
+  'zh-Hant': '安裝 App', 'zh-Hans': '安装应用', en: 'Install app',
+  ja: 'アプリをインストール', ko: '앱 설치', es: 'Instalar app',
+  de: 'App installieren', fr: 'Installer l’appli', ru: 'Установить приложение',
+  'pt-BR': 'Instalar app', th: 'ติดตั้งแอป', vi: 'Cài đặt ứng dụng', id: 'Instal aplikasi',
+};
+
+function updateInstallLabel() {
+  footerInstallButton.textContent = installLabels[document.documentElement.lang] ?? installLabels.en;
+}
 
 let deferredInstallPrompt = null;
 const INSTALL_SUPPRESSION_KEY = 'pwa-install-suppressed-until';
@@ -43,8 +56,8 @@ function hideInstallPrompt() {
   installPrompt.classList.remove('is-visible');
 }
 
-function showInstallPrompt() {
-  if (isStandalone() || wasDismissedThisSession() || isSuppressed()) return;
+function showInstallPrompt({ manual = false } = {}) {
+  if (isStandalone() || (!manual && (wasDismissedThisSession() || isSuppressed()))) return;
   installPrompt.hidden = false;
   requestAnimationFrame(() => installPrompt.classList.add('is-visible'));
 }
@@ -82,10 +95,14 @@ async function requestInstallation() {
     try {
       await promptEvent.prompt();
       const { outcome } = await promptEvent.userChoice;
-      if (outcome === 'accepted') hideInstallPrompt();
+      if (outcome === 'accepted') {
+        footerInstallAction.hidden = true;
+        hideInstallPrompt();
+      }
       else dismissInstallPrompt();
     } catch (error) {
       console.warn('無法開啟瀏覽器安裝視窗：', error);
+      showInstallPrompt({ manual: true });
       installInstructions.textContent = '請使用瀏覽器選單中的「安裝應用程式」或「加入主畫面」。';
       installInstructions.hidden = false;
       installButton.hidden = true;
@@ -93,21 +110,26 @@ async function requestInstallation() {
     return;
   }
 
-  if (isIosDevice()) {
-    installInstructions.textContent = '請點選瀏覽器的「分享」按鈕，再選擇「加入主畫面」。';
-    installInstructions.hidden = false;
-    installButton.hidden = true;
-  }
+  showInstallPrompt({ manual: true });
+  installInstructions.textContent = isIosDevice()
+    ? '請點選瀏覽器的「分享」按鈕，再選擇「加入主畫面」。'
+    : '請使用瀏覽器選單中的「安裝應用程式」或「加入主畫面」。';
+  installInstructions.hidden = false;
+  installButton.hidden = true;
 }
 
 window.addEventListener('beforeinstallprompt', (event) => {
   event.preventDefault();
   deferredInstallPrompt = event;
+  footerInstallAction.hidden = isStandalone();
+  installInstructions.hidden = true;
+  installButton.hidden = false;
   showInstallPrompt();
 });
 
 window.addEventListener('appinstalled', () => {
   deferredInstallPrompt = null;
+  footerInstallAction.hidden = true;
   try {
     localStorage.removeItem(INSTALL_SUPPRESSION_KEY);
   } catch {
@@ -117,6 +139,10 @@ window.addEventListener('appinstalled', () => {
 });
 
 installButton?.addEventListener('click', requestInstallation);
+footerInstallButton.addEventListener('click', requestInstallation);
+globalThis.addEventListener('pdf-tool-language-change', updateInstallLabel);
+updateInstallLabel();
+footerInstallAction.hidden = isStandalone();
 laterButton?.addEventListener('click', dismissInstallPrompt);
 notNeededButton?.addEventListener('click', suppressInstallPrompt);
 

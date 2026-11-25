@@ -1,4 +1,4 @@
-const LOCALES = ['zh-Hant', 'en', 'ja', 'ko', 'es', 'de', 'fr'];
+const LOCALES = ['zh-Hant', 'en', 'ja', 'ko', 'es', 'de', 'fr', 'zh-Hans', 'ru', 'pt-BR', 'th', 'vi', 'id'];
 const STORAGE_KEY = 'pdf-tool-language';
 
 // Order: Traditional Chinese, English, Japanese, Korean, Spanish, German, French.
@@ -215,8 +215,237 @@ const rows = [
   ['成功檔案已打包下載。', 'Successful files were packed and downloaded.', '成功したファイルをまとめてダウンロードしました。', '성공한 파일을 묶어 다운로드했습니다.', 'Los archivos correctos se comprimieron y descargaron.', 'Erfolgreiche Dateien wurden gepackt und heruntergeladen.', 'Les fichiers réussis ont été regroupés et téléchargés.'],
 ];
 
+// Additional columns in the same order as rows: zh-Hans, ru, pt-BR, th, vi, id.
+const additionalRows = [
+  ["语言","Язык","Idioma","ภาษา","Ngôn ngữ","Bahasa"],
+  ["活动记录","Журнал действий","Atividade","กิจกรรม","Hoạt động","Aktivitas"],
+  ["选择界面语言","Выберите язык интерфейса","Escolher idioma da interface","เลือกภาษาของหน้าจอ","Chọn ngôn ngữ giao diện","Pilih bahasa antarmuka"],
+  ["PDF 工具箱｜免费处理 PDF，无需上传","Инструменты PDF — бесплатно и без загрузки на сервер","Ferramentas PDF grátis, sem enviar arquivos","เครื่องมือ PDF ฟรี ไม่ต้องอัปโหลดไฟล์","Công cụ PDF miễn phí, không cần tải tệp lên","Alat PDF gratis tanpa unggah file"],
+  ["免费移除 PDF 密码、合并、拆分、转换、管理页面和添加水印。所有文件均在浏览器中处理，无需上传。","Снимайте пароль, объединяйте, разделяйте и конвертируйте PDF, меняйте порядок страниц и добавляйте водяные знаки. Всё в браузере, без отправки файлов на сервер.","Remova senhas, junte, divida e converta PDFs, organize páginas e adicione marcas-d’água. Tudo no navegador, sem enviar arquivos.","ปลดรหัสผ่าน รวม แยก แปลง จัดหน้าหรือใส่ลายน้ำ PDF ได้ฟรี ทุกอย่างทำในเบราว์เซอร์โดยไม่ต้องอัปโหลด","Gỡ mật khẩu, gộp, tách, chuyển đổi, sắp xếp trang và thêm hình mờ cho PDF. Tệp được xử lý ngay trong trình duyệt, không cần tải lên.","Hapus kata sandi, gabungkan, pisah, konversi, atur halaman, dan tambahkan tanda air PDF. Semua diproses di browser tanpa unggah."],
+  ["PDF 工具, PDF 本地处理, PDF 无需上传, 合并 PDF, 拆分 PDF, 移除 PDF 密码, PDF 水印, PDF 转 JPG","инструменты PDF, PDF без загрузки, объединить PDF, разделить PDF, снять пароль PDF, водяной знак PDF, PDF в JPG","ferramentas PDF, PDF sem upload, juntar PDF, dividir PDF, remover senha de PDF, marca-d’água, PDF para JPG","เครื่องมือ PDF, รวม PDF, แยก PDF, ปลดรหัส PDF, ลายน้ำ PDF, PDF เป็น JPG","công cụ PDF, gộp PDF, tách PDF, gỡ mật khẩu PDF, hình mờ PDF, PDF sang JPG","alat PDF, gabung PDF, pisah PDF, hapus kata sandi PDF, tanda air PDF, PDF ke JPG"],
+  ["免费 PDF 工具，文件仅在浏览器中处理，无需上传。","Бесплатные инструменты PDF. Файлы остаются в браузере.","Ferramentas PDF grátis. Seus arquivos ficam no navegador.","เครื่องมือ PDF ฟรี ไฟล์อยู่ในเบราว์เซอร์ของคุณ","Công cụ PDF miễn phí. Tệp chỉ được xử lý trong trình duyệt.","Alat PDF gratis. File tetap di browser Anda."],
+  ["请仅处理您拥有或已获合法授权的文档。文件在浏览器中处理，不会上传到本站服务器。","Обрабатывайте только свои документы или документы, на работу с которыми у вас есть разрешение. Файлы остаются в вашем браузере.","Use apenas documentos seus ou que você tenha autorização para processar. Os arquivos ficam no seu navegador.","โปรดใช้เฉพาะเอกสารของคุณหรือเอกสารที่ได้รับอนุญาต ไฟล์จะได้รับการประมวลผลในเบราว์เซอร์","Chỉ xử lý tài liệu của bạn hoặc tài liệu bạn được phép sử dụng. Tệp chỉ được xử lý trong trình duyệt.","Proses hanya dokumen milik Anda atau yang boleh Anda gunakan. File diproses di browser Anda."],
+  ["需要支持 JavaScript 和 WebAssembly 的现代浏览器","Нужен современный браузер с поддержкой JavaScript и WebAssembly","Requer um navegador moderno com JavaScript e WebAssembly","ต้องใช้เบราว์เซอร์ที่รองรับ JavaScript และ WebAssembly","Cần trình duyệt hiện đại hỗ trợ JavaScript và WebAssembly","Perlu browser modern yang mendukung JavaScript dan WebAssembly"],
+  ["在浏览器中本地处理 PDF 的多功能工具","Набор инструментов для работы с PDF прямо в браузере","Várias ferramentas para trabalhar com PDF no navegador","ชุดเครื่องมือจัดการ PDF ในเบราว์เซอร์","Bộ công cụ xử lý PDF ngay trong trình duyệt","Berbagai alat PDF yang bekerja langsung di browser"],
+  ["浏览器本地 PDF 工具","Работа с PDF в браузере","PDF direto no navegador","จัดการ PDF ในเบราว์เซอร์","Xử lý PDF trong trình duyệt","Olah PDF di browser"],
+  ["PDF 工具箱","Инструменты PDF","Ferramentas PDF","เครื่องมือ PDF","Bộ công cụ PDF","Alat PDF"],
+  ["✓ 100% 本地处理","✓ Всё обрабатывается в браузере","✓ Processamento no navegador","✓ ประมวลผลในเครื่อง 100%","✓ Xử lý 100% trên thiết bị","✓ 100% diproses di perangkat"],
+  ["文件不会上传到服务器","Файлы не отправляются на сервер","Seus arquivos não são enviados a servidores","ไม่มีการส่งไฟล์ขึ้นเซิร์ฟเวอร์","Tệp không được gửi lên máy chủ","File tidak dikirim ke server"],
+  ["选择工具","Выберите инструмент","Escolha uma ferramenta","เลือกเครื่องมือ","Chọn công cụ","Pilih alat"],
+  ["PDF 工具","Инструменты для PDF","Utilitários PDF","เครื่องมือสำหรับ PDF","Công cụ PDF","Alat untuk PDF"],
+  ["移除密码","Снять пароль","Remover senha","เอารหัสผ่านออก","Gỡ mật khẩu","Hapus kata sandi"],
+  ["添加密码","Задать пароль","Proteger com senha","ตั้งรหัสผ่าน","Đặt mật khẩu","Atur kata sandi"],
+  ["合并 PDF","Объединить PDF","Juntar PDF","รวม PDF","Gộp PDF","Gabungkan PDF"],
+  ["拆分 PDF","Разделить PDF","Dividir PDF","แยก PDF","Tách PDF","Pisah PDF"],
+  ["JPG 转 PDF","JPG в PDF","JPG para PDF","JPG เป็น PDF","JPG sang PDF","JPG ke PDF"],
+  ["PDF 转 JPG","PDF в JPG","PDF para JPG","PDF เป็น JPG","PDF sang JPG","PDF ke JPG"],
+  ["管理页面","Управление страницами","Organizar páginas","จัดการหน้า","Sắp xếp trang","Atur halaman"],
+  ["水印与页码","Водяной знак и номера страниц","Marca-d’água e numeração","ลายน้ำและเลขหน้า","Hình mờ và số trang","Tanda air dan nomor halaman"],
+  ["移除 PDF 密码","Снять пароль с PDF","Remover senha do PDF","เอารหัสผ่าน PDF ออก","Gỡ mật khẩu PDF","Hapus kata sandi PDF"],
+  ["为 PDF 设置密码","Защитить PDF паролем","Proteger PDF com senha","ตั้งรหัสผ่านให้ PDF","Đặt mật khẩu cho PDF","Lindungi PDF dengan kata sandi"],
+  ["PDF 页面管理","Управление страницами PDF","Organizar páginas do PDF","จัดการหน้า PDF","Sắp xếp trang PDF","Atur halaman PDF"],
+  ["添加水印与页码","Добавить водяной знак и номера страниц","Adicionar marca-d’água e números de página","เพิ่มลายน้ำและเลขหน้า","Thêm hình mờ và số trang","Tambahkan tanda air dan nomor halaman"],
+  ["添加使用相同密码的 PDF。多个结果会打包成 ZIP。","Добавьте PDF с одинаковым паролем. Несколько результатов будут собраны в ZIP.","Adicione PDFs com a mesma senha. Vários resultados saem em um ZIP.","เพิ่ม PDF ที่ใช้รหัสผ่านเดียวกัน หากได้หลายไฟล์ ระบบจะรวมเป็น ZIP","Thêm các PDF dùng chung mật khẩu. Nhiều tệp kết quả sẽ được gom vào ZIP.","Tambahkan PDF dengan kata sandi yang sama. Beberapa hasil dikemas dalam satu ZIP."],
+  ["为一个或多个未加密的 PDF 设置相同的打开密码。","Задайте один пароль на открытие для одного или нескольких PDF без шифрования.","Defina a mesma senha de abertura para um ou mais PDFs sem criptografia.","ตั้งรหัสผ่านสำหรับเปิดไฟล์ให้ PDF ที่ยังไม่ได้เข้ารหัสหนึ่งไฟล์ขึ้นไป","Đặt cùng một mật khẩu mở cho một hoặc nhiều PDF chưa mã hóa.","Atur kata sandi pembuka yang sama untuk satu atau beberapa PDF yang belum dienkripsi."],
+  ["按列表顺序将至少两个未加密的 PDF 合并为一个文件。","Объедините два или более незашифрованных PDF в порядке списка.","Junte dois ou mais PDFs sem criptografia na ordem da lista.","รวม PDF ที่ไม่ได้เข้ารหัสอย่างน้อยสองไฟล์ตามลำดับในรายการ","Gộp ít nhất hai PDF chưa mã hóa theo thứ tự trong danh sách.","Gabungkan dua PDF atau lebih yang belum dienkripsi sesuai urutan daftar."],
+  ["将未加密 PDF 的每一页拆成独立 PDF，再打包成 ZIP。","Разделите незашифрованный PDF на отдельные страницы и скачайте их в ZIP.","Separe cada página de um PDF sem criptografia em um arquivo e baixe tudo em ZIP.","แยกแต่ละหน้าของ PDF ที่ไม่เข้ารหัสเป็นไฟล์ PDF แล้วดาวน์โหลดเป็น ZIP","Tách từng trang của PDF chưa mã hóa thành tệp PDF riêng rồi tải xuống dưới dạng ZIP.","Pisahkan tiap halaman PDF yang belum dienkripsi menjadi PDF tersendiri, lalu unduh sebagai ZIP."],
+  ["按列表顺序将 JPG 图片转换为一个 PDF。","Соберите изображения JPG в один PDF в порядке списка.","Converta imagens JPG em um PDF na ordem da lista.","แปลงภาพ JPG เป็น PDF ตามลำดับในรายการ","Chuyển ảnh JPG thành một tệp PDF theo thứ tự trong danh sách.","Ubah gambar JPG menjadi satu PDF sesuai urutan daftar."],
+  ["将未加密 PDF 的每一页转成 JPG，再打包成 ZIP。","Преобразуйте каждую страницу незашифрованного PDF в JPG и скачайте ZIP.","Converta cada página de um PDF sem criptografia em JPG e baixe em ZIP.","แปลงทุกหน้าของ PDF ที่ไม่เข้ารหัสเป็น JPG แล้วดาวน์โหลดเป็น ZIP","Chuyển từng trang của PDF chưa mã hóa sang JPG rồi tải xuống dưới dạng ZIP.","Ubah setiap halaman PDF yang belum dienkripsi menjadi JPG, lalu unduh sebagai ZIP."],
+  ["预览、排序、旋转、删除或提取页面，再导出新 PDF。","Просматривайте, переставляйте, поворачивайте, удаляйте или извлекайте страницы и сохраняйте новый PDF.","Visualize, reordene, gire, exclua ou extraia páginas e salve um novo PDF.","ดูตัวอย่าง จัดลำดับ หมุน ลบ หรือแยกหน้า แล้วบันทึกเป็น PDF ใหม่","Xem trước, sắp xếp, xoay, xóa hoặc trích xuất trang rồi lưu thành PDF mới.","Pratinjau, urutkan, putar, hapus, atau ekstrak halaman, lalu ekspor PDF baru."],
+  ["添加文字或图片水印，调整位置和角度，也可添加页码。","Добавьте текстовый или графический водяной знак, настройте его положение и угол или пронумеруйте страницы.","Adicione uma marca-d’água de texto ou imagem, ajuste a posição e o ângulo ou numere as páginas.","ใส่ลายน้ำแบบข้อความหรือรูปภาพ ปรับตำแหน่งและมุม หรือเพิ่มเลขหน้า","Thêm hình mờ dạng chữ hoặc ảnh, chỉnh vị trí và góc xoay hoặc đánh số trang.","Tambahkan tanda air teks atau gambar, atur posisi dan sudut, atau beri nomor halaman."],
+  ["将加密 PDF 拖到这里","Перетащите сюда защищённые PDF","Arraste os PDFs protegidos para cá","ลาก PDF ที่เข้ารหัสมาที่นี่","Kéo PDF đã mã hóa vào đây","Seret PDF terenkripsi ke sini"],
+  ["将要加密的 PDF 拖到这里","Перетащите сюда PDF для защиты","Arraste os PDFs que quer proteger","ลาก PDF ที่ต้องการตั้งรหัสมาที่นี่","Kéo PDF cần đặt mật khẩu vào đây","Seret PDF yang ingin dilindungi ke sini"],
+  ["将要合并的 PDF 拖到这里","Перетащите сюда PDF для объединения","Arraste os PDFs que quer juntar","ลาก PDF ที่ต้องการรวมมาที่นี่","Kéo PDF cần gộp vào đây","Seret PDF yang ingin digabungkan ke sini"],
+  ["将一个 PDF 拖到这里","Перетащите сюда один PDF","Arraste um PDF para cá","ลาก PDF หนึ่งไฟล์มาที่นี่","Kéo một tệp PDF vào đây","Seret satu PDF ke sini"],
+  ["将 JPG 图片拖到这里","Перетащите сюда изображения JPG","Arraste as imagens JPG para cá","ลากภาพ JPG มาที่นี่","Kéo ảnh JPG vào đây","Seret gambar JPG ke sini"],
+  ["将 PDF 拖到这里","Перетащите PDF сюда","Arraste o PDF para cá","ลาก PDF มาที่นี่","Kéo tệp PDF vào đây","Seret PDF ke sini"],
+  ["或点击选择多个 PDF","Или нажмите, чтобы выбрать несколько PDF","Ou clique para selecionar vários PDFs","หรือคลิกเพื่อเลือก PDF หลายไฟล์","Hoặc bấm để chọn nhiều PDF","Atau klik untuk memilih beberapa PDF"],
+  ["或点击选择多个文件","Или нажмите, чтобы выбрать несколько файлов","Ou clique para selecionar vários arquivos","หรือคลิกเพื่อเลือกหลายไฟล์","Hoặc bấm để chọn nhiều tệp","Atau klik untuk memilih beberapa file"],
+  ["文件按添加顺序合并","Файлы объединяются в порядке добавления","Os arquivos são juntados na ordem em que forem adicionados","ระบบจะรวมไฟล์ตามลำดับที่เพิ่ม","Tệp được gộp theo thứ tự thêm vào","File digabungkan sesuai urutan penambahan"],
+  ["每页生成一个 PDF","Каждая страница станет отдельным PDF","Cada página vira um PDF","แต่ละหน้าจะเป็น PDF หนึ่งไฟล์","Mỗi trang tạo thành một PDF","Setiap halaman menjadi satu PDF"],
+  ["支持多张 JPG/JPEG 图片","Можно выбрать несколько изображений JPG/JPEG","Aceita várias imagens JPG ou JPEG","รองรับภาพ JPG หรือ JPEG หลายภาพ","Hỗ trợ nhiều ảnh JPG hoặc JPEG","Mendukung beberapa gambar JPG atau JPEG"],
+  ["每页生成一张 JPG","Каждая страница станет отдельным JPG","Cada página vira um JPG","แต่ละหน้าจะเป็น JPG หนึ่งภาพ","Mỗi trang tạo thành một ảnh JPG","Setiap halaman menjadi satu JPG"],
+  ["加载后会生成页面缩略图","После загрузки появятся миниатюры страниц","As miniaturas aparecem após o carregamento","เมื่อโหลดแล้วจะแสดงภาพย่อของหน้า","Ảnh thu nhỏ sẽ hiện sau khi nạp tệp","Thumbnail halaman muncul setelah file dimuat"],
+  ["设置水印或页码后导出新 PDF","Настройте водяной знак или номера страниц и сохраните новый PDF","Configure a marca-d’água ou a numeração e salve um novo PDF","ตั้งค่าลายน้ำหรือเลขหน้า แล้วบันทึก PDF ใหม่","Thiết lập hình mờ hoặc số trang rồi lưu PDF mới","Atur tanda air atau nomor halaman, lalu ekspor PDF baru"],
+  ["点击选择文件","Нажмите, чтобы выбрать файлы","Clique para escolher arquivos","คลิกเพื่อเลือกไฟล์","Bấm để chọn tệp","Klik untuk memilih file"],
+  ["从设备中选择要处理的文件","Выберите файлы на устройстве","Escolha os arquivos no seu dispositivo","เลือกไฟล์ที่ต้องการจากอุปกรณ์","Chọn tệp cần xử lý trên thiết bị","Pilih file dari perangkat Anda"],
+  ["移除所有密码并下载","Снять пароли и скачать","Remover senhas e baixar","เอารหัสผ่านออกทั้งหมดแล้วดาวน์โหลด","Gỡ mọi mật khẩu và tải xuống","Hapus semua kata sandi dan unduh"],
+  ["加密并下载 PDF","Защитить и скачать PDF","Proteger e baixar PDF","ตั้งรหัสผ่านและดาวน์โหลด PDF","Mã hóa và tải PDF xuống","Enkripsi dan unduh PDF"],
+  ["合并并下载 PDF","Объединить и скачать PDF","Juntar e baixar PDF","รวมและดาวน์โหลด PDF","Gộp và tải PDF xuống","Gabungkan dan unduh PDF"],
+  ["拆分并下载 ZIP","Разделить и скачать ZIP","Dividir e baixar ZIP","แยกและดาวน์โหลด ZIP","Tách và tải ZIP xuống","Pisahkan dan unduh ZIP"],
+  ["转换并下载 PDF","Преобразовать и скачать PDF","Converter e baixar PDF","แปลงและดาวน์โหลด PDF","Chuyển đổi và tải PDF xuống","Konversi dan unduh PDF"],
+  ["转换并下载 ZIP","Преобразовать и скачать ZIP","Converter e baixar ZIP","แปลงและดาวน์โหลด ZIP","Chuyển đổi và tải ZIP xuống","Konversi dan unduh ZIP"],
+  ["应用页面调整并下载","Применить изменения и скачать","Aplicar alterações nas páginas e baixar","ใช้การจัดหน้าแล้วดาวน์โหลด","Áp dụng thay đổi trang và tải xuống","Terapkan perubahan halaman dan unduh"],
+  ["应用并下载 PDF","Применить и скачать PDF","Aplicar e baixar PDF","นำไปใช้และดาวน์โหลด PDF","Áp dụng và tải PDF xuống","Terapkan dan unduh PDF"],
+  ["PDF 密码","Пароль PDF","Senha do PDF","รหัสผ่าน PDF","Mật khẩu PDF","Kata sandi PDF"],
+  ["输入 PDF 密码","Введите пароль PDF","Digite a senha do PDF","กรอกรหัสผ่าน PDF","Nhập mật khẩu PDF","Masukkan kata sandi PDF"],
+  ["新密码","Новый пароль","Nova senha","รหัสผ่านใหม่","Mật khẩu mới","Kata sandi baru"],
+  ["输入新的 PDF 打开密码","Введите новый пароль для открытия PDF","Digite a nova senha de abertura do PDF","กรอกรหัสผ่านใหม่สำหรับเปิด PDF","Nhập mật khẩu mới để mở PDF","Masukkan kata sandi baru untuk membuka PDF"],
+  ["确认密码","Подтвердите пароль","Confirme a senha","ยืนยันรหัสผ่าน","Xác nhận mật khẩu","Konfirmasi kata sandi"],
+  ["再次输入相同密码","Повторите пароль","Digite a mesma senha novamente","กรอกรหัสผ่านเดิมอีกครั้ง","Nhập lại cùng mật khẩu","Masukkan lagi kata sandi yang sama"],
+  ["使用 AES-256 加密。建议至少输入 8 个字符，并妥善保管密码。","Шифрование AES-256. Используйте не менее 8 символов и храните пароль в надёжном месте.","Criptografia AES-256. Use pelo menos 8 caracteres e guarde a senha em local seguro.","เข้ารหัสด้วย AES-256 ใช้อย่างน้อย 8 อักขระและเก็บรหัสผ่านไว้ให้ปลอดภัย","Mã hóa AES-256. Dùng ít nhất 8 ký tự và cất mật khẩu ở nơi an toàn.","Enkripsi AES-256. Gunakan minimal 8 karakter dan simpan kata sandi dengan aman."],
+  ["密码设置方式","Способ задания пароля","Como definir a senha","วิธีตั้งรหัสผ่าน","Cách đặt mật khẩu","Cara mengatur kata sandi"],
+  ["自行设置密码","Задать свой пароль","Criar minha própria senha","ตั้งรหัสผ่านเอง","Tự đặt mật khẩu","Buat kata sandi sendiri"],
+  ["自动生成密码","Сгенерировать пароль","Gerar uma senha","สร้างรหัสผ่านอัตโนมัติ","Tạo mật khẩu tự động","Buat kata sandi otomatis"],
+  ["密码长度","Длина пароля","Tamanho da senha","ความยาวรหัสผ่าน","Độ dài mật khẩu","Panjang kata sandi"],
+  ["较弱","Слабый","Fraca","อ่อน","Yếu","Lemah"],
+  ["基本","Базовый","Básica","พื้นฐาน","Cơ bản","Dasar"],
+  ["推荐","Рекомендуемый","Recomendada","แนะนำ","Khuyên dùng","Disarankan"],
+  ["很强","Очень надёжный","Muito forte","แข็งแรงมาก","Rất mạnh","Sangat kuat"],
+  ["极强","Максимальная стойкость","Máxima proteção","ความปลอดภัยสูงสุด","Mạnh nhất","Paling kuat"],
+  ["8–12 个字符安全性较低，建议至少使用 24 个字符。","Пароль из 8–12 символов менее надёжен. Лучше использовать от 24 символов.","De 8 a 12 caracteres oferecem menos proteção. Prefira 24 ou mais.","รหัส 8–12 อักขระปลอดภัยน้อยกว่า แนะนำให้ใช้อย่างน้อย 24 อักขระ","Mật khẩu 8–12 ký tự kém an toàn hơn. Nên dùng ít nhất 24 ký tự.","Kata sandi 8–12 karakter kurang aman. Gunakan 24 karakter atau lebih."],
+  ["包含特殊字符","Добавить спецсимволы","Incluir caracteres especiais","รวมอักขระพิเศษ","Dùng ký tự đặc biệt","Sertakan karakter khusus"],
+  ["生成的密码","Сгенерированный пароль","Senha gerada","รหัสผ่านที่สร้างขึ้น","Mật khẩu đã tạo","Kata sandi yang dibuat"],
+  ["复制密码","Скопировать пароль","Copiar senha","คัดลอกรหัสผ่าน","Sao chép mật khẩu","Salin kata sandi"],
+  ["重新生成密码","Сгенерировать новый пароль","Gerar outra senha","สร้างรหัสผ่านใหม่","Tạo mật khẩu khác","Buat kata sandi lain"],
+  ["加密文件与密码 TXT 会分别下载。离开此工具或刷新页面后，屏幕上将不再显示密码。","Защищённые файлы и TXT с паролем скачиваются отдельно. Пароль виден до смены инструмента или обновления страницы.","Os arquivos protegidos e o TXT com a senha são baixados separadamente. A senha fica visível até sair da ferramenta ou recarregar a página.","ไฟล์ที่เข้ารหัสกับ TXT ที่มีรหัสผ่านจะดาวน์โหลดแยกกัน รหัสจะแสดงจนกว่าจะออกจากเครื่องมือหรือโหลดหน้าใหม่","Tệp đã mã hóa và TXT chứa mật khẩu được tải riêng. Mật khẩu hiển thị đến khi bạn rời công cụ hoặc tải lại trang.","File terlindungi dan TXT berisi kata sandi diunduh terpisah. Kata sandi terlihat sampai Anda keluar dari alat atau memuat ulang halaman."],
+  ["密码已复制到剪贴板。","Пароль скопирован в буфер обмена.","Senha copiada para a área de transferência.","คัดลอกรหัสผ่านไปยังคลิปบอร์ดแล้ว","Đã sao chép mật khẩu vào bộ nhớ tạm.","Kata sandi disalin ke papan klip."],
+  ["无法访问剪贴板，请手动选中并复制密码。","Нет доступа к буферу обмена. Выделите пароль и скопируйте его вручную.","Não foi possível acessar a área de transferência. Selecione e copie a senha manualmente.","เข้าใช้คลิปบอร์ดไม่ได้ ให้เลือกรหัสผ่านแล้วคัดลอกเอง","Không truy cập được bộ nhớ tạm. Hãy chọn và sao chép mật khẩu thủ công.","Papan klip tidak dapat diakses. Pilih dan salin kata sandi secara manual."],
+  ["显示","Показать","Mostrar","แสดง","Hiện","Tampilkan"],
+  ["隐藏","Скрыть","Ocultar","ซ่อน","Ẩn","Sembunyikan"],
+  ["JPG 输出分辨率","Разрешение JPG","Resolução do JPG","ความละเอียด JPG","Độ phân giải JPG","Resolusi JPG"],
+  ["屏幕（96 DPI）","Для экрана (96 DPI)","Para tela (96 DPI)","สำหรับหน้าจอ (96 DPI)","Màn hình (96 DPI)","Layar (96 DPI)"],
+  ["清晰（150 DPI）","Чёткое (150 DPI)","Boa qualidade (150 DPI)","คมชัด (150 DPI)","Rõ nét (150 DPI)","Tajam (150 DPI)"],
+  ["高质量（300 DPI）","Высокое (300 DPI)","Alta qualidade (300 DPI)","คุณภาพสูง (300 DPI)","Chất lượng cao (300 DPI)","Kualitas tinggi (300 DPI)"],
+  ["水印类型","Тип водяного знака","Tipo de marca-d’água","ประเภทลายน้ำ","Loại hình mờ","Jenis tanda air"],
+  ["文字水印","Текстовый водяной знак","Marca-d’água de texto","ลายน้ำข้อความ","Hình mờ dạng chữ","Tanda air teks"],
+  ["图片水印","Графический водяной знак","Marca-d’água de imagem","ลายน้ำรูปภาพ","Hình mờ dạng ảnh","Tanda air gambar"],
+  ["水印文字","Текст водяного знака","Texto da marca-d’água","ข้อความลายน้ำ","Nội dung hình mờ","Teks tanda air"],
+  ["例如：内部资料（选填）","Например: Конфиденциально (необязательно)","Ex.: Confidencial (opcional)","เช่น เอกสารลับ (ไม่บังคับ)","Ví dụ: Tài liệu mật (không bắt buộc)","Contoh: Rahasia (opsional)"],
+  ["水印图片","Изображение для водяного знака","Imagem da marca-d’água","รูปภาพสำหรับทำลายน้ำ","Ảnh dùng làm hình mờ","Gambar tanda air"],
+  ["选择图片","Выбрать изображение","Escolher imagem","เลือกรูปภาพ","Chọn ảnh","Pilih gambar"],
+  ["从设备中选择一张 PNG、JPG 或 SVG 图片","Выберите один файл PNG, JPG или SVG на устройстве","Escolha um PNG, JPG ou SVG no seu dispositivo","เลือกภาพ PNG, JPG หรือ SVG จากอุปกรณ์","Chọn một ảnh PNG, JPG hoặc SVG trên thiết bị","Pilih satu PNG, JPG, atau SVG dari perangkat"],
+  ["支持 PNG、JPG 和 SVG。推荐使用透明背景的 PNG 或 SVG，最大 20 MB。","Поддерживаются PNG, JPG и SVG до 20 МБ. Лучше выбрать PNG или SVG с прозрачным фоном.","Aceita PNG, JPG e SVG de até 20 MB. Para fundo transparente, prefira PNG ou SVG.","รองรับ PNG, JPG และ SVG ขนาดไม่เกิน 20 MB แนะนำ PNG หรือ SVG พื้นหลังโปร่งใส","Hỗ trợ PNG, JPG và SVG tối đa 20 MB. Nên dùng PNG hoặc SVG nền trong suốt.","Mendukung PNG, JPG, dan SVG hingga 20 MB. Sebaiknya gunakan PNG atau SVG berlatar transparan."],
+  ["字体","Шрифт текста","Fonte do texto","แบบอักษรข้อความ","Phông chữ","Font teks"],
+  ["系统无衬线字体","Системный шрифт без засечек","Fonte do sistema sem serifa","แบบอักษรระบบไม่มีเชิง","Phông hệ thống không chân","Font sistem tanpa kait"],
+  ["繁体中文黑体","Традиционный китайский без засечек","Chinês tradicional sem serifa","แบบไม่มีเชิงสำหรับจีนตัวเต็ม","Chữ Hoa phồn thể không chân","Sans-serif Tionghoa Tradisional"],
+  ["楷体","Китайский шрифт Кай","Kai (caligrafia chinesa)","แบบอักษรจีนไค","Chữ Khải","Kai (kaligrafi Tionghoa)"],
+  ["明体","Шрифт с засечками","Com serifa","แบบมีเชิง","Phông có chân","Serif"],
+  ["等宽字体","Моноширинный шрифт","Fonte monoespaçada","แบบอักษรความกว้างคงที่","Phông đơn cách","Font lebar tetap"],
+  ["水印布局","Размещение водяного знака","Distribuição da marca-d’água","รูปแบบการวางลายน้ำ","Bố cục hình mờ","Tata letak tanda air"],
+  ["单个水印","Один водяной знак","Marca-d’água única","ลายน้ำเดียว","Một hình mờ","Satu tanda air"],
+  ["平铺整页","Повторить по всей странице","Repetir pela página","วางซ้ำทั่วหน้า","Lặp trên toàn trang","Ulangi di seluruh halaman"],
+  ["字号","Размер текста","Tamanho do texto","ขนาดข้อความ","Cỡ chữ","Ukuran teks"],
+  ["缩放比例","Масштаб","Escala","สัดส่วนย่อขยาย","Tỷ lệ","Skala"],
+  ["不透明度","Непрозрачность","Opacidade","ความทึบ","Độ đậm","Opasitas"],
+  ["位置","Положение","Posição","ตำแหน่ง","Vị trí","Posisi"],
+  ["居中","По центру","Centro","กลางหน้า","Chính giữa","Tengah"],
+  ["左上","Слева вверху","Superior esquerdo","บนซ้าย","Trên trái","Kiri atas"],
+  ["右上","Справа вверху","Superior direito","บนขวา","Trên phải","Kanan atas"],
+  ["左下","Слева внизу","Inferior esquerdo","ล่างซ้าย","Dưới trái","Kiri bawah"],
+  ["右下","Справа внизу","Inferior direito","ล่างขวา","Dưới phải","Kanan bawah"],
+  ["旋转角度","Угол поворота","Ângulo de rotação","มุมหมุน","Góc xoay","Sudut rotasi"],
+  ["自动在页面底部添加页码","Нумеровать страницы внизу","Numerar as páginas no rodapé","ใส่เลขหน้าที่ด้านล่างโดยอัตโนมัติ","Tự động đánh số ở cuối trang","Tambahkan nomor di bagian bawah halaman secara otomatis"],
+  ["页码字体","Шрифт номеров страниц","Fonte dos números de página","แบบอักษรเลขหน้า","Phông số trang","Font nomor halaman"],
+  ["页码字号","Размер номеров страниц","Tamanho dos números de página","ขนาดเลขหน้า","Cỡ số trang","Ukuran nomor halaman"],
+  ["效果预览","Предпросмотр","Prévia","ดูตัวอย่าง","Xem trước","Pratinjau"],
+  ["尚未加载 PDF","PDF ещё не загружен","Nenhum PDF carregado","ยังไม่ได้โหลด PDF","Chưa nạp PDF","Belum ada PDF yang dimuat"],
+  ["正在加载第 1 页…","Загружаем первую страницу…","Carregando a primeira página…","กำลังโหลดหน้าแรก…","Đang nạp trang đầu…","Memuat halaman pertama…"],
+  ["PDF 第 1 页","Первая страница PDF","Primeira página do PDF","หน้าแรกของ PDF","Trang đầu của PDF","Halaman pertama PDF"],
+  ["PDF 首页预览","Предпросмотр первой страницы PDF","Prévia da primeira página do PDF","ตัวอย่างหน้าแรกของ PDF","Xem trước trang đầu của PDF","Pratinjau halaman pertama PDF"],
+  ["水印与页码预览","Предпросмотр водяного знака и номеров страниц","Prévia da marca-d’água e da numeração","ตัวอย่างลายน้ำและเลขหน้า","Xem trước hình mờ và số trang","Pratinjau tanda air dan nomor halaman"],
+  ["添加 PDF 后可预览第一页。输出按原始页面尺寸生成。","После добавления PDF здесь появится первая страница. При сохранении используется исходный размер страниц.","A prévia mostra a primeira página do PDF. O arquivo final usa as dimensões originais das páginas.","เมื่อเพิ่ม PDF จะแสดงหน้าแรกให้ดู ไฟล์ผลลัพธ์จะใช้ขนาดหน้าเดิม","Bản xem trước hiển thị trang đầu. Tệp xuất giữ kích thước trang gốc.","Pratinjau menampilkan halaman pertama. Hasil memakai ukuran halaman asli."],
+  ["准备就绪","Готово к работе","Tudo pronto","พร้อมใช้งาน","Sẵn sàng","Siap"],
+  ["尚未添加文件","Файлы не добавлены","Nenhum arquivo adicionado","ยังไม่ได้เพิ่มไฟล์","Chưa thêm tệp","Belum ada file"],
+  ["待处理文件","Файлы в очереди","Arquivos na fila","ไฟล์รอประมวลผล","Tệp chờ xử lý","File dalam antrean"],
+  ["清空列表","Очистить список","Limpar lista","ล้างรายการ","Xóa danh sách","Kosongkan daftar"],
+  ["处理记录","История обработки","Histórico de processamento","ประวัติการประมวลผล","Lịch sử xử lý","Riwayat pemrosesan"],
+  ["展开","Развернуть","Expandir","ขยาย","Mở rộng","Perluas"],
+  ["收起","Свернуть","Recolher","ย่อ","Thu gọn","Ciutkan"],
+  ["清空记录","Очистить историю","Limpar histórico","ล้างประวัติ","Xóa lịch sử","Hapus riwayat"],
+  ["文件和处理记录","Файлы и история обработки","Arquivos e histórico","ไฟล์และประวัติ","Tệp và lịch sử xử lý","File dan riwayat pemrosesan"],
+  ["当前批次","Текущая очередь","Lote atual","ชุดปัจจุบัน","Lô hiện tại","Batch saat ini"],
+  ["本次记录","История сеанса","Histórico da sessão","ประวัติรอบนี้","Lịch sử phiên này","Riwayat sesi"],
+  ["页面工作区","Рабочая область страниц","Área de organização","พื้นที่จัดหน้า","Khu vực sắp xếp trang","Ruang kerja halaman"],
+  ["尚未添加文件，请在左侧选择或拖入文件。","Файлы не добавлены. Выберите их или перетащите в область слева.","Nenhum arquivo adicionado. Selecione ou arraste os arquivos para o painel à esquerda.","ยังไม่มีไฟล์ ให้เลือกหรือลากไฟล์ไปยังช่องด้านซ้าย","Chưa có tệp. Chọn hoặc kéo tệp vào khung bên trái.","Belum ada file. Pilih atau seret file ke panel kiri."],
+  ["处理结果会显示在这里。","Здесь появятся результаты обработки.","Os resultados aparecem aqui.","ผลลัพธ์จะแสดงที่นี่","Kết quả xử lý sẽ hiện ở đây.","Hasil pemrosesan akan muncul di sini."],
+  ["等待中","В ожидании","Na fila","กำลังรอ","Đang chờ","Menunggu"],
+  ["处理中","Обработка","Processando","กำลังประมวลผล","Đang xử lý","Sedang diproses"],
+  ["已完成","Готово","Concluído","เสร็จแล้ว","Hoàn tất","Selesai"],
+  ["失败","Ошибка","Falhou","ไม่สำเร็จ","Thất bại","Gagal"],
+  ["移除","Убрать","Remover","นำออก","Bỏ khỏi danh sách","Hapus"],
+  ["页面排列","Порядок страниц","Ordem das páginas","ลำดับหน้า","Thứ tự trang","Urutan halaman"],
+  ["已选中 0 页","Выбрано страниц: 0","0 páginas selecionadas","เลือกแล้ว 0 หน้า","Đã chọn 0 trang","0 halaman dipilih"],
+  ["页面操作","Действия со страницами","Ações nas páginas","คำสั่งจัดหน้า","Thao tác với trang","Tindakan halaman"],
+  ["全选／取消全选","Выбрать всё / снять выбор","Selecionar tudo / desmarcar","เลือกทั้งหมด / ยกเลิกการเลือก","Chọn tất cả / bỏ chọn","Pilih semua / batalkan pilihan"],
+  ["向左旋转","Повернуть влево","Girar à esquerda","หมุนซ้าย","Xoay trái","Putar ke kiri"],
+  ["向右旋转","Повернуть вправо","Girar à direita","หมุนขวา","Xoay phải","Putar ke kanan"],
+  ["删除选中页","Удалить выбранные","Excluir páginas selecionadas","ลบหน้าที่เลือก","Xóa trang đã chọn","Hapus halaman terpilih"],
+  ["提取选中页","Извлечь выбранные страницы","Extrair páginas selecionadas","แยกหน้าที่เลือก","Trích xuất trang đã chọn","Ekstrak halaman terpilih"],
+  ["点击页面即可选中。拖动可调整顺序，手机上可长按拖动，也可使用左右箭头。","Нажмите на страницу, чтобы выбрать её. Для сортировки перетаскивайте страницы, на телефоне сначала удерживайте карточку. Также можно использовать стрелки.","Clique na página para selecioná-la. Arraste para reordenar. No celular, toque e segure antes de arrastar. Você também pode usar as setas.","แตะเพื่อเลือกหน้า ลากเพื่อจัดลำดับ บนมือถือให้แตะค้างก่อนลาก หรือใช้ปุ่มลูกศร","Bấm vào trang để chọn. Kéo để đổi thứ tự. Trên điện thoại, nhấn giữ rồi kéo hoặc dùng nút mũi tên.","Klik halaman untuk memilih. Seret untuk mengurutkan. Di ponsel, tekan dan tahan sebelum menyeret, atau gunakan tombol panah."],
+  ["处理出错","Ошибка обработки","Erro no processamento","เกิดข้อผิดพลาดในการประมวลผล","Lỗi xử lý","Kesalahan pemrosesan"],
+  ["关闭错误提示","Закрыть сообщение об ошибке","Fechar aviso de erro","ปิดข้อความแจ้งข้อผิดพลาด","Đóng thông báo lỗi","Tutup pesan kesalahan"],
+  ["处理失败。","Не удалось обработать файл.","Não foi possível processar.","ประมวลผลไม่สำเร็จ","Không xử lý được.","Pemrosesan gagal."],
+  ["PDF 处理失败。","Не удалось обработать PDF.","Não foi possível processar o PDF.","ประมวลผล PDF ไม่สำเร็จ","Không xử lý được PDF.","PDF gagal diproses."],
+  ["无法加载 PDF 首页预览。","Не удалось загрузить предпросмотр первой страницы PDF.","Não foi possível carregar a prévia da primeira página do PDF.","โหลดตัวอย่างหน้าแรกของ PDF ไม่ได้","Không tải được bản xem trước trang đầu của PDF.","Pratinjau halaman pertama PDF gagal dimuat."],
+  ["无法生成图片水印预览。","Не удалось создать предпросмотр графического водяного знака.","Não foi possível gerar a prévia da marca-d’água de imagem.","สร้างตัวอย่างลายน้ำรูปภาพไม่ได้","Không tạo được bản xem trước hình mờ dạng ảnh.","Pratinjau tanda air gambar gagal dibuat."],
+  ["无法使用该水印图片。","Это изображение нельзя использовать как водяной знак.","Não foi possível usar a imagem da marca-d’água.","ใช้รูปภาพนี้เป็นลายน้ำไม่ได้","Không dùng được ảnh này làm hình mờ.","Gambar ini tidak bisa digunakan sebagai tanda air."],
+  ["图片不得超过 20 MB。","Размер изображения не должен превышать 20 МБ.","A imagem deve ter no máximo 20 MB.","รูปภาพต้องมีขนาดไม่เกิน 20 MB","Ảnh không được vượt quá 20 MB.","Ukuran gambar maksimal 20 MB."],
+  ["仅支持 PNG、JPG 或 SVG。","Поддерживаются только PNG, JPG и SVG.","Use apenas PNG, JPG ou SVG.","รองรับเฉพาะ PNG, JPG หรือ SVG","Chỉ hỗ trợ PNG, JPG hoặc SVG.","Hanya PNG, JPG, atau SVG yang didukung."],
+  ["可能原因：","Возможная причина: ","Possível causa: ","สาเหตุที่เป็นไปได้: ","Nguyên nhân có thể là: ","Kemungkinan penyebab: "],
+  ["文件会逐个处理，多个结果会合并为一个 ZIP 下载。","Файлы обрабатываются по одному, несколько результатов скачиваются одним ZIP.","Os arquivos são processados um por vez. Vários resultados são baixados em um único ZIP.","ระบบประมวลผลทีละไฟล์และรวมหลายผลลัพธ์เป็น ZIP เดียว","Tệp được xử lý lần lượt. Nhiều kết quả được tải về trong một tệp ZIP.","File diproses satu per satu. Beberapa hasil diunduh sebagai satu ZIP."],
+  ["请先移除加密 PDF 的密码。可拖动文件或用箭头调整合并顺序。","Сначала снимите пароль с защищённых PDF. Меняйте порядок файлов перетаскиванием или стрелками.","Remova a senha dos PDFs protegidos primeiro. Arraste os arquivos ou use as setas para mudar a ordem.","เอารหัสผ่าน PDF ออกก่อน จากนั้นลากไฟล์หรือใช้ลูกศรเพื่อจัดลำดับ","Gỡ mật khẩu PDF trước. Kéo tệp hoặc dùng nút mũi tên để đổi thứ tự gộp.","Hapus kata sandi PDF terlebih dahulu. Seret file atau gunakan panah untuk mengubah urutan."],
+  ["多页结果会打包成 ZIP，以免浏览器拦截连续下载。","Несколько страниц собираются в ZIP, чтобы браузер не блокировал серию загрузок.","As páginas são reunidas em um ZIP para evitar o bloqueio de downloads sucessivos.","ระบบรวมหลายหน้าเป็น ZIP เพื่อไม่ให้เบราว์เซอร์บล็อกการดาวน์โหลดต่อเนื่อง","Nhiều trang được gom vào ZIP để trình duyệt không chặn tải xuống liên tiếp.","Beberapa halaman dikemas dalam ZIP agar browser tidak memblokir unduhan berturut-turut."],
+  ["每张图片对应一页，页面尺寸与原图一致。","Каждое изображение станет отдельной страницей исходного размера.","Cada imagem vira uma página com as dimensões originais.","แต่ละภาพจะเป็นหนึ่งหน้าและใช้ขนาดตามภาพต้นฉบับ","Mỗi ảnh tạo thành một trang với kích thước gốc.","Setiap gambar menjadi satu halaman dengan ukuran asli."],
+  ["高分辨率占用更多内存。大型 PDF 建议选择较低分辨率。","Высокое разрешение требует больше памяти. Для больших PDF выберите разрешение ниже.","Resoluções altas usam mais memória. Para PDFs grandes, escolha uma resolução menor.","ความละเอียดสูงใช้หน่วยความจำมากขึ้น สำหรับ PDF ขนาดใหญ่ให้เลือกความละเอียดต่ำลง","Độ phân giải cao tốn thêm bộ nhớ. Với PDF lớn, hãy chọn mức thấp hơn.","Resolusi tinggi memakai lebih banyak memori. Pilih resolusi yang lebih rendah untuk PDF besar."],
+  ["缩略图和结果均在浏览器中生成，大型 PDF 可能需要更久。","Миниатюры и результаты создаются в браузере. Обработка больших PDF может занять больше времени.","O navegador gera as miniaturas e os resultados. PDFs grandes podem demorar mais.","เบราว์เซอร์สร้างภาพย่อและผลลัพธ์ในเครื่อง PDF ขนาดใหญ่อาจใช้เวลานานขึ้น","Trình duyệt tạo ảnh thu nhỏ và tệp kết quả. PDF lớn có thể mất nhiều thời gian hơn.","Thumbnail dan hasil dibuat di browser. PDF besar mungkin perlu waktu lebih lama."],
+  ["文字水印使用浏览器字体绘制，整个过程无需上传文件。","Текст водяного знака использует шрифты браузера. Файлы не отправляются на сервер.","O texto da marca-d’água usa as fontes do navegador. Nenhum arquivo é enviado.","ลายน้ำข้อความใช้แบบอักษรของเบราว์เซอร์และไม่ต้องอัปโหลดไฟล์","Hình mờ dạng chữ dùng phông của trình duyệt. Không cần tải tệp lên.","Tanda air teks memakai font browser. File tidak perlu diunggah."],
+  ["正在准备文件…","Подготавливаем файлы…","Preparando arquivos…","กำลังเตรียมไฟล์…","Đang chuẩn bị tệp…","Menyiapkan file…"],
+  ["正在生成页面缩略图…","Создаём миниатюры страниц…","Gerando miniaturas das páginas…","กำลังสร้างภาพย่อ…","Đang tạo ảnh thu nhỏ…","Membuat thumbnail halaman…"],
+  ["正在将已解锁的 PDF 打包为 ZIP…","Собираем PDF без паролей в ZIP…","Compactando PDFs desbloqueados em ZIP…","กำลังรวม PDF ที่ปลดรหัสแล้วเป็น ZIP…","Đang gom PDF đã gỡ mật khẩu vào ZIP…","Mengemas PDF yang sudah dibuka kuncinya ke dalam ZIP…"],
+  ["正在将已加密的 PDF 打包为 ZIP…","Собираем защищённые PDF в ZIP…","Compactando PDFs protegidos em ZIP…","กำลังรวม PDF ที่ตั้งรหัสแล้วเป็น ZIP…","Đang gom PDF đã mã hóa vào ZIP…","Mengemas PDF terenkripsi ke dalam ZIP…"],
+  ["在浏览器中使用 AES-256 加密，多个结果会打包成 ZIP。","Шифрование AES-256 в браузере. Несколько результатов будут собраны в ZIP.","Criptografia AES-256 no navegador. Vários resultados saem em um ZIP.","เข้ารหัส AES-256 ในเบราว์เซอร์ หากได้หลายไฟล์จะรวมเป็น ZIP","Mã hóa AES-256 trong trình duyệt. Nhiều kết quả được gom vào ZIP.","Enkripsi AES-256 di browser. Beberapa hasil dikemas dalam ZIP."],
+  ["正在处理…","Обрабатываем…","Processando…","กำลังประมวลผล…","Đang xử lý…","Sedang memproses…"],
+  ["请先添加文件。","Сначала добавьте файл.","Adicione um arquivo primeiro.","เพิ่มไฟล์ก่อน","Hãy thêm tệp trước.","Tambahkan file terlebih dahulu."],
+  ["请输入 PDF 密码。","Введите пароль PDF.","Digite a senha do PDF.","กรอกรหัสผ่าน PDF","Hãy nhập mật khẩu PDF.","Masukkan kata sandi PDF."],
+  ["两次输入的密码不一致。","Пароли не совпадают.","As senhas não coincidem.","รหัสผ่านไม่ตรงกัน","Hai mật khẩu không khớp.","Kedua kata sandi tidak cocok."],
+  ["请确认两个输入框完全一致后重试。","Убедитесь, что оба поля заполнены одинаково, и повторите попытку.","Confira se os dois campos estão iguais e tente de novo.","ตรวจให้ทั้งสองช่องตรงกันแล้วลองใหม่","Kiểm tra hai ô nhập giống hệt nhau rồi thử lại.","Pastikan kedua kolom sama persis, lalu coba lagi."],
+  ["无法为 PDF 设置密码。","Не удалось защитить PDF паролем.","Não foi possível proteger o PDF com senha.","ตั้งรหัสผ่านให้ PDF ไม่สำเร็จ","Không đặt được mật khẩu cho PDF.","PDF gagal dilindungi dengan kata sandi."],
+  ["请输入水印文字或启用页码。","Введите текст водяного знака или включите нумерацию страниц.","Digite o texto da marca-d’água ou ative a numeração.","กรอกข้อความลายน้ำหรือเปิดใช้เลขหน้า","Nhập nội dung hình mờ hoặc bật số trang.","Masukkan teks tanda air atau aktifkan nomor halaman."],
+  ["请选择水印图片或启用页码。","Выберите изображение водяного знака или включите нумерацию страниц.","Escolha uma imagem para a marca-d’água ou ative a numeração.","เลือกรูปภาพลายน้ำหรือเปิดใช้เลขหน้า","Chọn ảnh làm hình mờ hoặc bật số trang.","Pilih gambar tanda air atau aktifkan nomor halaman."],
+  ["此工具一次只能处理一个文件。","Этот инструмент обрабатывает только один файл за раз.","Esta ferramenta processa um arquivo por vez.","เครื่องมือนี้ใช้ได้ครั้งละหนึ่งไฟล์","Công cụ này chỉ xử lý một tệp mỗi lần.","Alat ini memproses satu file per giliran."],
+  ["此 PDF 受密码保护，请先移除密码。","Этот PDF защищён паролем. Сначала снимите пароль.","Este PDF está protegido. Remova a senha primeiro.","PDF นี้มีรหัสผ่าน ให้เอารหัสผ่านออกก่อน","PDF này có mật khẩu. Hãy gỡ mật khẩu trước.","PDF ini dilindungi kata sandi. Hapus kata sandinya terlebih dahulu."],
+  ["此 PDF 没有可调整的页面。","В PDF нет страниц для перестановки.","Não há páginas para organizar neste PDF.","PDF นี้ไม่มีหน้าให้จัด","PDF này không có trang để sắp xếp.","Tidak ada halaman yang bisa diatur di PDF ini."],
+  ["此 PDF 没有可导出的页面。","В PDF нет страниц для сохранения.","Não há páginas para exportar neste PDF.","PDF นี้ไม่มีหน้าให้ส่งออก","PDF này không có trang để xuất.","Tidak ada halaman yang bisa diekspor dari PDF ini."],
+  ["正在加载缩略图，请稍候。","Дождитесь загрузки миниатюр.","Aguarde o carregamento das miniaturas.","กำลังโหลดภาพย่อ โปรดรอสักครู่","Ảnh thu nhỏ đang tải. Vui lòng đợi.","Thumbnail masih dimuat. Tunggu sebentar."],
+  ["处理失败，请确认文件有效。","Не удалось обработать файл. Проверьте, что он открывается.","Não foi possível processar. Confira se o arquivo é válido.","ประมวลผลไม่สำเร็จ โปรดตรวจว่าไฟล์เปิดได้","Không xử lý được. Hãy kiểm tra tệp có mở được không.","Pemrosesan gagal. Pastikan file dapat dibuka."],
+  ["文件格式无效或内容已损坏。","Неверный формат или повреждённый файл.","O formato é inválido ou o arquivo está corrompido.","รูปแบบไฟล์ไม่ถูกต้องหรือไฟล์เสียหาย","Định dạng không hợp lệ hoặc tệp bị hỏng.","Format tidak valid atau file rusak."],
+  ["浏览器内存不足，请减少页数或降低 JPG 分辨率。","Браузеру не хватает памяти. Уменьшите число страниц или разрешение JPG.","O navegador está sem memória. Reduza o número de páginas ou a resolução do JPG.","หน่วยความจำไม่พอ ให้ลดจำนวนหน้าหรือความละเอียด JPG","Trình duyệt thiếu bộ nhớ. Giảm số trang hoặc độ phân giải JPG.","Memori browser tidak cukup. Kurangi jumlah halaman atau resolusi JPG."],
+  ["已清空文件列表。","Список файлов очищен.","Lista de arquivos limpa.","ล้างรายการไฟล์แล้ว","Đã xóa danh sách tệp.","Daftar file sudah dikosongkan."],
+  ["已清空记录并释放所有输出数据。","История и результаты удалены из памяти.","Histórico limpo e resultados removidos da memória.","ล้างประวัติและลบผลลัพธ์จากหน่วยความจำแล้ว","Đã xóa lịch sử và giải phóng toàn bộ kết quả.","Riwayat dan hasil sudah dihapus dari memori."],
+  ["已更新 PDF 合并顺序。","Порядок объединения PDF изменён.","Ordem dos PDFs atualizada.","อัปเดตลำดับการรวม PDF แล้ว","Đã cập nhật thứ tự gộp PDF.","Urutan penggabungan PDF diperbarui."],
+  ["清除此结果","Удалить результат из памяти","Remover este resultado","ล้างผลลัพธ์นี้","Xóa kết quả này","Hapus hasil ini"],
+  ["结果已从内存清除，无法再次下载。","Результат удалён из памяти. Скачать его повторно нельзя.","Este resultado foi removido da memória e não pode ser baixado novamente.","ลบผลลัพธ์ออกจากหน่วยความจำแล้ว จึงดาวน์โหลดซ้ำไม่ได้","Kết quả đã được xóa khỏi bộ nhớ nên không thể tải lại.","Hasil sudah dihapus dari memori dan tidak bisa diunduh lagi."],
+  ["此记录没有可下载的结果。","Для этой записи нет файла для скачивания.","Não há arquivo para baixar neste item.","รายการนี้ไม่มีไฟล์ให้ดาวน์โหลด","Mục này không có tệp để tải xuống.","Entri ini tidak memiliki file yang dapat diunduh."],
+  ["处理完成，已下载 1 个 PDF。","Готово. Скачан один PDF.","Tudo pronto. Um PDF baixado.","เสร็จแล้ว ดาวน์โหลด PDF 1 ไฟล์","Đã xử lý xong và tải xuống 1 PDF.","Selesai. Satu PDF telah diunduh."],
+  ["处理成功的文件已打包下载。","Обработанные файлы скачаны одним архивом.","Os arquivos processados com sucesso foram baixados em um ZIP.","ดาวน์โหลดไฟล์ที่ประมวลผลสำเร็จเป็น ZIP แล้ว","Các tệp xử lý thành công đã được tải về trong một ZIP.","File yang berhasil diproses telah diunduh dalam satu ZIP."],
+];
+rows.forEach((row, index) => row.push(...additionalRows[index]));
+
+// Keep tool names, actions and privacy copy idiomatic in the original locales.
+const localizedCopy = {
+  'PDF 本機工具箱': ['PDF 本機工具箱', 'PDF Toolbox', 'PDFツールボックス', 'PDF 도구 모음', 'Herramientas PDF', 'PDF-Werkzeuge', 'Outils PDF'],
+  '本機瀏覽器 PDF 工具': ['在瀏覽器處理 PDF', 'PDF tools in your browser', 'ブラウザーで使えるPDFツール', '브라우저에서 쓰는 PDF 도구', 'Edita PDF desde el navegador', 'PDFs direkt im Browser bearbeiten', 'Modifiez vos PDF dans votre navigateur'],
+  '加上密碼': ['加上密碼', 'Protect with password', 'パスワードを設定', '암호 설정', 'Proteger con contraseña', 'Mit Passwort schützen', 'Protéger par mot de passe'],
+  '頁面管理': ['頁面管理', 'Organize pages', 'ページを整理', '페이지 정리', 'Organizar páginas', 'Seiten organisieren', 'Organiser les pages'],
+  '全部釋放': ['清除歷程', 'Clear history', '履歴を消去', '기록 지우기', 'Borrar historial', 'Verlauf löschen', 'Effacer l’historique'],
+  '釋放此結果': ['清除此結果', 'Remove this result', 'この結果を削除', '이 결과 지우기', 'Eliminar este resultado', 'Dieses Ergebnis entfernen', 'Supprimer ce résultat'],
+  '請僅處理您本人擁有或已取得合法授權的文件。所有檔案均在您的瀏覽器本機處理，不會主動上傳至本站伺服器。': [
+    '請只處理您擁有或已獲授權的文件。檔案會在您的瀏覽器中處理，不會上傳到本站伺服器。',
+    'Only process documents you own or have permission to use. Your files stay in your browser.',
+    'ご自身の文書、または使用許可を得た文書のみを処理してください。ファイルの処理はブラウザー内で行われます。',
+    '본인 소유이거나 사용 허가를 받은 문서만 처리하세요. 파일은 브라우저 안에서만 처리됩니다.',
+    'Usa solo documentos tuyos o que tengas permiso para tratar. Los archivos se procesan en tu navegador.',
+    'Verarbeiten Sie nur eigene Dokumente oder Dokumente, für die Sie eine Berechtigung haben. Die Dateien bleiben in Ihrem Browser.',
+    'Traitez uniquement les documents qui vous appartiennent ou que vous êtes autorisé à utiliser. Vos fichiers restent dans votre navigateur.',
+  ],
+};
+
 const localeIndex = new Map(LOCALES.map((locale, index) => [locale, index]));
 const rowsByCanonical = new Map(rows.map((row) => [row[0], row]));
+for (const [source, translations] of Object.entries(localizedCopy)) {
+  rowsByCanonical.get(source).splice(1, translations.length - 1, ...translations.slice(1));
+}
 const canonicalByTranslation = new Map();
 const BASE_URL = 'https://pdf.stack-base.com/';
 const OPEN_GRAPH_LOCALES = {
@@ -227,6 +456,12 @@ const OPEN_GRAPH_LOCALES = {
   es: 'es_ES',
   de: 'de_DE',
   fr: 'fr_FR',
+  'zh-Hans': 'zh_CN',
+  ru: 'ru_RU',
+  'pt-BR': 'pt_BR',
+  th: 'th_TH',
+  vi: 'vi_VN',
+  id: 'id_ID',
 };
 for (const row of rows) {
   for (const value of row) canonicalByTranslation.set(value, row[0]);
@@ -240,7 +475,10 @@ function requestedLocale() {
 function systemLocale() {
   for (const language of navigator.languages?.length ? navigator.languages : [navigator.language]) {
     const value = String(language || '').toLowerCase();
-    if (value.startsWith('zh')) return 'zh-Hant';
+    if (/^zh-(hans|cn|sg|my)(-|$)/.test(value) || value === 'zh') return 'zh-Hans';
+    if (value.startsWith('zh-')) return 'zh-Hant';
+    if (/^pt(-|$)/.test(value)) return 'pt-BR';
+    if (/^in(-|$)/.test(value)) return 'id';
     const match = LOCALES.find((locale) => locale.toLowerCase() === value || value.startsWith(`${locale.toLowerCase()}-`));
     if (match) return match;
   }
@@ -260,6 +498,7 @@ let hasExplicitLocale = requestedLocale() !== null;
 let currentLocale = requestedLocale() ?? storedLocale() ?? systemLocale();
 const sourceByTextNode = new WeakMap();
 const lastOutputByTextNode = new WeakMap();
+const attributesByElement = new WeakMap();
 
 function template(values, args) {
   const index = localeIndex.get(currentLocale) ?? 0;
@@ -271,23 +510,27 @@ function translateDynamic(text) {
   if (match) return template([
     '已選取 {0} 頁', '{0} pages selected', '{0} ページ選択', '{0}페이지 선택됨',
     '{0} páginas seleccionadas', '{0} Seiten ausgewählt', '{0} pages sélectionnées',
+    '已选中 {0} 页', 'Выбрано страниц: {0}', 'Páginas selecionadas: {0}', 'เลือกแล้ว {0} หน้า', 'Đã chọn {0} trang', '{0} halaman dipilih',
   ], [match[1]]);
   match = text.match(/^第 (\d+) 頁$/);
-  if (match) return template(['第 {0} 頁', 'Page {0}', '{0} ページ', '{0}페이지', 'Página {0}', 'Seite {0}', 'Page {0}'], [match[1]]);
+  if (match) return template(['第 {0} 頁', 'Page {0}', '{0} ページ', '{0}페이지', 'Página {0}', 'Seite {0}', 'Page {0}', '第 {0} 页', 'Страница {0}', 'Página {0}', 'หน้า {0}', 'Trang {0}', 'Halaman {0}'], [match[1]]);
   match = text.match(/^已加入 (\d+) 個檔案，總大小 (.+)$/);
   if (match) return template([
     '已加入 {0} 個檔案，總大小 {1}', '{0} files added · {1}', '{0} 件追加 · {1}', '{0}개 추가 · {1}',
     '{0} archivos añadidos · {1}', '{0} Dateien hinzugefügt · {1}', '{0} fichiers ajoutés · {1}',
+    '已添加 {0} 个文件，共 {1}', 'Добавлено файлов: {0} · {1}', 'Arquivos adicionados: {0} · {1}', 'เพิ่มแล้ว {0} ไฟล์ · {1}', 'Đã thêm {0} tệp · {1}', '{0} file ditambahkan · {1}',
   ], [match[1], match[2]]);
   match = text.match(/^已選擇：(.+)（(.+)）$/);
   if (match) return template([
     '已選擇：{0}（{1}）', 'Selected: {0} ({1})', '選択済み：{0}（{1}）', '선택됨: {0} ({1})',
     'Seleccionado: {0} ({1})', 'Ausgewählt: {0} ({1})', 'Sélectionné : {0} ({1})',
+    '已选择：{0}（{1}）', 'Выбрано: {0} ({1})', 'Selecionado: {0} ({1})', 'เลือกแล้ว: {0} ({1})', 'Đã chọn: {0} ({1})', 'Dipilih: {0} ({1})',
   ], [match[1], match[2]]);
   match = text.match(/^完成，已下載 (.+)。$/);
   if (match) return template([
     '完成，已下載 {0}。', 'Complete. Downloaded {0}.', '完了。{0} をダウンロードしました。', '{0} 다운로드 완료.',
     'Completado. Se descargó {0}.', 'Abgeschlossen. {0} wurde heruntergeladen.', 'Terminé. {0} a été téléchargé.',
+    '处理完成，已下载 {0}。', 'Готово. Файл {0} скачан.', 'Tudo pronto. {0} foi baixado.', 'เสร็จแล้ว ดาวน์โหลด {0} แล้ว', 'Đã tải xuống {0}.', 'Selesai. {0} telah diunduh.',
   ], [match[1]]);
   if (text.startsWith('可能原因：')) {
     return `${rowsByCanonical.get('可能原因：')[localeIndex.get(currentLocale)]}${translateText(text.slice(5))}`;
@@ -298,9 +541,10 @@ function translateDynamic(text) {
 function translateText(text) {
   const trimmed = text.trim();
   if (!trimmed) return text;
-  const canonical = canonicalByTranslation.get(trimmed) ?? trimmed;
+  const canonical = rowsByCanonical.has(trimmed) ? trimmed : canonicalByTranslation.get(trimmed) ?? trimmed;
   const row = rowsByCanonical.get(canonical);
-  const translated = row?.[localeIndex.get(currentLocale)] ?? translateDynamic(trimmed) ?? trimmed;
+  const index = localeIndex.get(currentLocale);
+  const translated = localizedCopy[canonical]?.[index] ?? row?.[index] ?? translateDynamic(trimmed) ?? trimmed;
   const leading = text.match(/^\s*/)?.[0] ?? '';
   const trailing = text.match(/\s*$/)?.[0] ?? '';
   return `${leading}${translated}${trailing}`;
@@ -327,10 +571,18 @@ function translateTree(root = document.body) {
   const elements = root.querySelectorAll?.('[placeholder], [title], [aria-label], [alt]') ?? [];
   for (const element of elements) {
     if (shouldSkip(element)) continue;
+    const entries = attributesByElement.get(element) ?? new Map();
+    attributesByElement.set(element, entries);
     for (const attribute of ['placeholder', 'title', 'aria-label', 'alt']) {
-      if (!element.hasAttribute(attribute)) continue;
+      if (!element.hasAttribute(attribute)) {
+        entries.delete(attribute);
+        continue;
+      }
       const current = element.getAttribute(attribute);
-      const translated = translateText(current);
+      const previous = entries.get(attribute);
+      const source = previous?.translated === current ? previous.source : current;
+      const translated = translateText(source);
+      entries.set(attribute, { source, translated });
       if (translated !== current) element.setAttribute(attribute, translated);
     }
   }
@@ -421,6 +673,12 @@ function applyLanguage(locale, { persist = false } = {}) {
     hasExplicitLocale = true;
   }
   document.documentElement.lang = currentLocale;
+  for (const link of document.querySelectorAll('[data-legal-page]')) {
+    const locale = link.dataset.legalPage === 'licenses' && !['zh-Hant', 'en', 'ja'].includes(currentLocale)
+      ? (currentLocale === 'zh-Hans' ? 'zh-Hant' : 'en')
+      : currentLocale;
+    link.href = './' + link.dataset.legalPage + '/?lang=' + encodeURIComponent(locale);
+  }
   const languageSelect = document.querySelector('#language-select');
   languageSelect.value = currentLocale;
   languageSelect.setAttribute('aria-label', translateText('選擇介面語言'));

@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'pdf-local-toolbox-';
-const CACHE_NAME = `${CACHE_PREFIX}v4`;
+const CACHE_NAME = `${CACHE_PREFIX}v7`;
 const APP_SHELL = [
   './',
   './index.html',
@@ -27,7 +27,9 @@ const APP_SHELL = [
   './terms/index.html',
   './licenses/',
   './licenses/index.html',
-  './assets/legal-pages.css'
+  './assets/legal-pages.css',
+  './assets/legal-pages.js',
+  './assets/legal-translations.js'
 ];
 
 self.addEventListener('install', (event) => {

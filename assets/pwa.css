@@ -120,3 +120,22 @@
     transition: none;
   }
 }
+#footer-install-action:not([hidden]) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#footer-install-button {
+  padding: 3px 10px;
+  border: 1px solid #a8d3c9;
+  border-radius: 999px;
+  background: #edf8f5;
+  color: #115e52;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#footer-install-button:hover { background: #d9f0e9; }
+#footer-install-button:focus-visible { outline: 2px solid #147b6d; outline-offset: 2px; }
