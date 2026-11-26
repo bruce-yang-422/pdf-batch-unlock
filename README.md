@@ -59,12 +59,12 @@ https://pdf.stack-base.com/?lang=en
 
 ## 瀏覽器擴充功能
 
-repository 已包含可直接載入的未封裝版本：
+下載並解壓縮 [Chrome／Edge 擴充功能 v1.0.0（ZIP）](https://github.com/bruce-yang-422/pdf-batch-unlock/releases/download/v1.0.0/pdf-toolbox-v1.0.0.zip)，即可手動安裝。
 
 1. Chrome 開啟 `chrome://extensions`；Edge 開啟 `edge://extensions`。
 2. 開啟「開發人員模式」。
 3. 選擇「載入未封裝」。
-4. 選取本專案的 `browser-extension/dist/` 目錄。
+4. 選取解壓縮後含有 `manifest.json` 的資料夾。如果是從原始碼安裝，請選取本專案的 `browser-extension/dist/`。
 
 主站資產更新後，使用 Node.js 22 重新建置擴充功能：
 
