@@ -461,6 +461,11 @@ rows.push(
   ['加入 PDF 後會依檔案與頁面順序顯示配置。', 'Add PDFs to preview the arrangement in file and page order.', 'PDF を追加すると、ファイルとページの順番で配置を表示します。', 'PDF를 추가하면 파일 및 페이지 순서대로 배치를 표시합니다.', 'Añade PDF para ver la disposición según el orden de archivos y páginas.', 'PDFs hinzufügen, um die Anordnung in Datei- und Seitenreihenfolge zu sehen.', 'Ajoutez des PDF pour afficher la disposition selon l’ordre des fichiers et des pages.', '添加 PDF 后会按文件和页面顺序显示排版效果。', 'Добавьте PDF, чтобы увидеть размещение в порядке файлов и страниц.', 'Adicione PDFs para visualizar a disposição na ordem dos arquivos e páginas.', 'เพิ่ม PDF เพื่อดูการจัดตามลำดับไฟล์และหน้า', 'Thêm PDF để xem bố cục theo thứ tự tệp và trang.', 'Tambahkan PDF untuk melihat susunan menurut urutan file dan halaman.']
 );
 
+rows.push(
+  ['開啟工具選單', 'Open tool menu', 'ツールメニューを開く', '도구 메뉴 열기', 'Abrir menú de herramientas', 'Werkzeugmenü öffnen', 'Ouvrir le menu des outils', '打开工具菜单', 'Открыть меню инструментов', 'Abrir menu de ferramentas', 'เปิดเมนูเครื่องมือ', 'Mở trình đơn công cụ', 'Buka menu alat'],
+  ['關閉工具選單', 'Close tool menu', 'ツールメニューを閉じる', '도구 메뉴 닫기', 'Cerrar menú de herramientas', 'Werkzeugmenü schließen', 'Fermer le menu des outils', '关闭工具菜单', 'Закрыть меню инструментов', 'Fechar menu de ferramentas', 'ปิดเมนูเครื่องมือ', 'Đóng trình đơn công cụ', 'Tutup menu alat']
+);
+
 // Confirm-before-download workflow for watermark and page-number output.
 rows.push(
   ['產生預覽 PDF', 'Generate preview PDF', 'プレビュー PDF を作成', '미리보기 PDF 만들기', 'Generar PDF de vista previa', 'Vorschau-PDF erstellen', 'Créer le PDF d’aperçu', '生成预览 PDF', 'Создать PDF для предпросмотра', 'Gerar PDF de prévia', 'สร้าง PDF ตัวอย่าง', 'Tạo PDF xem trước', 'Buat PDF pratinjau'],

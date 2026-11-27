@@ -49,7 +49,12 @@
         <p class="privacy-note"><span class="privacy-badge">✓ 100% 本機處理</span><span>檔案不會上傳至任何伺服器</span></p>
 
         <div class="mobile-tool-picker">
-          <label for="tool-select">選擇工具</label>
+          <button id="mobile-tool-menu-button" class="mobile-tool-menu-button" type="button" aria-expanded="false" aria-controls="mobile-tool-drawer" aria-label="開啟工具選單">
+            <span class="mobile-menu-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="mobile-tool-current">移除密碼</span>
+            <span class="mobile-menu-chevron" aria-hidden="true">›</span>
+          </button>
+          <label class="visually-hidden" for="tool-select">選擇工具</label>
             <select id="tool-select">
               <option value="unlock">移除密碼</option>
               <option value="protect">加上密碼</option>
@@ -61,6 +66,17 @@
               <option value="jpg-to-pdf">JPG 轉 PDF</option>
             </select>
           </div>
+
+        <div id="mobile-tool-drawer" class="mobile-tool-drawer" hidden>
+          <button class="mobile-tool-backdrop" type="button" aria-label="關閉工具選單"></button>
+          <aside class="mobile-tool-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-tool-drawer-title">
+            <header>
+              <div><span>PDF 本機工具箱</span><strong id="mobile-tool-drawer-title">PDF 工具</strong></div>
+              <button id="mobile-tool-drawer-close" type="button" aria-label="關閉工具選單">×</button>
+            </header>
+            <nav id="mobile-tool-drawer-list" aria-label="PDF 工具"></nav>
+          </aside>
+        </div>
 
         <nav class="tool-tabs" aria-label="PDF 工具">
           <button class="tool-tab is-active" type="button" data-tool="unlock">移除密碼</button>

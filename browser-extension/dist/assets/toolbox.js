@@ -99,6 +99,14 @@ fn fs_main(in : VertexOutput) -> @location(0) vec4<f32> {
 {
 const card = document.querySelector('.card');
 const tabs = [...document.querySelectorAll('.tool-tab')];
+const allToolTabs = [...document.querySelectorAll('.tool-tabs [data-tool]')];
+const mobileToolMenuButton = document.querySelector('#mobile-tool-menu-button');
+const mobileToolCurrent = document.querySelector('.mobile-tool-current');
+const mobileToolDrawer = document.querySelector('#mobile-tool-drawer');
+const mobileToolDrawerPanel = document.querySelector('.mobile-tool-drawer-panel');
+const mobileToolDrawerList = document.querySelector('#mobile-tool-drawer-list');
+const mobileToolDrawerClose = document.querySelector('#mobile-tool-drawer-close');
+const mobileToolBackdrop = document.querySelector('.mobile-tool-backdrop');
 const workspace = document.querySelector('.workspace');
 const activityPanel = document.querySelector('.activity-panel');
 const queueSection = document.querySelector('#queue-section');
@@ -200,6 +208,7 @@ let previewPdfFile = null;
 let previewPageWidth = 595;
 let previewPageHeight = 842;
 let lastCoreError = null;
+let mobileDrawerCloseTimer = null;
 let awaitingDecorationOutput = false;
 let decorationOutputUrl = null;
 let decorationOutputName = '';
@@ -238,6 +247,59 @@ emptyDragImage.height = 1;
 
 function activeTool() {
   return tabs.find((tab) => tab.classList.contains('is-active'))?.dataset.tool ?? 'unlock';
+}
+
+function activeDrawerTab() {
+  return allToolTabs.find((tab) => tab.classList.contains('is-active')) ?? allToolTabs[0];
+}
+
+function syncMobileToolDrawer() {
+  const selectedTab = activeDrawerTab();
+  mobileToolCurrent.textContent = selectedTab?.textContent.trim() || '選擇工具';
+  for (const button of mobileToolDrawerList.querySelectorAll('[data-drawer-tool]')) {
+    const selected = button.dataset.drawerTool === selectedTab?.dataset.tool;
+    button.classList.toggle('is-active', selected);
+    button.setAttribute('aria-current', selected ? 'page' : 'false');
+  }
+}
+
+function buildMobileToolDrawer() {
+  mobileToolDrawerList.replaceChildren(...allToolTabs.map((tab) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.dataset.drawerTool = tab.dataset.tool;
+    button.innerHTML = '<span aria-hidden="true"></span><strong></strong><i aria-hidden="true">›</i>';
+    button.querySelector('strong').textContent = tab.textContent.trim();
+    button.addEventListener('click', () => {
+      tab.click();
+      closeMobileToolDrawer();
+    });
+    return button;
+  }));
+  syncMobileToolDrawer();
+}
+
+function openMobileToolDrawer() {
+  clearTimeout(mobileDrawerCloseTimer);
+  buildMobileToolDrawer();
+  mobileToolDrawer.hidden = false;
+  document.body.classList.add('mobile-drawer-open');
+  mobileToolMenuButton.setAttribute('aria-expanded', 'true');
+  requestAnimationFrame(() => {
+    mobileToolDrawer.classList.add('is-open');
+    mobileToolDrawerList.querySelector('.is-active')?.focus();
+  });
+}
+
+function closeMobileToolDrawer() {
+  if (mobileToolDrawer.hidden) return;
+  mobileToolDrawer.classList.remove('is-open');
+  document.body.classList.remove('mobile-drawer-open');
+  mobileToolMenuButton.setAttribute('aria-expanded', 'false');
+  mobileDrawerCloseTimer = window.setTimeout(() => {
+    mobileToolDrawer.hidden = true;
+    mobileToolMenuButton.focus();
+  }, 180);
 }
 
 function translated(text) {
@@ -344,6 +406,7 @@ function updateResponsiveLayout() {
   updateUploadMode();
   updatePasswordMode();
   updateDecorationProcessLabel();
+  syncMobileToolDrawer();
 }
 
 function updatePasswordMode() {
@@ -1142,7 +1205,7 @@ globalThis.addEventListener('unhandledrejection', (event) => {
 });
 
 const tabObserver = new MutationObserver(updateResponsiveLayout);
-tabs.forEach((tab) => tabObserver.observe(tab, { attributes: true, attributeFilter: ['class'] }));
+allToolTabs.forEach((tab) => tabObserver.observe(tab, { attributes: true, attributeFilter: ['class'] }));
 
 const statusObserver = new MutationObserver(updateStatusPresentation);
 statusObserver.observe(status, { attributes: true, attributeFilter: ['data-kind'], childList: true, characterData: true, subtree: true });
@@ -1157,8 +1220,16 @@ mobileQuery.addEventListener?.('change', updateResponsiveLayout);
 desktopQuery.addEventListener?.('change', updateResponsiveLayout);
 compactUploadQuery.addEventListener?.('change', updateUploadMode);
 globalThis.addEventListener('pdf-tool-language-change', updateDecorationProcessLabel);
+globalThis.addEventListener('pdf-tool-language-change', buildMobileToolDrawer);
 globalThis.addEventListener('beforeunload', () => clearDecorationOutput({ restoreDraft: false }));
+mobileToolMenuButton?.addEventListener('click', openMobileToolDrawer);
+mobileToolDrawerClose?.addEventListener('click', closeMobileToolDrawer);
+mobileToolBackdrop?.addEventListener('click', closeMobileToolDrawer);
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !mobileToolDrawer.hidden) closeMobileToolDrawer();
+});
 updateHistoryState(true);
+buildMobileToolDrawer();
 updateResponsiveLayout();
 updateStatusPresentation();
 updateDecorationOptions();
@@ -1627,6 +1698,11 @@ rows.push(
   ['合版預覽', 'Pages-per-sheet preview', '複数ページのプレビュー', '모아찍기 미리보기', 'Vista previa de páginas por hoja', 'Vorschau: Seiten pro Blatt', 'Aperçu des pages par feuille', '排版预览', 'Предпросмотр страниц на листе', 'Prévia de páginas por folha', 'ตัวอย่างการจัดหน้า', 'Xem trước nhiều trang trên một tờ', 'Pratinjau halaman per lembar'],
   ['合版配置預覽', 'Pages-per-sheet layout preview', '複数ページ配置のプレビュー', '모아찍기 배치 미리보기', 'Vista previa de la disposición por hoja', 'Vorschau der Seitenanordnung pro Blatt', 'Aperçu de la disposition par feuille', '多页排版预览', 'Предпросмотр расположения страниц на листе', 'Prévia da disposição por folha', 'ตัวอย่างรูปแบบหลายหน้าต่อแผ่น', 'Xem trước bố cục nhiều trang trên một tờ', 'Pratinjau susunan halaman per lembar'],
   ['加入 PDF 後會依檔案與頁面順序顯示配置。', 'Add PDFs to preview the arrangement in file and page order.', 'PDF を追加すると、ファイルとページの順番で配置を表示します。', 'PDF를 추가하면 파일 및 페이지 순서대로 배치를 표시합니다.', 'Añade PDF para ver la disposición según el orden de archivos y páginas.', 'PDFs hinzufügen, um die Anordnung in Datei- und Seitenreihenfolge zu sehen.', 'Ajoutez des PDF pour afficher la disposition selon l’ordre des fichiers et des pages.', '添加 PDF 后会按文件和页面顺序显示排版效果。', 'Добавьте PDF, чтобы увидеть размещение в порядке файлов и страниц.', 'Adicione PDFs para visualizar a disposição na ordem dos arquivos e páginas.', 'เพิ่ม PDF เพื่อดูการจัดตามลำดับไฟล์และหน้า', 'Thêm PDF để xem bố cục theo thứ tự tệp và trang.', 'Tambahkan PDF untuk melihat susunan menurut urutan file dan halaman.']
+);
+
+rows.push(
+  ['開啟工具選單', 'Open tool menu', 'ツールメニューを開く', '도구 메뉴 열기', 'Abrir menú de herramientas', 'Werkzeugmenü öffnen', 'Ouvrir le menu des outils', '打开工具菜单', 'Открыть меню инструментов', 'Abrir menu de ferramentas', 'เปิดเมนูเครื่องมือ', 'Mở trình đơn công cụ', 'Buka menu alat'],
+  ['關閉工具選單', 'Close tool menu', 'ツールメニューを閉じる', '도구 메뉴 닫기', 'Cerrar menú de herramientas', 'Werkzeugmenü schließen', 'Fermer le menu des outils', '关闭工具菜单', 'Закрыть меню инструментов', 'Fechar menu de ferramentas', 'ปิดเมนูเครื่องมือ', 'Đóng trình đơn công cụ', 'Tutup menu alat']
 );
 
 // Confirm-before-download workflow for watermark and page-number output.

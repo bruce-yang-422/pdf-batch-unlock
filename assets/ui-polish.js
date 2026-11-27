@@ -1,5 +1,13 @@
 const card = document.querySelector('.card');
 const tabs = [...document.querySelectorAll('.tool-tab')];
+const allToolTabs = [...document.querySelectorAll('.tool-tabs [data-tool]')];
+const mobileToolMenuButton = document.querySelector('#mobile-tool-menu-button');
+const mobileToolCurrent = document.querySelector('.mobile-tool-current');
+const mobileToolDrawer = document.querySelector('#mobile-tool-drawer');
+const mobileToolDrawerPanel = document.querySelector('.mobile-tool-drawer-panel');
+const mobileToolDrawerList = document.querySelector('#mobile-tool-drawer-list');
+const mobileToolDrawerClose = document.querySelector('#mobile-tool-drawer-close');
+const mobileToolBackdrop = document.querySelector('.mobile-tool-backdrop');
 const workspace = document.querySelector('.workspace');
 const activityPanel = document.querySelector('.activity-panel');
 const queueSection = document.querySelector('#queue-section');
@@ -101,6 +109,7 @@ let previewPdfFile = null;
 let previewPageWidth = 595;
 let previewPageHeight = 842;
 let lastCoreError = null;
+let mobileDrawerCloseTimer = null;
 let awaitingDecorationOutput = false;
 let decorationOutputUrl = null;
 let decorationOutputName = '';
@@ -139,6 +148,59 @@ emptyDragImage.height = 1;
 
 function activeTool() {
   return tabs.find((tab) => tab.classList.contains('is-active'))?.dataset.tool ?? 'unlock';
+}
+
+function activeDrawerTab() {
+  return allToolTabs.find((tab) => tab.classList.contains('is-active')) ?? allToolTabs[0];
+}
+
+function syncMobileToolDrawer() {
+  const selectedTab = activeDrawerTab();
+  mobileToolCurrent.textContent = selectedTab?.textContent.trim() || '選擇工具';
+  for (const button of mobileToolDrawerList.querySelectorAll('[data-drawer-tool]')) {
+    const selected = button.dataset.drawerTool === selectedTab?.dataset.tool;
+    button.classList.toggle('is-active', selected);
+    button.setAttribute('aria-current', selected ? 'page' : 'false');
+  }
+}
+
+function buildMobileToolDrawer() {
+  mobileToolDrawerList.replaceChildren(...allToolTabs.map((tab) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.dataset.drawerTool = tab.dataset.tool;
+    button.innerHTML = '<span aria-hidden="true"></span><strong></strong><i aria-hidden="true">›</i>';
+    button.querySelector('strong').textContent = tab.textContent.trim();
+    button.addEventListener('click', () => {
+      tab.click();
+      closeMobileToolDrawer();
+    });
+    return button;
+  }));
+  syncMobileToolDrawer();
+}
+
+function openMobileToolDrawer() {
+  clearTimeout(mobileDrawerCloseTimer);
+  buildMobileToolDrawer();
+  mobileToolDrawer.hidden = false;
+  document.body.classList.add('mobile-drawer-open');
+  mobileToolMenuButton.setAttribute('aria-expanded', 'true');
+  requestAnimationFrame(() => {
+    mobileToolDrawer.classList.add('is-open');
+    mobileToolDrawerList.querySelector('.is-active')?.focus();
+  });
+}
+
+function closeMobileToolDrawer() {
+  if (mobileToolDrawer.hidden) return;
+  mobileToolDrawer.classList.remove('is-open');
+  document.body.classList.remove('mobile-drawer-open');
+  mobileToolMenuButton.setAttribute('aria-expanded', 'false');
+  mobileDrawerCloseTimer = window.setTimeout(() => {
+    mobileToolDrawer.hidden = true;
+    mobileToolMenuButton.focus();
+  }, 180);
 }
 
 function translated(text) {
@@ -245,6 +307,7 @@ function updateResponsiveLayout() {
   updateUploadMode();
   updatePasswordMode();
   updateDecorationProcessLabel();
+  syncMobileToolDrawer();
 }
 
 function updatePasswordMode() {
@@ -1043,7 +1106,7 @@ globalThis.addEventListener('unhandledrejection', (event) => {
 });
 
 const tabObserver = new MutationObserver(updateResponsiveLayout);
-tabs.forEach((tab) => tabObserver.observe(tab, { attributes: true, attributeFilter: ['class'] }));
+allToolTabs.forEach((tab) => tabObserver.observe(tab, { attributes: true, attributeFilter: ['class'] }));
 
 const statusObserver = new MutationObserver(updateStatusPresentation);
 statusObserver.observe(status, { attributes: true, attributeFilter: ['data-kind'], childList: true, characterData: true, subtree: true });
@@ -1058,8 +1121,16 @@ mobileQuery.addEventListener?.('change', updateResponsiveLayout);
 desktopQuery.addEventListener?.('change', updateResponsiveLayout);
 compactUploadQuery.addEventListener?.('change', updateUploadMode);
 globalThis.addEventListener('pdf-tool-language-change', updateDecorationProcessLabel);
+globalThis.addEventListener('pdf-tool-language-change', buildMobileToolDrawer);
 globalThis.addEventListener('beforeunload', () => clearDecorationOutput({ restoreDraft: false }));
+mobileToolMenuButton?.addEventListener('click', openMobileToolDrawer);
+mobileToolDrawerClose?.addEventListener('click', closeMobileToolDrawer);
+mobileToolBackdrop?.addEventListener('click', closeMobileToolDrawer);
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !mobileToolDrawer.hidden) closeMobileToolDrawer();
+});
 updateHistoryState(true);
+buildMobileToolDrawer();
 updateResponsiveLayout();
 updateStatusPresentation();
 updateDecorationOptions();
