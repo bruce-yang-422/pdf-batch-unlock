@@ -146,6 +146,11 @@ const previewPdfPage = document.querySelector('#preview-pdf-page');
 const previewDocumentPlaceholder = document.querySelector('#preview-document-placeholder');
 const previewModeLabel = document.querySelector('#preview-mode-label');
 const decorationPreview = document.querySelector('.decoration-preview');
+const decorationOutputPreview = document.querySelector('#decoration-output-preview');
+const decorationOutputActions = document.querySelector('#decoration-output-actions');
+const decorationPreviewHelp = document.querySelector('#decoration-preview-help');
+const downloadDecorationOutput = document.querySelector('#download-decoration-output');
+const editDecorationOutput = document.querySelector('#edit-decoration-output');
 const errorNotice = document.querySelector('#error-notice');
 const errorSummary = document.querySelector('#error-summary');
 const errorReason = document.querySelector('#error-reason');
@@ -195,6 +200,37 @@ let previewPdfFile = null;
 let previewPageWidth = 595;
 let previewPageHeight = 842;
 let lastCoreError = null;
+let awaitingDecorationOutput = false;
+let decorationOutputUrl = null;
+let decorationOutputName = '';
+let decorationOutputTimer = null;
+
+document.addEventListener('click', (event) => {
+  const anchor = event.target instanceof HTMLAnchorElement ? event.target : null;
+  const isDecorationOutput = awaitingDecorationOutput
+    && activeTool() === 'decorate'
+    && Boolean(anchor?.download)
+    && anchor.href.startsWith('blob:');
+  if (!isDecorationOutput) return;
+
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  awaitingDecorationOutput = false;
+  clearTimeout(decorationOutputTimer);
+  const sourceUrl = anchor.href;
+  const filename = anchor.download;
+  fetch(sourceUrl)
+    .then((response) => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.blob();
+    })
+    .then((blob) => showDecorationOutput(blob, filename))
+    .catch((error) => {
+      showErrorNotice('無法建立實際輸出預覽。', error?.message ?? String(error));
+      status.textContent = '無法建立實際輸出預覽，請再試一次。';
+      status.dataset.kind = 'error';
+    });
+}, { capture: true });
 
 const emptyDragImage = document.createElement('canvas');
 emptyDragImage.width = 1;
@@ -202,6 +238,68 @@ emptyDragImage.height = 1;
 
 function activeTool() {
   return tabs.find((tab) => tab.classList.contains('is-active'))?.dataset.tool ?? 'unlock';
+}
+
+function translated(text) {
+  return globalThis.pdfToolI18n?.translate?.(text) ?? text;
+}
+
+function updateDecorationProcessLabel() {
+  if (activeTool() === 'decorate' && status.dataset.kind !== 'working') {
+    processButton.textContent = translated('產生預覽 PDF');
+  }
+}
+
+function clearDecorationOutput({ restoreDraft = true } = {}) {
+  awaitingDecorationOutput = false;
+  clearTimeout(decorationOutputTimer);
+  decorationOutputTimer = null;
+  if (decorationOutputUrl) URL.revokeObjectURL(decorationOutputUrl);
+  decorationOutputUrl = null;
+  decorationOutputName = '';
+  decorationOutputPreview.removeAttribute('src');
+  decorationOutputPreview.hidden = true;
+  decorationOutputActions.hidden = true;
+  if (restoreDraft) {
+    previewPaper.hidden = false;
+    previewModeLabel.textContent = previewPdfFile ? 'PDF 第 1 頁（設定預覽）' : '尚未載入 PDF';
+    decorationPreviewHelp.textContent = '加入 PDF 後會使用第一頁實際畫面預覽；按下產生預覽後，會切換為實際輸出的 PDF。';
+  }
+}
+
+function showDecorationOutput(blob, filename) {
+  clearDecorationOutput({ restoreDraft: false });
+  decorationOutputUrl = URL.createObjectURL(blob.type === 'application/pdf' ? blob : new Blob([blob], { type: 'application/pdf' }));
+  decorationOutputName = filename || 'decorated.pdf';
+  decorationOutputPreview.src = `${decorationOutputUrl}#page=1&zoom=page-width&navpanes=0`;
+  decorationOutputPreview.hidden = false;
+  decorationOutputActions.hidden = false;
+  previewPaper.hidden = true;
+  previewModeLabel.textContent = '實際輸出 PDF';
+  decorationPreviewHelp.textContent = '這是實際產生的 PDF；確認效果後再下載。若要修改，請返回調整並重新產生。';
+  status.textContent = '預覽已產生，請確認效果後下載。';
+  status.dataset.kind = 'success';
+  updateDecorationProcessLabel();
+}
+
+function beginDecorationOutputCapture() {
+  clearDecorationOutput();
+  awaitingDecorationOutput = true;
+  decorationOutputTimer = window.setTimeout(() => {
+    awaitingDecorationOutput = false;
+  }, 60000);
+}
+
+function saveDecorationOutput() {
+  if (!decorationOutputUrl) return;
+  const anchor = document.createElement('a');
+  anchor.href = decorationOutputUrl;
+  anchor.download = decorationOutputName;
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  status.textContent = '已下載確認後的 PDF。';
+  status.dataset.kind = 'success';
 }
 
 function updateUploadMode() {
@@ -245,6 +343,7 @@ function updateResponsiveLayout() {
 
   updateUploadMode();
   updatePasswordMode();
+  updateDecorationProcessLabel();
 }
 
 function updatePasswordMode() {
@@ -365,11 +464,14 @@ function updateStatusPresentation() {
     lastCoreError = null;
     hideErrorNotice();
   } else if (status.dataset.kind === 'error') {
+    awaitingDecorationOutput = false;
+    clearTimeout(decorationOutputTimer);
     showErrorNotice(status.textContent, lastCoreError?.message);
   }
 }
 
 toolForm.addEventListener('submit', (event) => {
+  if (activeTool() === 'decorate') beginDecorationOutputCapture();
   if (activeTool() === 'protect' && selectedPasswordSource() === 'generated') {
     const generated = generatedPasswordValue.textContent || generatePassword();
     passwordInput.value = generated;
@@ -1010,9 +1112,21 @@ watermarkAngle?.addEventListener('change', renderDecorationPreview);
 addPageNumbers?.addEventListener('change', updateDecorationOptions);
 pageNumberFont?.addEventListener('change', renderDecorationPreview);
 pageNumberSize?.addEventListener('input', updateDecorationOptions);
+for (const input of [watermarkLayout, watermarkSource, watermarkImage, watermarkText, watermarkFont, watermarkSize,
+  watermarkScale, watermarkOpacity, watermarkPosition, watermarkAngle, addPageNumbers, pageNumberFont, pageNumberSize]) {
+  input?.addEventListener(input.matches('input[type="range"], input[type="text"]') ? 'input' : 'change', () => {
+    if (decorationOutputUrl) clearDecorationOutput();
+  });
+}
+downloadDecorationOutput?.addEventListener('click', saveDecorationOutput);
+editDecorationOutput?.addEventListener('click', () => {
+  clearDecorationOutput();
+  processButton.focus();
+});
 dismissError?.addEventListener('click', hideErrorNotice);
 
 globalThis.addEventListener('pdf-tool-error', (event) => {
+  awaitingDecorationOutput = false;
   lastCoreError = event.detail ?? null;
   showErrorNotice('PDF 處理失敗。', lastCoreError?.message);
 });
@@ -1034,6 +1148,7 @@ const statusObserver = new MutationObserver(updateStatusPresentation);
 statusObserver.observe(status, { attributes: true, attributeFilter: ['data-kind'], childList: true, characterData: true, subtree: true });
 
 const fileListObserver = new MutationObserver(() => {
+  if (decorationOutputUrl) clearDecorationOutput();
   if (previewPdfFile && !fileList.querySelector('.file-row')) resetPdfPagePreview();
 });
 fileListObserver.observe(fileList, { childList: true });
@@ -1041,6 +1156,8 @@ fileListObserver.observe(fileList, { childList: true });
 mobileQuery.addEventListener?.('change', updateResponsiveLayout);
 desktopQuery.addEventListener?.('change', updateResponsiveLayout);
 compactUploadQuery.addEventListener?.('change', updateUploadMode);
+globalThis.addEventListener('pdf-tool-language-change', updateDecorationProcessLabel);
+globalThis.addEventListener('beforeunload', () => clearDecorationOutput({ restoreDraft: false }));
 updateHistoryState(true);
 updateResponsiveLayout();
 updateStatusPresentation();
@@ -1510,6 +1627,25 @@ rows.push(
   ['合版預覽', 'Pages-per-sheet preview', '複数ページのプレビュー', '모아찍기 미리보기', 'Vista previa de páginas por hoja', 'Vorschau: Seiten pro Blatt', 'Aperçu des pages par feuille', '排版预览', 'Предпросмотр страниц на листе', 'Prévia de páginas por folha', 'ตัวอย่างการจัดหน้า', 'Xem trước nhiều trang trên một tờ', 'Pratinjau halaman per lembar'],
   ['合版配置預覽', 'Pages-per-sheet layout preview', '複数ページ配置のプレビュー', '모아찍기 배치 미리보기', 'Vista previa de la disposición por hoja', 'Vorschau der Seitenanordnung pro Blatt', 'Aperçu de la disposition par feuille', '多页排版预览', 'Предпросмотр расположения страниц на листе', 'Prévia da disposição por folha', 'ตัวอย่างรูปแบบหลายหน้าต่อแผ่น', 'Xem trước bố cục nhiều trang trên một tờ', 'Pratinjau susunan halaman per lembar'],
   ['加入 PDF 後會依檔案與頁面順序顯示配置。', 'Add PDFs to preview the arrangement in file and page order.', 'PDF を追加すると、ファイルとページの順番で配置を表示します。', 'PDF를 추가하면 파일 및 페이지 순서대로 배치를 표시합니다.', 'Añade PDF para ver la disposición según el orden de archivos y páginas.', 'PDFs hinzufügen, um die Anordnung in Datei- und Seitenreihenfolge zu sehen.', 'Ajoutez des PDF pour afficher la disposition selon l’ordre des fichiers et des pages.', '添加 PDF 后会按文件和页面顺序显示排版效果。', 'Добавьте PDF, чтобы увидеть размещение в порядке файлов и страниц.', 'Adicione PDFs para visualizar a disposição na ordem dos arquivos e páginas.', 'เพิ่ม PDF เพื่อดูการจัดตามลำดับไฟล์และหน้า', 'Thêm PDF để xem bố cục theo thứ tự tệp và trang.', 'Tambahkan PDF untuk melihat susunan menurut urutan file dan halaman.']
+);
+
+// Confirm-before-download workflow for watermark and page-number output.
+rows.push(
+  ['產生預覽 PDF', 'Generate preview PDF', 'プレビュー PDF を作成', '미리보기 PDF 만들기', 'Generar PDF de vista previa', 'Vorschau-PDF erstellen', 'Créer le PDF d’aperçu', '生成预览 PDF', 'Создать PDF для предпросмотра', 'Gerar PDF de prévia', 'สร้าง PDF ตัวอย่าง', 'Tạo PDF xem trước', 'Buat PDF pratinjau'],
+  ['實際輸出 PDF 預覽', 'Actual output PDF preview', '実際の出力 PDF プレビュー', '실제 출력 PDF 미리보기', 'Vista previa del PDF final', 'Vorschau der tatsächlichen PDF-Ausgabe', 'Aperçu du PDF réellement généré', '实际输出 PDF 预览', 'Предпросмотр готового PDF', 'Prévia do PDF gerado', 'ตัวอย่าง PDF ที่สร้างจริง', 'Xem trước PDF đầu ra thực tế', 'Pratinjau PDF keluaran aktual'],
+  ['下載確認後的 PDF', 'Download approved PDF', '確認した PDF をダウンロード', '확인한 PDF 다운로드', 'Descargar el PDF aprobado', 'Geprüfte PDF herunterladen', 'Télécharger le PDF validé', '下载已确认的 PDF', 'Скачать проверенный PDF', 'Baixar PDF aprovado', 'ดาวน์โหลด PDF ที่ตรวจสอบแล้ว', 'Tải PDF đã xác nhận', 'Unduh PDF yang telah diperiksa'],
+  ['返回調整', 'Back to settings', '設定に戻る', '설정으로 돌아가기', 'Volver a los ajustes', 'Zurück zu den Einstellungen', 'Revenir aux réglages', '返回调整', 'Вернуться к настройкам', 'Voltar aos ajustes', 'กลับไปปรับตั้งค่า', 'Quay lại cài đặt', 'Kembali ke pengaturan'],
+  ['加入 PDF 後會使用第一頁實際畫面預覽；按下產生預覽後，會切換為實際輸出的 PDF。', 'After adding a PDF, its first page is used for the settings preview. Generate a preview to inspect the actual output PDF.', 'PDF を追加すると、1 ページ目で設定を確認できます。プレビューを作成すると、実際に出力される PDF に切り替わります。', 'PDF를 추가하면 첫 페이지에서 설정을 미리 볼 수 있습니다. 미리보기를 만들면 실제 출력 PDF로 전환됩니다.', 'Al añadir un PDF, la primera página sirve para previsualizar los ajustes. Genera la vista previa para comprobar el PDF final.', 'Nach dem Hinzufügen einer PDF zeigt die erste Seite eine Einstellungsvorschau. Erstellen Sie die Vorschau, um die tatsächliche Ausgabe zu prüfen.', 'Après l’ajout d’un PDF, la première page sert à prévisualiser les réglages. Générez l’aperçu pour vérifier le PDF final.', '添加 PDF 后，将使用第一页预览设置效果；生成预览后会切换为实际输出的 PDF。', 'После добавления PDF первая страница используется для предпросмотра настроек. Создайте предпросмотр, чтобы проверить готовый PDF.', 'Após adicionar um PDF, a primeira página mostra uma prévia dos ajustes. Gere a prévia para conferir o PDF final.', 'เมื่อเพิ่ม PDF แล้ว ระบบจะใช้หน้าแรกแสดงตัวอย่างการตั้งค่า จากนั้นสร้างตัวอย่างเพื่อตรวจสอบ PDF ที่ได้จริง', 'Sau khi thêm PDF, trang đầu được dùng để xem trước cài đặt. Hãy tạo bản xem trước để kiểm tra PDF đầu ra thực tế.', 'Setelah PDF ditambahkan, halaman pertama digunakan untuk pratinjau pengaturan. Buat pratinjau untuk memeriksa PDF keluaran aktual.'],
+  ['這是實際產生的 PDF；確認效果後再下載。若要修改，請返回調整並重新產生。', 'This is the actual generated PDF. Check it before downloading. To make changes, return to settings and generate it again.', 'これは実際に生成された PDF です。内容を確認してからダウンロードしてください。変更する場合は設定に戻って再作成してください。', '실제로 생성된 PDF입니다. 결과를 확인한 뒤 다운로드하세요. 수정하려면 설정으로 돌아가 다시 만드세요.', 'Este es el PDF final generado. Compruébalo antes de descargarlo. Para cambiar algo, vuelve a los ajustes y genéralo de nuevo.', 'Dies ist die tatsächlich erzeugte PDF. Prüfen Sie das Ergebnis vor dem Download. Für Änderungen kehren Sie zu den Einstellungen zurück und erstellen sie erneut.', 'Voici le PDF réellement généré. Vérifiez-le avant de le télécharger. Pour le modifier, revenez aux réglages et générez-le à nouveau.', '这是实际生成的 PDF；请确认效果后再下载。如需修改，请返回调整并重新生成。', 'Это фактически созданный PDF. Проверьте результат перед скачиванием. Для изменений вернитесь к настройкам и создайте его заново.', 'Este é o PDF realmente gerado. Confira o resultado antes de baixar. Para alterar, volte aos ajustes e gere novamente.', 'นี่คือ PDF ที่สร้างจริง โปรดตรวจสอบก่อนดาวน์โหลด หากต้องการแก้ไข ให้กลับไปปรับตั้งค่าแล้วสร้างใหม่', 'Đây là PDF thực tế đã tạo. Hãy kiểm tra trước khi tải xuống. Nếu cần sửa, quay lại cài đặt và tạo lại.', 'Ini adalah PDF yang benar-benar dibuat. Periksa sebelum mengunduh. Untuk mengubahnya, kembali ke pengaturan dan buat lagi.'],
+  ['預覽已產生，請確認效果後下載。', 'Preview generated. Check the result before downloading.', 'プレビューを作成しました。内容を確認してからダウンロードしてください。', '미리보기가 생성되었습니다. 결과를 확인한 뒤 다운로드하세요.', 'Vista previa generada. Comprueba el resultado antes de descargarlo.', 'Vorschau erstellt. Bitte prüfen Sie das Ergebnis vor dem Download.', 'Aperçu généré. Vérifiez le résultat avant de le télécharger.', '预览已生成，请确认效果后再下载。', 'Предпросмотр готов. Проверьте результат перед скачиванием.', 'Prévia gerada. Confira o resultado antes de baixar.', 'สร้างตัวอย่างแล้ว โปรดตรวจสอบก่อนดาวน์โหลด', 'Đã tạo bản xem trước. Hãy kiểm tra trước khi tải xuống.', 'Pratinjau telah dibuat. Periksa hasilnya sebelum mengunduh.'],
+  ['已下載確認後的 PDF。', 'The approved PDF has been downloaded.', '確認した PDF をダウンロードしました。', '확인한 PDF를 다운로드했습니다.', 'Se ha descargado el PDF aprobado.', 'Die geprüfte PDF wurde heruntergeladen.', 'Le PDF validé a été téléchargé.', '已下载确认后的 PDF。', 'Проверенный PDF скачан.', 'O PDF aprovado foi baixado.', 'ดาวน์โหลด PDF ที่ตรวจสอบแล้ว', 'Đã tải PDF được xác nhận.', 'PDF yang telah diperiksa sudah diunduh.']
+);
+
+rows.push(
+  ['紙張邊界', 'Sheet margin', '用紙の余白', '용지 여백', 'Margen de la hoja', 'Blattrand', 'Marge de la feuille', '纸张边距', 'Поля листа', 'Margem da folha', 'ระยะขอบกระดาษ', 'Lề giấy', 'Margin kertas'],
+  ['內容與紙張四周的留白', 'Blank space around the content and sheet edges', '内容と用紙の端との間の余白', '내용과 용지 가장자리 사이의 여백', 'Espacio entre el contenido y los bordes de la hoja', 'Abstand zwischen Inhalt und Blattrand', 'Espace entre le contenu et les bords de la feuille', '内容与纸张四周之间的留白', 'Отступ между содержимым и краями листа', 'Espaço entre o conteúdo e as bordas da folha', 'พื้นที่ว่างระหว่างเนื้อหากับขอบกระดาษ', 'Khoảng trống giữa nội dung và mép giấy', 'Ruang antara konten dan tepi kertas'],
+  ['頁面間距', 'Page spacing', 'ページ間隔', '페이지 간격', 'Espacio entre páginas', 'Seitenabstand', 'Espacement entre les pages', '页面间距', 'Интервал между страницами', 'Espaçamento entre páginas', 'ระยะห่างระหว่างหน้า', 'Khoảng cách giữa các trang', 'Jarak antarhalaman'],
+  ['同一張紙內各頁之間的距離', 'Distance between pages placed on the same sheet', '同じ用紙に配置するページ同士の間隔', '한 장에 배치된 페이지 사이의 간격', 'Distancia entre las páginas de una misma hoja', 'Abstand zwischen den Seiten auf demselben Blatt', 'Distance entre les pages placées sur une même feuille', '同一张纸内各页面之间的距离', 'Расстояние между страницами на одном листе', 'Distância entre as páginas na mesma folha', 'ระยะห่างระหว่างหน้าที่วางอยู่ในกระดาษแผ่นเดียวกัน', 'Khoảng cách giữa các trang trên cùng một tờ giấy', 'Jarak antarhalaman pada lembar yang sama']
 );
 
 // Keep tool names, actions and privacy copy idiomatic in the original locales.
@@ -2166,7 +2302,7 @@ processButton.addEventListener('click', async () => {
     const base = files.length === 1 ? files[0].name.replace(/\.pdf$/i, '') : translate('合版文件');
     const filename = `${base}_${output.layout.count}合1_${output.layout.paper}.pdf`;
     openLink.href = outputUrl;
-    previewFrame.src = `${outputUrl}#page=1&zoom=page-width&navpanes=0&toolbar=0`;
+    previewFrame.src = `${outputUrl}#page=1&zoom=page-width&navpanes=0`;
     previewFrame.hidden = false;
     previewPaper.hidden = true;
     downloadButton.dataset.filename = filename;

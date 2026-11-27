@@ -260,7 +260,12 @@
                     <div id="preview-watermark-layer" class="preview-watermark-layer" aria-hidden="true"></div>
                     <span id="preview-page-number" class="preview-page-number" aria-hidden="true"></span>
                   </div>
-                  <p class="option-help">加入 PDF 後會使用第一頁實際畫面預覽；輸出仍以原始 PDF 頁面尺寸計算。</p>
+                  <iframe id="decoration-output-preview" class="decoration-output-preview" title="實際輸出 PDF 預覽" hidden></iframe>
+                  <div id="decoration-output-actions" class="decoration-output-actions" hidden>
+                    <button id="download-decoration-output" class="secondary-button decoration-download-button" type="button"><span aria-hidden="true">↓</span> 下載確認後的 PDF</button>
+                    <button id="edit-decoration-output" class="text-button" type="button">返回調整</button>
+                  </div>
+                  <p id="decoration-preview-help" class="option-help">加入 PDF 後會使用第一頁實際畫面預覽；按下產生預覽後，會切換為實際輸出的 PDF。</p>
                 </section>
               </div>
 
@@ -387,28 +392,20 @@
             <details class="nup-advanced">
               <summary id="nup-advanced-label">進階設定</summary>
               <div class="nup-number-grid">
-                <label><span id="nup-margin-label">邊界</span> <span><input id="nup-margin" type="number" min="0" max="30" step="1" value="5" /> mm</span></label>
-                <label><span id="nup-gap-label">格間距</span> <span><input id="nup-gap" type="number" min="0" max="30" step="1" value="0" /> mm</span></label>
+                <label class="nup-number-field" for="nup-margin">
+                  <span class="nup-number-copy"><strong id="nup-margin-label">紙張邊界</strong><small>內容與紙張四周的留白</small></span>
+                  <span class="nup-number-control"><input id="nup-margin" type="number" min="0" max="30" step="1" value="5" /><span>mm</span></span>
+                </label>
+                <label class="nup-number-field" for="nup-gap">
+                  <span class="nup-number-copy"><strong id="nup-gap-label">頁面間距</strong><small>同一張紙內各頁之間的距離</small></span>
+                  <span class="nup-number-control"><input id="nup-gap" type="number" min="0" max="30" step="1" value="0" /><span>mm</span></span>
+                </label>
               </div>
               <label class="check-option"><input id="nup-cutline" type="checkbox" /> <span id="nup-cutline-label">顯示裁切虛線</span></label>
               <label class="check-option"><input id="nup-duplicate" type="checkbox" /> <span id="nup-duplicate-label">單頁重複填滿一張紙</span></label>
             </details>
 
             <button id="nup-process" class="primary-button" type="button" disabled>產生合版 PDF</button>
-            <div id="nup-status" class="status" role="status" aria-live="polite">請先加入 PDF</div>
-            <div id="nup-result" class="nup-result" hidden>
-              <strong id="nup-result-title"></strong>
-              <div>
-                <button id="nup-download" class="secondary-button nup-result-button" type="button">
-                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 4v12m0 0-4.5-4.5M12 16l4.5-4.5M4 20h16" /></svg>
-                  <span>下載 PDF</span>
-                </button>
-                <a id="nup-open" class="nup-result-button nup-preview-button" target="_blank" rel="noopener">
-                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 5h5v5M13 11l6-6M19 13v4a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4" /></svg>
-                  <span>在新分頁預覽</span>
-                </a>
-              </div>
-            </div>
             </section>
           </div>
 
@@ -423,6 +420,22 @@
                 <iframe id="nup-preview-frame" class="nup-preview-frame" title="合版預覽" hidden></iframe>
               </div>
               <p id="nup-preview-note" class="nup-preview-note">加入 PDF 後會依檔案與頁面順序顯示配置。</p>
+              <div class="nup-output-feedback">
+                <div id="nup-status" class="status" role="status" aria-live="polite">請先加入 PDF</div>
+                <div id="nup-result" class="nup-result" hidden>
+                  <strong id="nup-result-title"></strong>
+                  <div>
+                    <button id="nup-download" class="secondary-button nup-result-button" type="button">
+                      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 4v12m0 0-4.5-4.5M12 16l4.5-4.5M4 20h16" /></svg>
+                      <span>下載 PDF</span>
+                    </button>
+                    <a id="nup-open" class="nup-result-button nup-preview-button" target="_blank" rel="noopener">
+                      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 5h5v5M13 11l6-6M19 13v4a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4" /></svg>
+                      <span>在新分頁預覽</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </aside>
         </section>

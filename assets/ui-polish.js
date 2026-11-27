@@ -47,6 +47,11 @@ const previewPdfPage = document.querySelector('#preview-pdf-page');
 const previewDocumentPlaceholder = document.querySelector('#preview-document-placeholder');
 const previewModeLabel = document.querySelector('#preview-mode-label');
 const decorationPreview = document.querySelector('.decoration-preview');
+const decorationOutputPreview = document.querySelector('#decoration-output-preview');
+const decorationOutputActions = document.querySelector('#decoration-output-actions');
+const decorationPreviewHelp = document.querySelector('#decoration-preview-help');
+const downloadDecorationOutput = document.querySelector('#download-decoration-output');
+const editDecorationOutput = document.querySelector('#edit-decoration-output');
 const errorNotice = document.querySelector('#error-notice');
 const errorSummary = document.querySelector('#error-summary');
 const errorReason = document.querySelector('#error-reason');
@@ -96,6 +101,37 @@ let previewPdfFile = null;
 let previewPageWidth = 595;
 let previewPageHeight = 842;
 let lastCoreError = null;
+let awaitingDecorationOutput = false;
+let decorationOutputUrl = null;
+let decorationOutputName = '';
+let decorationOutputTimer = null;
+
+document.addEventListener('click', (event) => {
+  const anchor = event.target instanceof HTMLAnchorElement ? event.target : null;
+  const isDecorationOutput = awaitingDecorationOutput
+    && activeTool() === 'decorate'
+    && Boolean(anchor?.download)
+    && anchor.href.startsWith('blob:');
+  if (!isDecorationOutput) return;
+
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  awaitingDecorationOutput = false;
+  clearTimeout(decorationOutputTimer);
+  const sourceUrl = anchor.href;
+  const filename = anchor.download;
+  fetch(sourceUrl)
+    .then((response) => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.blob();
+    })
+    .then((blob) => showDecorationOutput(blob, filename))
+    .catch((error) => {
+      showErrorNotice('無法建立實際輸出預覽。', error?.message ?? String(error));
+      status.textContent = '無法建立實際輸出預覽，請再試一次。';
+      status.dataset.kind = 'error';
+    });
+}, { capture: true });
 
 const emptyDragImage = document.createElement('canvas');
 emptyDragImage.width = 1;
@@ -103,6 +139,68 @@ emptyDragImage.height = 1;
 
 function activeTool() {
   return tabs.find((tab) => tab.classList.contains('is-active'))?.dataset.tool ?? 'unlock';
+}
+
+function translated(text) {
+  return globalThis.pdfToolI18n?.translate?.(text) ?? text;
+}
+
+function updateDecorationProcessLabel() {
+  if (activeTool() === 'decorate' && status.dataset.kind !== 'working') {
+    processButton.textContent = translated('產生預覽 PDF');
+  }
+}
+
+function clearDecorationOutput({ restoreDraft = true } = {}) {
+  awaitingDecorationOutput = false;
+  clearTimeout(decorationOutputTimer);
+  decorationOutputTimer = null;
+  if (decorationOutputUrl) URL.revokeObjectURL(decorationOutputUrl);
+  decorationOutputUrl = null;
+  decorationOutputName = '';
+  decorationOutputPreview.removeAttribute('src');
+  decorationOutputPreview.hidden = true;
+  decorationOutputActions.hidden = true;
+  if (restoreDraft) {
+    previewPaper.hidden = false;
+    previewModeLabel.textContent = previewPdfFile ? 'PDF 第 1 頁（設定預覽）' : '尚未載入 PDF';
+    decorationPreviewHelp.textContent = '加入 PDF 後會使用第一頁實際畫面預覽；按下產生預覽後，會切換為實際輸出的 PDF。';
+  }
+}
+
+function showDecorationOutput(blob, filename) {
+  clearDecorationOutput({ restoreDraft: false });
+  decorationOutputUrl = URL.createObjectURL(blob.type === 'application/pdf' ? blob : new Blob([blob], { type: 'application/pdf' }));
+  decorationOutputName = filename || 'decorated.pdf';
+  decorationOutputPreview.src = `${decorationOutputUrl}#page=1&zoom=page-width&navpanes=0`;
+  decorationOutputPreview.hidden = false;
+  decorationOutputActions.hidden = false;
+  previewPaper.hidden = true;
+  previewModeLabel.textContent = '實際輸出 PDF';
+  decorationPreviewHelp.textContent = '這是實際產生的 PDF；確認效果後再下載。若要修改，請返回調整並重新產生。';
+  status.textContent = '預覽已產生，請確認效果後下載。';
+  status.dataset.kind = 'success';
+  updateDecorationProcessLabel();
+}
+
+function beginDecorationOutputCapture() {
+  clearDecorationOutput();
+  awaitingDecorationOutput = true;
+  decorationOutputTimer = window.setTimeout(() => {
+    awaitingDecorationOutput = false;
+  }, 60000);
+}
+
+function saveDecorationOutput() {
+  if (!decorationOutputUrl) return;
+  const anchor = document.createElement('a');
+  anchor.href = decorationOutputUrl;
+  anchor.download = decorationOutputName;
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  status.textContent = '已下載確認後的 PDF。';
+  status.dataset.kind = 'success';
 }
 
 function updateUploadMode() {
@@ -146,6 +244,7 @@ function updateResponsiveLayout() {
 
   updateUploadMode();
   updatePasswordMode();
+  updateDecorationProcessLabel();
 }
 
 function updatePasswordMode() {
@@ -266,11 +365,14 @@ function updateStatusPresentation() {
     lastCoreError = null;
     hideErrorNotice();
   } else if (status.dataset.kind === 'error') {
+    awaitingDecorationOutput = false;
+    clearTimeout(decorationOutputTimer);
     showErrorNotice(status.textContent, lastCoreError?.message);
   }
 }
 
 toolForm.addEventListener('submit', (event) => {
+  if (activeTool() === 'decorate') beginDecorationOutputCapture();
   if (activeTool() === 'protect' && selectedPasswordSource() === 'generated') {
     const generated = generatedPasswordValue.textContent || generatePassword();
     passwordInput.value = generated;
@@ -911,9 +1013,21 @@ watermarkAngle?.addEventListener('change', renderDecorationPreview);
 addPageNumbers?.addEventListener('change', updateDecorationOptions);
 pageNumberFont?.addEventListener('change', renderDecorationPreview);
 pageNumberSize?.addEventListener('input', updateDecorationOptions);
+for (const input of [watermarkLayout, watermarkSource, watermarkImage, watermarkText, watermarkFont, watermarkSize,
+  watermarkScale, watermarkOpacity, watermarkPosition, watermarkAngle, addPageNumbers, pageNumberFont, pageNumberSize]) {
+  input?.addEventListener(input.matches('input[type="range"], input[type="text"]') ? 'input' : 'change', () => {
+    if (decorationOutputUrl) clearDecorationOutput();
+  });
+}
+downloadDecorationOutput?.addEventListener('click', saveDecorationOutput);
+editDecorationOutput?.addEventListener('click', () => {
+  clearDecorationOutput();
+  processButton.focus();
+});
 dismissError?.addEventListener('click', hideErrorNotice);
 
 globalThis.addEventListener('pdf-tool-error', (event) => {
+  awaitingDecorationOutput = false;
   lastCoreError = event.detail ?? null;
   showErrorNotice('PDF 處理失敗。', lastCoreError?.message);
 });
@@ -935,6 +1049,7 @@ const statusObserver = new MutationObserver(updateStatusPresentation);
 statusObserver.observe(status, { attributes: true, attributeFilter: ['data-kind'], childList: true, characterData: true, subtree: true });
 
 const fileListObserver = new MutationObserver(() => {
+  if (decorationOutputUrl) clearDecorationOutput();
   if (previewPdfFile && !fileList.querySelector('.file-row')) resetPdfPagePreview();
 });
 fileListObserver.observe(fileList, { childList: true });
@@ -942,6 +1057,8 @@ fileListObserver.observe(fileList, { childList: true });
 mobileQuery.addEventListener?.('change', updateResponsiveLayout);
 desktopQuery.addEventListener?.('change', updateResponsiveLayout);
 compactUploadQuery.addEventListener?.('change', updateUploadMode);
+globalThis.addEventListener('pdf-tool-language-change', updateDecorationProcessLabel);
+globalThis.addEventListener('beforeunload', () => clearDecorationOutput({ restoreDraft: false }));
 updateHistoryState(true);
 updateResponsiveLayout();
 updateStatusPresentation();

@@ -439,7 +439,7 @@ processButton.addEventListener('click', async () => {
     const base = files.length === 1 ? files[0].name.replace(/\.pdf$/i, '') : translate('合版文件');
     const filename = `${base}_${output.layout.count}合1_${output.layout.paper}.pdf`;
     openLink.href = outputUrl;
-    previewFrame.src = `${outputUrl}#page=1&zoom=page-width&navpanes=0&toolbar=0`;
+    previewFrame.src = `${outputUrl}#page=1&zoom=page-width&navpanes=0`;
     previewFrame.hidden = false;
     previewPaper.hidden = true;
     downloadButton.dataset.filename = filename;

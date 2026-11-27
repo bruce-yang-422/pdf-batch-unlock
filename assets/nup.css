@@ -89,8 +89,21 @@
 .nup-advanced { border-top: 1px solid #dce5ed; margin: 18px 0 0; padding-top: 14px; }
 .nup-advanced summary { color: #344158; cursor: pointer; font-size: 0.84rem; font-weight: 750; margin-bottom: 12px; }
 .nup-number-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-.nup-number-grid label { display: flex; justify-content: space-between; align-items: center; gap: 8px; color: #526075; font-size: 0.78rem; }
-.nup-number-grid input { width: 4.5rem; padding: 6px 7px; border: 1px solid #c8d2de; border-radius: 8px; color: #344158; background: #fff; }
+.nup-number-field {
+  display: grid;
+  gap: 12px;
+  padding: 13px;
+  border: 1px solid #dce5ed;
+  border-radius: 11px;
+  color: #526075;
+  background: #f8fafc;
+  cursor: pointer;
+}
+.nup-number-copy strong { display: block; color: #344158; font-size: 0.82rem; }
+.nup-number-copy small { display: block; margin-top: 4px; color: #778296; font-size: 0.7rem; line-height: 1.45; }
+.nup-number-control { display: flex; align-items: center; gap: 7px; color: #526075; font-size: 0.76rem; }
+.nup-number-grid input { width: 5.25rem; padding: 8px 9px; border: 1px solid #c8d2de; border-radius: 8px; color: #344158; background: #fff; }
+.nup-number-field:focus-within { border-color: #236a9f; box-shadow: 0 0 0 3px rgb(35 106 159 / 10%); }
 .nup-settings .primary-button { width: 100%; }
 .nup-result { border-top: 1px solid #dce5ed; display: grid; gap: 12px; margin-top: 18px; padding-top: 16px; font-size: 0.84rem; }
 .nup-result[hidden] { display: none; }
@@ -215,6 +228,9 @@
   font-size: 0.68rem;
 }
 .nup-preview-note { margin: 0; color: #778296; font-size: 0.76rem; line-height: 1.5; text-align: center; }
+.nup-output-feedback { margin-top: 16px; text-align: left; }
+.nup-output-feedback .status { margin-top: 0; }
+.nup-output-feedback .nup-result { margin-top: 14px; }
 
 @media (max-width: 900px) {
   .tool-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }

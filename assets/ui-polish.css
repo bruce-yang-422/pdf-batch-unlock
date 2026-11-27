@@ -720,6 +720,43 @@ body.is-native-sorting .page-card:hover {
   box-shadow: 0 8px 20px rgba(38, 55, 78, 0.12);
 }
 
+.decoration-preview-paper[hidden],
+.decoration-output-preview[hidden],
+.decoration-output-actions[hidden] { display: none; }
+
+.decoration-output-preview {
+  display: block;
+  width: 100%;
+  min-height: 560px;
+  margin: 12px 0;
+  border: 1px solid #cfd9e3;
+  border-radius: 8px;
+  background: #eef3f7;
+  box-shadow: 0 8px 20px rgba(38, 55, 78, 0.12);
+}
+
+.decoration-output-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.decoration-download-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+.decoration-download-button span { font-size: 1.15em; line-height: 1; }
+
+@media (max-width: 640px) {
+  .decoration-output-preview { min-height: 460px; }
+  .decoration-output-actions > button { flex: 1 1 auto; }
+}
+
 .preview-document-content {
   position: absolute;
   inset: 11% 10%;
