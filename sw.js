@@ -1,11 +1,13 @@
 const CACHE_PREFIX = 'pdf-local-toolbox-';
-const CACHE_NAME = `${CACHE_PREFIX}v25`;
+const CACHE_NAME = `${CACHE_PREFIX}v42`;
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
   './assets/index-XfCSYlnY.js',
   './assets/index-CFPIHGYZ.css',
+  './browser-extension/theme.js',
+  './browser-extension/theme.css',
   './assets/layout-DH4mL2.css',
   './assets/ui-polish.js',
   './assets/ui-polish.css',

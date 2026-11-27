@@ -9,6 +9,8 @@
 @media (max-width: 640px) {
   .extension-preferences { flex: 1; }
   .extension-preferences select { max-width: min(44vw, 200px); }
+  .mobile-drawer-preferences .extension-preferences { display: grid; gap: 9px; width: 100%; }
+  .mobile-drawer-preferences .extension-preferences select { max-width: none; }
 }
 
 :root[data-theme="dark"] {
@@ -70,6 +72,18 @@
   & :is(a, .site-footer a, .text-button, .history-section .text-button.compact, .history-section .history-actions button,
         .order-button, .page-order-controls button) {
     color: var(--link);
+  }
+
+  & :is(#footer-extension-link.is-copy-link, #footer-install-button) {
+    color: var(--link);
+    background: transparent;
+    border-color: #536a78;
+  }
+
+  & :is(#footer-extension-link.is-copy-link, #footer-install-button):hover {
+    color: var(--ink);
+    background: #263743;
+    border-color: #718b9b;
   }
 
   & .eyebrow,
@@ -217,7 +231,12 @@
     box-shadow: 18px 0 48px rgb(0 0 0 / 38%);
   }
   & .mobile-tool-menu-button { color: var(--ink); }
-  & .mobile-tool-drawer-panel header span { color: var(--muted); }
+  & .mobile-menu-icon-shell { color: var(--accent); background: #203e37; }
+  & .mobile-tool-title { background: #20303a; border-color: var(--line); }
+  & .mobile-tool-title::before { background: var(--accent); }
+  & #mobile-drawer-brand-slot .privacy-note > span:last-child { color: var(--muted); }
+  & .mobile-drawer-preferences { border-color: var(--line); }
+  & .mobile-drawer-preferences > strong { color: var(--muted); }
   & #mobile-tool-drawer-close { color: var(--ink); background: var(--input); }
   & #mobile-tool-drawer-list button { color: var(--ink); }
   & #mobile-tool-drawer-list button i { color: var(--muted); }

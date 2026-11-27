@@ -14,6 +14,24 @@
   <body>
     <main class="app-shell">
       <section class="card" aria-labelledby="page-title">
+        <div class="mobile-tool-picker">
+          <button id="mobile-tool-menu-button" class="mobile-tool-menu-button" type="button" aria-expanded="false" aria-controls="mobile-tool-drawer" aria-label="開啟工具選單">
+            <span class="mobile-menu-icon-shell" aria-hidden="true"><span class="mobile-menu-icon"><i></i><i></i><i></i></span></span>
+            <span class="mobile-tool-title"><strong class="mobile-tool-current">移除密碼</strong></span>
+          </button>
+          <label class="visually-hidden" for="tool-select">選擇工具</label>
+          <select id="tool-select">
+            <option value="unlock">移除密碼</option>
+            <option value="protect">加上密碼</option>
+            <option value="merge">合併 PDF</option>
+            <option value="split">拆分 PDF</option>
+            <option value="pages">頁面管理</option>
+            <option value="decorate">浮水印／頁碼</option>
+            <option value="pdf-to-jpg">PDF 轉 JPG</option>
+            <option value="jpg-to-pdf">JPG 轉 PDF</option>
+          </select>
+        </div>
+
         <div class="header-bar">
           <div class="eyebrow">本機瀏覽器 PDF 工具</div>
           <div class="extension-preferences">
@@ -48,32 +66,18 @@
         <h1 id="page-title">PDF 本機工具箱</h1>
         <p class="privacy-note"><span class="privacy-badge">✓ 100% 本機處理</span><span>檔案不會上傳至任何伺服器</span></p>
 
-        <div class="mobile-tool-picker">
-          <button id="mobile-tool-menu-button" class="mobile-tool-menu-button" type="button" aria-expanded="false" aria-controls="mobile-tool-drawer" aria-label="開啟工具選單">
-            <span class="mobile-menu-icon-shell" aria-hidden="true"><span class="mobile-menu-icon"><i></i><i></i><i></i></span></span>
-            <span class="mobile-tool-current">移除密碼</span>
-          </button>
-          <label class="visually-hidden" for="tool-select">選擇工具</label>
-            <select id="tool-select">
-              <option value="unlock">移除密碼</option>
-              <option value="protect">加上密碼</option>
-              <option value="merge">合併 PDF</option>
-              <option value="split">拆分 PDF</option>
-              <option value="pages">頁面管理</option>
-              <option value="decorate">浮水印／頁碼</option>
-              <option value="pdf-to-jpg">PDF 轉 JPG</option>
-              <option value="jpg-to-pdf">JPG 轉 PDF</option>
-            </select>
-          </div>
-
         <div id="mobile-tool-drawer" class="mobile-tool-drawer" hidden>
           <button class="mobile-tool-backdrop" type="button" aria-label="關閉工具選單"></button>
-          <aside class="mobile-tool-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-tool-drawer-title">
+          <aside class="mobile-tool-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="page-title">
             <header>
-              <div><span>PDF 本機工具箱</span><strong id="mobile-tool-drawer-title">PDF 工具</strong></div>
+              <div id="mobile-drawer-brand-slot"></div>
               <button id="mobile-tool-drawer-close" type="button" aria-label="關閉工具選單">×</button>
             </header>
             <nav id="mobile-tool-drawer-list" aria-label="PDF 工具"></nav>
+            <section class="mobile-drawer-preferences" aria-label="偏好設定">
+              <strong>偏好設定</strong>
+              <div id="mobile-drawer-preferences-slot"></div>
+            </section>
           </aside>
         </div>
 

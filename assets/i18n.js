@@ -462,6 +462,11 @@ rows.push(
 );
 
 rows.push(
+  ['外觀', 'Appearance', '外観', '화면 모드', 'Apariencia', 'Darstellung', 'Apparence', '外观', 'Оформление', 'Aparência', 'รูปแบบ', 'Giao diện', 'Tampilan'],
+  ['跟隨系統', 'System', 'システム設定', '시스템 설정', 'Sistema', 'System', 'Système', '跟随系统', 'Как в системе', 'Sistema', 'ตามระบบ', 'Theo hệ thống', 'Sistem'],
+  ['淺色', 'Light', 'ライト', '라이트', 'Claro', 'Hell', 'Clair', '浅色', 'Светлая', 'Claro', 'สว่าง', 'Sáng', 'Terang'],
+  ['深色', 'Dark', 'ダーク', '다크', 'Oscuro', 'Dunkel', 'Sombre', '深色', 'Тёмная', 'Escuro', 'มืด', 'Tối', 'Gelap'],
+  ['偏好設定', 'Preferences', '環境設定', '환경설정', 'Preferencias', 'Einstellungen', 'Préférences', '偏好设置', 'Настройки', 'Preferências', 'การตั้งค่า', 'Tùy chọn', 'Preferensi'],
   ['開啟工具選單', 'Open tool menu', 'ツールメニューを開く', '도구 메뉴 열기', 'Abrir menú de herramientas', 'Werkzeugmenü öffnen', 'Ouvrir le menu des outils', '打开工具菜单', 'Открыть меню инструментов', 'Abrir menu de ferramentas', 'เปิดเมนูเครื่องมือ', 'Mở trình đơn công cụ', 'Buka menu alat'],
   ['關閉工具選單', 'Close tool menu', 'ツールメニューを閉じる', '도구 메뉴 닫기', 'Cerrar menú de herramientas', 'Werkzeugmenü schließen', 'Fermer le menu des outils', '关闭工具菜单', 'Закрыть меню инструментов', 'Fechar menu de ferramentas', 'ปิดเมนูเครื่องมือ', 'Đóng trình đơn công cụ', 'Tutup menu alat']
 );

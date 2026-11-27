@@ -22,7 +22,7 @@ const installLabels = {
 };
 
 const extensionLinkLabels = {
-  'zh-Hant': ['外掛 ZIP 選項', '已複製外掛連結', '取得瀏覽器外掛', '手機通常無法直接安裝 ZIP，請選擇要如何處理連結。', '複製連結', '仍要下載 ZIP', '取消'],
+  'zh-Hant': ['外掛 ZIP', '已複製外掛連結', '取得瀏覽器外掛', '手機通常無法直接安裝 ZIP，請選擇要如何處理連結。', '複製連結', '仍要下載 ZIP', '取消'],
   'zh-Hans': ['扩展 ZIP 选项', '已复制扩展链接', '获取浏览器扩展', '手机通常无法直接安装 ZIP，请选择如何处理链接。', '复制链接', '仍要下载 ZIP', '取消'],
   en: ['Extension ZIP options', 'Extension link copied', 'Get the browser extension', 'Phones usually cannot install this ZIP directly. Choose what to do with the link.', 'Copy link', 'Download ZIP anyway', 'Cancel'],
   ja: ['拡張機能 ZIP の操作', 'リンクをコピーしました', 'ブラウザー拡張機能を入手', 'スマートフォンでは通常 ZIP を直接インストールできません。リンクの扱いを選択してください。', 'リンクをコピー', 'ZIP をダウンロード', 'キャンセル'],

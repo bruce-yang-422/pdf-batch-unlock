@@ -107,6 +107,29 @@ const mobileToolDrawerPanel = document.querySelector('.mobile-tool-drawer-panel'
 const mobileToolDrawerList = document.querySelector('#mobile-tool-drawer-list');
 const mobileToolDrawerClose = document.querySelector('#mobile-tool-drawer-close');
 const mobileToolBackdrop = document.querySelector('.mobile-tool-backdrop');
+const mobileDrawerPreferencesSlot = document.querySelector('#mobile-drawer-preferences-slot');
+const mobileDrawerBrandSlot = document.querySelector('#mobile-drawer-brand-slot');
+const headerBar = document.querySelector('.header-bar');
+if (headerBar && !headerBar.querySelector('.extension-preferences')) {
+  const languageControl = headerBar.querySelector('.language-switcher');
+  const themeControl = document.createElement('label');
+  const preferences = document.createElement('div');
+  preferences.className = 'extension-preferences';
+  themeControl.className = 'language-switcher';
+  themeControl.htmlFor = 'theme-select';
+  themeControl.innerHTML = '<span id="theme-label">外觀</span><select id="theme-select" aria-labelledby="theme-label"><option value="system">跟隨系統</option><option value="light">淺色</option><option value="dark">深色</option></select>';
+  languageControl.before(preferences);
+  preferences.append(themeControl, languageControl);
+}
+const preferencesControl = headerBar?.querySelector('.extension-preferences') ?? headerBar?.querySelector('.language-switcher');
+const preferencesHome = document.createComment('preferences-home');
+preferencesControl?.before(preferencesHome);
+const pageTitle = document.querySelector('#page-title');
+const privacyNote = document.querySelector('.privacy-note');
+const pageTitleHome = document.createComment('page-title-home');
+const privacyNoteHome = document.createComment('privacy-note-home');
+pageTitle?.before(pageTitleHome);
+privacyNote?.before(privacyNoteHome);
 const workspace = document.querySelector('.workspace');
 const activityPanel = document.querySelector('.activity-panel');
 const queueSection = document.querySelector('#queue-section');
@@ -388,6 +411,18 @@ function updateResponsiveLayout() {
   card.classList.toggle('page-manager-mode', pageMode);
   card.classList.toggle('decorate-mode', decorateMode);
   decorationPreview.hidden = !decorateMode;
+
+  if (preferencesControl) {
+    if (mobileQuery.matches) mobileDrawerPreferencesSlot.append(preferencesControl);
+    else preferencesHome.after(preferencesControl);
+  }
+
+  if (mobileQuery.matches) {
+    mobileDrawerBrandSlot.append(pageTitle, privacyNote);
+  } else {
+    pageTitleHome.after(pageTitle);
+    privacyNoteHome.after(privacyNote);
+  }
 
   if (decorateMode && desktopQuery.matches) {
     queueSection.before(decorationPreview);
@@ -1701,6 +1736,11 @@ rows.push(
 );
 
 rows.push(
+  ['外觀', 'Appearance', '外観', '화면 모드', 'Apariencia', 'Darstellung', 'Apparence', '外观', 'Оформление', 'Aparência', 'รูปแบบ', 'Giao diện', 'Tampilan'],
+  ['跟隨系統', 'System', 'システム設定', '시스템 설정', 'Sistema', 'System', 'Système', '跟随系统', 'Как в системе', 'Sistema', 'ตามระบบ', 'Theo hệ thống', 'Sistem'],
+  ['淺色', 'Light', 'ライト', '라이트', 'Claro', 'Hell', 'Clair', '浅色', 'Светлая', 'Claro', 'สว่าง', 'Sáng', 'Terang'],
+  ['深色', 'Dark', 'ダーク', '다크', 'Oscuro', 'Dunkel', 'Sombre', '深色', 'Тёмная', 'Escuro', 'มืด', 'Tối', 'Gelap'],
+  ['偏好設定', 'Preferences', '環境設定', '환경설정', 'Preferencias', 'Einstellungen', 'Préférences', '偏好设置', 'Настройки', 'Preferências', 'การตั้งค่า', 'Tùy chọn', 'Preferensi'],
   ['開啟工具選單', 'Open tool menu', 'ツールメニューを開く', '도구 메뉴 열기', 'Abrir menú de herramientas', 'Werkzeugmenü öffnen', 'Ouvrir le menu des outils', '打开工具菜单', 'Открыть меню инструментов', 'Abrir menu de ferramentas', 'เปิดเมนูเครื่องมือ', 'Mở trình đơn công cụ', 'Buka menu alat'],
   ['關閉工具選單', 'Close tool menu', 'ツールメニューを閉じる', '도구 메뉴 닫기', 'Cerrar menú de herramientas', 'Werkzeugmenü schließen', 'Fermer le menu des outils', '关闭工具菜单', 'Закрыть меню инструментов', 'Fechar menu de ferramentas', 'ปิดเมนูเครื่องมือ', 'Đóng trình đơn công cụ', 'Tutup menu alat']
 );

@@ -60,6 +60,7 @@ const htmlBody = website.slice(website.indexOf('  <body>'), website.indexOf('   
 const resourceTags = [...website.matchAll(/^    (?:<script type="module"[^\n]+<\/script>|<link rel="stylesheet"[^\n]+)$/gm)]
   .map(([tag]) => tag.trim())
   .filter((tag) => !tag.includes('/pwa.'))
+  .filter((tag) => !tag.includes('/browser-extension/theme.'))
   .map((tag) => tag.replace(/\?v=[^"]+/g, '').replace(' crossorigin', ''));
 const resourcePaths = resourceTags.map((tag) => tag.match(/(?:src|href)="\.\/([^"]+)"/)[1]);
 const bundlePath = resourcePaths.find((path) => /^assets\/index-.*\.js$/.test(path));

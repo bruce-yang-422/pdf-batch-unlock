@@ -8,6 +8,29 @@ const mobileToolDrawerPanel = document.querySelector('.mobile-tool-drawer-panel'
 const mobileToolDrawerList = document.querySelector('#mobile-tool-drawer-list');
 const mobileToolDrawerClose = document.querySelector('#mobile-tool-drawer-close');
 const mobileToolBackdrop = document.querySelector('.mobile-tool-backdrop');
+const mobileDrawerPreferencesSlot = document.querySelector('#mobile-drawer-preferences-slot');
+const mobileDrawerBrandSlot = document.querySelector('#mobile-drawer-brand-slot');
+const headerBar = document.querySelector('.header-bar');
+if (headerBar && !headerBar.querySelector('.extension-preferences')) {
+  const languageControl = headerBar.querySelector('.language-switcher');
+  const themeControl = document.createElement('label');
+  const preferences = document.createElement('div');
+  preferences.className = 'extension-preferences';
+  themeControl.className = 'language-switcher';
+  themeControl.htmlFor = 'theme-select';
+  themeControl.innerHTML = '<span id="theme-label">外觀</span><select id="theme-select" aria-labelledby="theme-label"><option value="system">跟隨系統</option><option value="light">淺色</option><option value="dark">深色</option></select>';
+  languageControl.before(preferences);
+  preferences.append(themeControl, languageControl);
+}
+const preferencesControl = headerBar?.querySelector('.extension-preferences') ?? headerBar?.querySelector('.language-switcher');
+const preferencesHome = document.createComment('preferences-home');
+preferencesControl?.before(preferencesHome);
+const pageTitle = document.querySelector('#page-title');
+const privacyNote = document.querySelector('.privacy-note');
+const pageTitleHome = document.createComment('page-title-home');
+const privacyNoteHome = document.createComment('privacy-note-home');
+pageTitle?.before(pageTitleHome);
+privacyNote?.before(privacyNoteHome);
 const workspace = document.querySelector('.workspace');
 const activityPanel = document.querySelector('.activity-panel');
 const queueSection = document.querySelector('#queue-section');
@@ -289,6 +312,18 @@ function updateResponsiveLayout() {
   card.classList.toggle('page-manager-mode', pageMode);
   card.classList.toggle('decorate-mode', decorateMode);
   decorationPreview.hidden = !decorateMode;
+
+  if (preferencesControl) {
+    if (mobileQuery.matches) mobileDrawerPreferencesSlot.append(preferencesControl);
+    else preferencesHome.after(preferencesControl);
+  }
+
+  if (mobileQuery.matches) {
+    mobileDrawerBrandSlot.append(pageTitle, privacyNote);
+  } else {
+    pageTitleHome.after(pageTitle);
+    privacyNoteHome.after(privacyNote);
+  }
 
   if (decorateMode && desktopQuery.matches) {
     queueSection.before(decorationPreview);
