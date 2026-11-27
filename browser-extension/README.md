@@ -3,7 +3,7 @@
 Google Chrome 和 Microsoft Edge 共用同一個 Manifest V3 外掛。點擊工具列圖示即可在獨立分頁開啟 PDF 工作區。
 
 - `dist/` 是開發測試用的未封裝外掛。
-- `release/` 存放依 manifest 版本命名的 ZIP，可用來提交 Chrome Web Store 或 Microsoft Edge Add-ons。
+- `release/` 存放依 manifest 版本命名的 `pdf-toolbox-v<version>.zip`，可用來提交 Chrome Web Store 或 Microsoft Edge Add-ons。
 
 `dist/` 將工作區與法律頁的腳本、樣式集中在 `assets/`。三個法律頁共用 `legal.html`。瀏覽器管理頁的原生翻譯各自放在 `_locales/`，PDF worker 和 WebAssembly 則保留為可離線載入的資產。
 

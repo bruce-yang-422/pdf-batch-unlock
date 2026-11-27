@@ -61,7 +61,7 @@ https://pdf.stack-base.com/?lang=en
 
 ## 瀏覽器擴充功能
 
-下載並解壓縮 [Chrome／Edge 擴充功能 v1.1.0（ZIP）](https://github.com/bruce-yang-422/pdf-batch-unlock/releases/download/v1.1.0/pdf-toolbox-1.1.0.zip)，即可手動安裝。
+下載並解壓縮 [Chrome／Edge 擴充功能 v1.1.0（ZIP）](https://github.com/bruce-yang-422/pdf-batch-unlock/releases/download/v1.1.0/pdf-toolbox-v1.1.0.zip)，即可手動安裝。
 
 1. Chrome 開啟 `chrome://extensions`；Edge 開啟 `edge://extensions`。
 2. 開啟「開發人員模式」。
@@ -80,7 +80,7 @@ node browser-extension/build.mjs
 pwsh -File browser-extension/package.ps1
 ```
 
-ZIP 會輸出至 `browser-extension/release/pdf-toolbox-<version>.zip`。發行前請先更新 `browser-extension/manifest.json` 的版本號。完整說明請見 [browser-extension/README.md](browser-extension/README.md)。
+ZIP 會輸出至 `browser-extension/release/pdf-toolbox-v<version>.zip`。發行前請先更新 `browser-extension/manifest.json` 的版本號。完整說明請見 [browser-extension/README.md](browser-extension/README.md)。
 
 ## 技術棧
 

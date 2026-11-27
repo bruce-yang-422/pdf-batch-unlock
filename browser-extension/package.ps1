@@ -14,7 +14,7 @@ if ($manifest.manifest_version -ne 3 -or $manifest.version -notmatch '^\d+(\.\d+
 }
 
 [void][System.IO.Directory]::CreateDirectory($releasePath)
-$zipPath = Join-Path $releasePath "pdf-toolbox-$($manifest.version).zip"
+$zipPath = Join-Path $releasePath "pdf-toolbox-v$($manifest.version).zip"
 $temporaryZip = Join-Path $releasePath ('pdf-toolbox-' + [Guid]::NewGuid().ToString('N') + '.tmp')
 try {
     [System.IO.Compression.ZipFile]::CreateFromDirectory(
