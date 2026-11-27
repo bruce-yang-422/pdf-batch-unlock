@@ -13,9 +13,9 @@
 - 移除 PDF 密碼，支援批次處理與 ZIP 下載
 - 使用 AES-256 為 PDF 加上開啟密碼
 - 合併及逐頁拆分 PDF
-- 將 2 或 4 個 PDF 頁面合版到一張 A3、A4 或 A5，支援裁切線與單頁重複
+- 將 2 或 4 個 PDF 頁面合版到一張 A3、A4 或 A5，支援自動建議、裁切線與單頁重複
 - 重新排序、旋轉、刪除或擷取 PDF 頁面
-- 加入文字／圖片浮水印及頁碼
+- 加入文字／圖片浮水印及頁碼，先確認實際輸出 PDF 再下載
 - PDF 轉 JPG，支援 96、150、300 DPI
 - JPG／JPEG 合併轉為 PDF
 - 支援 PWA 安裝與離線使用
@@ -41,7 +41,8 @@ python -m http.server 8080
 1. 選擇需要的 PDF 工具。
 2. 拖入檔案，或點擊上傳區選取檔案。
 3. 視需要調整檔案順序與處理選項。
-4. 執行處理並下載結果。
+4. 執行處理並確認結果。
+5. 下載 PDF、JPG 或 ZIP；支援預覽的工具也可先在內嵌閱讀器或新分頁檢查輸出。
 
 合併、拆分及 PDF 轉 JPG 不直接支援加密 PDF。請先使用「移除密碼」，再處理解密後的副本。
 
@@ -60,7 +61,7 @@ https://pdf.stack-base.com/?lang=en
 
 ## 瀏覽器擴充功能
 
-下載並解壓縮 [Chrome／Edge 擴充功能 v1.0.0（ZIP）](https://github.com/bruce-yang-422/pdf-batch-unlock/releases/download/v1.0.0/pdf-toolbox-v1.0.0.zip)，即可手動安裝。
+下載並解壓縮 [Chrome／Edge 擴充功能 v1.1.0（ZIP）](https://github.com/bruce-yang-422/pdf-batch-unlock/releases/download/v1.1.0/pdf-toolbox-1.1.0.zip)，即可手動安裝。
 
 1. Chrome 開啟 `chrome://extensions`；Edge 開啟 `edge://extensions`。
 2. 開啟「開發人員模式」。
@@ -119,6 +120,8 @@ ZIP 會輸出至 `browser-extension/release/pdf-toolbox-<version>.zip`。發行�
 ### 多頁合版模組
 
 多頁合版的介面與處理邏輯位於 `assets/nup.js` 與 `assets/nup.css`。由於目前 repository 僅保留主工具的建置後 bundle，這項功能以隔離模組掛接主介面，請勿直接修改 `assets/index-*.js`。`pdf-lib.min.js` 只會在使用者首次加入合版檔案時延遲載入，不影響其他工具的初始載入；擴充功能建置腳本會將模組與相依檔案一併封裝。
+
+主工具的介面補強與浮水印實體輸出確認流程位於 `assets/ui-polish.js` 與 `assets/ui-polish.css`；多語系文字集中於 `assets/i18n.js`。浮水印與多頁合版的實體預覽皆直接使用剛產生的 PDF Blob，因此預覽和下載不會經過兩套不同的輸出流程。
 
 ## 部署
 
