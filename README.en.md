@@ -63,7 +63,7 @@ Open the site in a browser with PWA support and choose **Install app**. The inst
 3. Enable **Developer mode**.
 4. Select **Load unpacked** and choose the extracted directory containing `manifest.json`.
 
-See the [browser extension documentation](browser-extension/README.md) for more information.
+Official installation guides: [Google Chrome](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked) · [Microsoft Edge](https://learn.microsoft.com/en-us/microsoft-edge/extensions/getting-started/extension-sideloading)
 
 ## Run locally
 

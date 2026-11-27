@@ -63,7 +63,9 @@
 3. 開啟「開發人員模式」。
 4. 選擇「載入未封裝」，再選取含有 `manifest.json` 的解壓縮資料夾。
 
-完整說明請見[瀏覽器擴充功能文件](browser-extension/README.md)。
+瀏覽器官方安裝說明： [Google Chrome](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world?hl=zh-tw#load-unpacked) · [Microsoft Edge](https://learn.microsoft.com/zh-tw/microsoft-edge/extensions/getting-started/extension-sideloading)
+
+專案建置與封裝細節請見[瀏覽器擴充功能文件](browser-extension/README.md)。
 
 ## 本機執行
 

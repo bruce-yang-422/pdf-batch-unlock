@@ -63,7 +63,7 @@ PWA 対応ブラウザーでサイトを開き、「アプリをインストー�
 3. 「デベロッパー モード」を有効にします。
 4. 「パッケージ化されていない拡張機能を読み込む」を選び、`manifest.json` が入った展開先フォルダーを指定します。
 
-詳しくは[ブラウザー拡張機能のドキュメント](browser-extension/README.md)をご覧ください。
+ブラウザー公式のインストール手順：[Google Chrome](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world?hl=ja#load-unpacked) · [Microsoft Edge](https://learn.microsoft.com/ja-jp/microsoft-edge/extensions/getting-started/extension-sideloading)
 
 ## ローカルで実行する
 
