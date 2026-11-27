@@ -216,6 +216,7 @@
     background: var(--surface);
     box-shadow: 18px 0 48px rgb(0 0 0 / 38%);
   }
+  & .mobile-tool-menu-button { color: var(--ink); }
   & .mobile-tool-drawer-panel header span { color: var(--muted); }
   & #mobile-tool-drawer-close { color: var(--ink); background: var(--input); }
   & #mobile-tool-drawer-list button { color: var(--ink); }
