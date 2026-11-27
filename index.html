@@ -394,13 +394,13 @@
               <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
               </svg>
-              <strong>將 PDF 拖曳到這裡</strong>
-              <span>或點一下選擇多個檔案</span>
+              <strong id="nup-drop-title">將 PDF 拖曳到這裡</strong>
+              <span id="nup-drop-hint">或點一下選擇多個檔案</span>
             </div>
 
             <section class="nup-file-card" aria-labelledby="nup-files-title">
               <div class="queue-heading">
-                <div><span class="section-kicker">本批次</span><h3 id="nup-files-title">待合版檔案</h3></div>
+                <div><span id="nup-batch-label" class="section-kicker">本批次</span><h3 id="nup-files-title">待合版檔案</h3></div>
                 <div class="nup-file-actions">
                   <button id="nup-sort-files" class="text-button compact" type="button">依檔名排序</button>
                   <button id="nup-clear-files" class="text-button compact" type="button">清除全部</button>
@@ -414,23 +414,23 @@
           <aside class="nup-settings" aria-labelledby="nup-workspace-title">
             <h3 id="nup-workspace-title">合版設定</h3>
             <fieldset class="nup-fieldset">
-              <legend>1. 選擇版型</legend>
+              <legend id="nup-layout-legend">1. 選擇版型</legend>
               <div class="nup-layouts">
                 <label class="nup-layout-card">
                   <input type="radio" name="nup-layout" value="2" checked />
                   <span class="nup-sheet nup-sheet-2" aria-hidden="true"><i></i><i></i></span>
-                  <span><b>2 合 1</b><small>一張放 2 頁</small></span>
+                  <span><b id="nup-2up-title">2 合 1</b><small id="nup-2up-help">一張放 2 頁</small></span>
                 </label>
                 <label class="nup-layout-card">
                   <input type="radio" name="nup-layout" value="4" />
                   <span class="nup-sheet nup-sheet-4" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-                  <span><b>4 合 1</b><small>一張放 4 頁</small></span>
+                  <span><b id="nup-4up-title">4 合 1</b><small id="nup-4up-help">一張放 4 頁</small></span>
                 </label>
               </div>
             </fieldset>
 
             <fieldset class="nup-fieldset">
-              <legend>2. 輸出紙張</legend>
+              <legend id="nup-paper-legend">2. 輸出紙張</legend>
               <div class="nup-segments">
                 <label><input type="radio" name="nup-paper" value="A3" /><span>A3</span></label>
                 <label><input type="radio" name="nup-paper" value="A4" checked /><span>A4</span></label>
@@ -439,23 +439,23 @@
             </fieldset>
 
             <fieldset class="nup-fieldset">
-              <legend>3. 排列方向</legend>
+              <legend id="nup-direction-legend">3. 排列方向</legend>
               <div class="nup-segments nup-segments-2">
-                <label><input type="radio" name="nup-orientation" value="landscape" checked /><span>左右排列</span></label>
-                <label><input type="radio" name="nup-orientation" value="portrait" /><span>上下排列</span></label>
+                <label><input type="radio" name="nup-orientation" value="landscape" checked /><span id="nup-landscape-label">左右排列</span></label>
+                <label><input type="radio" name="nup-orientation" value="portrait" /><span id="nup-portrait-label">上下排列</span></label>
               </div>
             </fieldset>
 
             <p id="nup-summary" class="nup-summary" aria-live="polite"></p>
 
             <details class="nup-advanced">
-              <summary>進階設定</summary>
+              <summary id="nup-advanced-label">進階設定</summary>
               <div class="nup-number-grid">
-                <label>邊界 <span><input id="nup-margin" type="number" min="0" max="30" step="1" value="5" /> mm</span></label>
-                <label>格間距 <span><input id="nup-gap" type="number" min="0" max="30" step="1" value="0" /> mm</span></label>
+                <label><span id="nup-margin-label">邊界</span> <span><input id="nup-margin" type="number" min="0" max="30" step="1" value="5" /> mm</span></label>
+                <label><span id="nup-gap-label">格間距</span> <span><input id="nup-gap" type="number" min="0" max="30" step="1" value="0" /> mm</span></label>
               </div>
-              <label class="check-option"><input id="nup-cutline" type="checkbox" /> 顯示裁切虛線</label>
-              <label class="check-option"><input id="nup-duplicate" type="checkbox" /> 單頁重複填滿一張紙</label>
+              <label class="check-option"><input id="nup-cutline" type="checkbox" /> <span id="nup-cutline-label">顯示裁切虛線</span></label>
+              <label class="check-option"><input id="nup-duplicate" type="checkbox" /> <span id="nup-duplicate-label">單頁重複填滿一張紙</span></label>
             </details>
 
             <button id="nup-process" class="primary-button" type="button" disabled>產生合版 PDF</button>

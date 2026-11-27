@@ -1473,6 +1473,41 @@ const additionalRows = [
 ];
 rows.forEach((row, index) => row.push(...additionalRows[index]));
 
+// Multi-page layout module. Keep the same locale order as LOCALES.
+rows.push(
+  ['多頁合版', 'N-up layout', '複数ページ面付け', '모아찍기', 'Diseño de varias páginas', 'Mehrfachanordnung', 'Mise en page multiple', '多页合版', 'Размещение нескольких страниц', 'Layout de várias páginas', 'จัดหลายหน้าต่อแผ่น', 'Dàn nhiều trang', 'Tata letak multi-halaman'],
+  ['將 2 或 4 個 PDF 頁面縮排到同一張紙，適合表單、講義與節省紙張列印。', 'Place 2 or 4 PDF pages on one sheet—ideal for forms, handouts, and paper-saving printing.', '2 または 4 ページの PDF を 1 枚に配置します。帳票や配布資料、省用紙印刷に最適です。', 'PDF 2페이지 또는 4페이지를 한 장에 배치합니다. 양식, 유인물, 용지 절약 인쇄에 적합합니다.', 'Coloca 2 o 4 páginas PDF en una hoja; ideal para formularios, folletos y ahorrar papel.', 'Ordnet 2 oder 4 PDF-Seiten auf einem Blatt an – ideal für Formulare, Handouts und papiersparendes Drucken.', 'Placez 2 ou 4 pages PDF sur une feuille, idéal pour les formulaires, les supports et l’économie de papier.', '将 2 或 4 个 PDF 页面缩排到同一张纸，适合表单、讲义和节省纸张打印。', 'Размещайте 2 или 4 страницы PDF на одном листе — удобно для бланков, раздаточных материалов и экономии бумаги.', 'Coloque 2 ou 4 páginas PDF em uma folha, ideal para formulários, apostilas e economia de papel.', 'จัดหน้า PDF 2 หรือ 4 หน้าลงในกระดาษแผ่นเดียว เหมาะกับแบบฟอร์ม เอกสารแจก และการประหยัดกระดาษ', 'Xếp 2 hoặc 4 trang PDF lên một tờ, phù hợp với biểu mẫu, tài liệu phát và tiết kiệm giấy.', 'Tempatkan 2 atau 4 halaman PDF pada satu lembar, cocok untuk formulir, materi, dan hemat kertas.'],
+  ['待合版檔案', 'Files to arrange', '面付けするファイル', '배치할 파일', 'Archivos para organizar', 'Anzuordnende Dateien', 'Fichiers à disposer', '待合版文件', 'Файлы для размещения', 'Arquivos para organizar', 'ไฟล์ที่จะจัดหน้า', 'Tệp cần dàn trang', 'File untuk ditata'],
+  ['依檔名排序', 'Sort by name', '名前順', '이름순 정렬', 'Ordenar por nombre', 'Nach Name sortieren', 'Trier par nom', '按文件名排序', 'Сортировать по имени', 'Ordenar por nome', 'เรียงตามชื่อ', 'Sắp xếp theo tên', 'Urutkan berdasarkan nama'],
+  ['合版設定', 'Layout settings', '面付け設定', '모아찍기 설정', 'Ajustes de diseño', 'Anordnungseinstellungen', 'Paramètres de mise en page', '合版设置', 'Настройки размещения', 'Configurações de layout', 'การตั้งค่าการจัดหน้า', 'Cài đặt dàn trang', 'Pengaturan tata letak'],
+  ['1. 選擇版型', '1. Choose a layout', '1. レイアウトを選択', '1. 배치 선택', '1. Elige un diseño', '1. Anordnung wählen', '1. Choisir une disposition', '1. 选择版型', '1. Выберите схему', '1. Escolha o layout', '1. เลือกรูปแบบ', '1. Chọn bố cục', '1. Pilih tata letak'],
+  ['2 合 1', '2-up', '2 ページ／枚', '2쪽 모아찍기', '2 por hoja', '2 Seiten/Blatt', '2 pages/feuille', '2 合 1', '2 страницы на листе', '2 por folha', '2 หน้าต่อแผ่น', '2 trang/tờ', '2 halaman/lembar'],
+  ['一張放 2 頁', '2 pages per sheet', '1 枚に 2 ページ', '한 장에 2페이지', '2 páginas por hoja', '2 Seiten pro Blatt', '2 pages par feuille', '一张放 2 页', '2 страницы на листе', '2 páginas por folha', '2 หน้าต่อแผ่น', '2 trang mỗi tờ', '2 halaman per lembar'],
+  ['4 合 1', '4-up', '4 ページ／枚', '4쪽 모아찍기', '4 por hoja', '4 Seiten/Blatt', '4 pages/feuille', '4 合 1', '4 страницы на листе', '4 por folha', '4 หน้าต่อแผ่น', '4 trang/tờ', '4 halaman/lembar'],
+  ['一張放 4 頁', '4 pages per sheet', '1 枚に 4 ページ', '한 장에 4페이지', '4 páginas por hoja', '4 Seiten pro Blatt', '4 pages par feuille', '一张放 4 页', '4 страницы на листе', '4 páginas por folha', '4 หน้าต่อแผ่น', '4 trang mỗi tờ', '4 halaman per lembar'],
+  ['2. 輸出紙張', '2. Output paper', '2. 出力用紙', '2. 출력 용지', '2. Papel de salida', '2. Ausgabepapier', '2. Papier de sortie', '2. 输出纸张', '2. Формат бумаги', '2. Papel de saída', '2. ขนาดกระดาษ', '2. Khổ giấy đầu ra', '2. Kertas keluaran'],
+  ['3. 排列方向', '3. Arrangement', '3. 配置方向', '3. 배치 방향', '3. Orientación', '3. Anordnung', '3. Disposition', '3. 排列方向', '3. Расположение', '3. Disposição', '3. ทิศทางการจัด', '3. Hướng sắp xếp', '3. Susunan'],
+  ['左右排列', 'Side by side', '左右に配置', '좌우 배치', 'Lado a lado', 'Nebeneinander', 'Côte à côte', '左右排列', 'Рядом', 'Lado a lado', 'เรียงซ้ายขวา', 'Xếp ngang', 'Berdampingan'],
+  ['上下排列', 'Top and bottom', '上下に配置', '상하 배치', 'Arriba y abajo', 'Übereinander', 'Haut et bas', '上下排列', 'Сверху и снизу', 'Acima e abaixo', 'เรียงบนล่าง', 'Xếp dọc', 'Atas dan bawah'],
+  ['進階設定', 'Advanced settings', '詳細設定', '고급 설정', 'Ajustes avanzados', 'Erweiterte Einstellungen', 'Paramètres avancés', '高级设置', 'Расширенные настройки', 'Configurações avançadas', 'การตั้งค่าขั้นสูง', 'Cài đặt nâng cao', 'Pengaturan lanjutan'],
+  ['邊界', 'Margin', '余白', '여백', 'Margen', 'Rand', 'Marge', '边距', 'Поля', 'Margem', 'ระยะขอบ', 'Lề', 'Margin'],
+  ['格間距', 'Cell gap', '枠間隔', '칸 간격', 'Espacio entre celdas', 'Zellenabstand', 'Espacement des cases', '格间距', 'Интервал между ячейками', 'Espaço entre células', 'ระยะห่างช่อง', 'Khoảng cách ô', 'Jarak sel'],
+  ['顯示裁切虛線', 'Show dashed cut lines', '裁断用の破線を表示', '재단 점선 표시', 'Mostrar líneas de corte discontinuas', 'Gestrichelte Schnittlinien anzeigen', 'Afficher les pointillés de coupe', '显示裁切虚线', 'Показать пунктирные линии разреза', 'Mostrar linhas de corte tracejadas', 'แสดงเส้นประสำหรับตัด', 'Hiện đường cắt nét đứt', 'Tampilkan garis potong putus-putus'],
+  ['單頁重複填滿一張紙', 'Repeat each page to fill a sheet', '各ページを 1 枚いっぱいに繰り返す', '각 페이지를 한 장에 반복 채우기', 'Repetir cada página para llenar una hoja', 'Jede Seite zum Füllen eines Blatts wiederholen', 'Répéter chaque page pour remplir une feuille', '单页重复填满一张纸', 'Повторять каждую страницу на всём листе', 'Repetir cada página para preencher uma folha', 'ทำซ้ำแต่ละหน้าให้เต็มแผ่น', 'Lặp từng trang để lấp đầy một tờ', 'Ulangi tiap halaman hingga memenuhi satu lembar'],
+  ['產生合版 PDF', 'Create N-up PDF', '面付け PDF を作成', '모아찍기 PDF 만들기', 'Crear PDF combinado', 'Mehrfach-PDF erstellen', 'Créer le PDF mis en page', '生成合版 PDF', 'Создать PDF с размещением', 'Criar PDF diagramado', 'สร้าง PDF แบบหลายหน้าต่อแผ่น', 'Tạo PDF dàn trang', 'Buat PDF multi-halaman'],
+  ['請先加入 PDF', 'Add a PDF first', '先に PDF を追加してください', '먼저 PDF를 추가하세요', 'Añade primero un PDF', 'Bitte zuerst eine PDF hinzufügen', 'Ajoutez d’abord un PDF', '请先加入 PDF', 'Сначала добавьте PDF', 'Adicione um PDF primeiro', 'เพิ่ม PDF ก่อน', 'Hãy thêm PDF trước', 'Tambahkan PDF terlebih dahulu'],
+  ['下載 PDF', 'Download PDF', 'PDF をダウンロード', 'PDF 다운로드', 'Descargar PDF', 'PDF herunterladen', 'Télécharger le PDF', '下载 PDF', 'Скачать PDF', 'Baixar PDF', 'ดาวน์โหลด PDF', 'Tải PDF', 'Unduh PDF'],
+  ['在新分頁預覽', 'Preview in a new tab', '新しいタブでプレビュー', '새 탭에서 미리보기', 'Vista previa en otra pestaña', 'In neuem Tab ansehen', 'Aperçu dans un nouvel onglet', '在新标签页预览', 'Открыть в новой вкладке', 'Visualizar em nova guia', 'ดูตัวอย่างในแท็บใหม่', 'Xem trước trong thẻ mới', 'Pratinjau di tab baru'],
+  ['2 × 2 四格', '2 × 2 grid', '2 × 2 グリッド', '2 × 2 격자', 'Cuadrícula 2 × 2', '2 × 2-Raster', 'Grille 2 × 2', '2 × 2 四格', 'Сетка 2 × 2', 'Grade 2 × 2', 'ตาราง 2 × 2', 'Lưới 2 × 2', 'Kisi 2 × 2'],
+  ['加入 PDF 後會顯示張數與縮放比例。', 'Add PDFs to see the sheet count and scale.', 'PDF を追加すると、枚数と縮小率が表示されます。', 'PDF를 추가하면 용지 수와 배율이 표시됩니다.', 'Añade PDF para ver el número de hojas y la escala.', 'PDFs hinzufügen, um Blattzahl und Skalierung zu sehen.', 'Ajoutez des PDF pour voir le nombre de feuilles et l’échelle.', '加入 PDF 后会显示张数和缩放比例。', 'Добавьте PDF, чтобы увидеть число листов и масштаб.', 'Adicione PDFs para ver o número de folhas e a escala.', 'เพิ่ม PDF เพื่อดูจำนวนแผ่นและอัตราส่วน', 'Thêm PDF để xem số tờ và tỷ lệ.', 'Tambahkan PDF untuk melihat jumlah lembar dan skala.'],
+  ['文字可能過小，建議減少合版頁數或使用較大的紙張。', 'Text may be too small. Use fewer pages per sheet or larger paper.', '文字が小さすぎる可能性があります。ページ数を減らすか、大きい用紙を使用してください。', '글자가 너무 작을 수 있습니다. 한 장당 페이지 수를 줄이거나 더 큰 용지를 사용하세요.', 'El texto puede quedar muy pequeño. Reduce las páginas por hoja o usa papel más grande.', 'Text könnte zu klein sein. Weniger Seiten pro Blatt oder größeres Papier verwenden.', 'Le texte risque d’être trop petit. Réduisez le nombre de pages par feuille ou utilisez un papier plus grand.', '文字可能过小，建议减少合版页数或使用较大的纸张。', 'Текст может быть слишком мелким. Уменьшите число страниц на листе или выберите бумагу большего формата.', 'O texto pode ficar pequeno. Use menos páginas por folha ou papel maior.', 'ข้อความอาจเล็กเกินไป ให้ลดจำนวนหน้าต่อแผ่นหรือใช้กระดาษขนาดใหญ่ขึ้น', 'Chữ có thể quá nhỏ. Hãy giảm số trang mỗi tờ hoặc dùng giấy lớn hơn.', 'Teks mungkin terlalu kecil. Kurangi halaman per lembar atau gunakan kertas lebih besar.'],
+  ['正在讀取 PDF 頁面資訊…', 'Reading PDF page information…', 'PDF のページ情報を読み込んでいます…', 'PDF 페이지 정보를 읽는 중…', 'Leyendo la información de páginas…', 'PDF-Seiteninformationen werden gelesen…', 'Lecture des informations de pages…', '正在读取 PDF 页面信息…', 'Чтение сведений о страницах PDF…', 'Lendo informações das páginas…', 'กำลังอ่านข้อมูลหน้า PDF…', 'Đang đọc thông tin trang PDF…', 'Membaca informasi halaman PDF…'],
+  ['請選擇 PDF 檔案。', 'Choose PDF files.', 'PDF ファイルを選択してください。', 'PDF 파일을 선택하세요.', 'Selecciona archivos PDF.', 'Bitte PDF-Dateien auswählen.', 'Choisissez des fichiers PDF.', '请选择 PDF 文件。', 'Выберите файлы PDF.', 'Selecione arquivos PDF.', 'เลือกไฟล์ PDF', 'Hãy chọn tệp PDF.', 'Pilih file PDF.'],
+  ['正在產生合版 PDF…', 'Creating N-up PDF…', '面付け PDF を作成しています…', '모아찍기 PDF 만드는 중…', 'Creando el PDF combinado…', 'Mehrfach-PDF wird erstellt…', 'Création du PDF mis en page…', '正在生成合版 PDF…', 'Создание PDF с размещением…', 'Criando PDF diagramado…', 'กำลังสร้าง PDF แบบหลายหน้าต่อแผ่น…', 'Đang tạo PDF dàn trang…', 'Membuat PDF multi-halaman…'],
+  ['處理完成，可下載或在新分頁預覽。', 'Done. Download the PDF or preview it in a new tab.', '完了しました。ダウンロードするか、新しいタブで確認できます。', '완료되었습니다. 다운로드하거나 새 탭에서 미리 볼 수 있습니다.', 'Listo. Descarga el PDF o ábrelo en otra pestaña.', 'Fertig. PDF herunterladen oder in einem neuen Tab ansehen.', 'Terminé. Téléchargez le PDF ou prévisualisez-le dans un nouvel onglet.', '处理完成，可下载或在新标签页预览。', 'Готово. Скачайте PDF или откройте его в новой вкладке.', 'Concluído. Baixe o PDF ou visualize-o em uma nova guia.', 'เสร็จแล้ว ดาวน์โหลด PDF หรือดูตัวอย่างในแท็บใหม่ได้', 'Hoàn tất. Hãy tải PDF hoặc xem trước trong thẻ mới.', 'Selesai. Unduh PDF atau pratinjau di tab baru.'],
+  ['合版文件', 'N-up document', '面付け文書', '모아찍기 문서', 'Documento combinado', 'Mehrfachdokument', 'Document mis en page', '合版文件', 'Документ с размещением', 'Documento diagramado', 'เอกสารหลายหน้าต่อแผ่น', 'Tài liệu dàn trang', 'Dokumen multi-halaman']
+);
+
 // Keep tool names, actions and privacy copy idiomatic in the original locales.
 const localizedCopy = {
   'PDF 本機工具箱': ['PDF 本機工具箱', 'PDF Toolbox', 'PDFツールボックス', 'PDF 도구 모음', 'Herramientas PDF', 'PDF-Werkzeuge', 'Outils PDF'],
@@ -1705,6 +1740,29 @@ const resultTitle = document.querySelector('#nup-result-title');
 const downloadButton = document.querySelector('#nup-download');
 const openLink = document.querySelector('#nup-open');
 
+const messageTemplates = {
+  'zh-Hant': { fileCount: '{files} 個檔案・共 {pages} 頁', fileMeta: '{pages} 頁・{size} MB', emptySummary: '輸出 {paper}；{count} 合 1・{direction}。{hint}', summary: '{pages} 個來源頁面 → {sheets} 張 {paper}；{count} 合 1・{direction}。', scale: ' 最小縮放比例約 {scale}%。', result: '完成：已產生 {sheets} 張 {paper}', loadError: '{file} 無法讀取；若有密碼，請先使用「移除密碼」。', failed: '合版失敗：{error}', remove: '移除 {file}', up: '上移 {file}', down: '下移 {file}' },
+  en: { fileCount: '{files} files · {pages} pages', fileMeta: '{pages} pages · {size} MB', emptySummary: 'Output: {paper}; {count}-up · {direction}. {hint}', summary: '{pages} source pages → {sheets} {paper} sheets; {count}-up · {direction}.', scale: ' Minimum scale: about {scale}%.', result: 'Done: created {sheets} {paper} sheets', loadError: 'Could not read {file}. If it is password-protected, use “Remove password” first.', failed: 'Layout failed: {error}', remove: 'Remove {file}', up: 'Move {file} up', down: 'Move {file} down' },
+  ja: { fileCount: '{files} ファイル・全 {pages} ページ', fileMeta: '{pages} ページ・{size} MB', emptySummary: '出力 {paper}・{count} ページ／枚・{direction}。{hint}', summary: '{pages} ページ → {paper} {sheets} 枚・{count} ページ／枚・{direction}。', scale: ' 最小縮小率は約 {scale}% です。', result: '完了：{paper} を {sheets} 枚作成しました', loadError: '{file} を読み込めません。パスワード付きの場合は、先に「パスワード解除」を使用してください。', failed: '面付けに失敗しました：{error}', remove: '{file} を削除', up: '{file} を上へ', down: '{file} を下へ' },
+  ko: { fileCount: '파일 {files}개 · 총 {pages}페이지', fileMeta: '{pages}페이지 · {size} MB', emptySummary: '출력 {paper} · {count}쪽 모아찍기 · {direction}. {hint}', summary: '원본 {pages}페이지 → {paper} {sheets}장 · {count}쪽 모아찍기 · {direction}.', scale: ' 최소 배율 약 {scale}%.', result: '완료: {paper} {sheets}장 생성', loadError: '{file}을(를) 읽을 수 없습니다. 암호가 있으면 먼저 “암호 제거”를 사용하세요.', failed: '모아찍기 실패: {error}', remove: '{file} 제거', up: '{file} 위로', down: '{file} 아래로' },
+  es: { fileCount: '{files} archivos · {pages} páginas', fileMeta: '{pages} páginas · {size} MB', emptySummary: 'Salida {paper}; {count} por hoja · {direction}. {hint}', summary: '{pages} páginas de origen → {sheets} hojas {paper}; {count} por hoja · {direction}.', scale: ' Escala mínima aproximada: {scale} %.', result: 'Listo: se crearon {sheets} hojas {paper}', loadError: 'No se pudo leer {file}. Si tiene contraseña, usa primero «Quitar contraseña».', failed: 'Error de diseño: {error}', remove: 'Quitar {file}', up: 'Subir {file}', down: 'Bajar {file}' },
+  de: { fileCount: '{files} Dateien · {pages} Seiten', fileMeta: '{pages} Seiten · {size} MB', emptySummary: 'Ausgabe {paper}; {count} Seiten/Blatt · {direction}. {hint}', summary: '{pages} Quellseiten → {sheets} Blatt {paper}; {count} Seiten/Blatt · {direction}.', scale: ' Kleinste Skalierung ca. {scale} %.', result: 'Fertig: {sheets} Blatt {paper} erstellt', loadError: '{file} konnte nicht gelesen werden. Bei Passwortschutz zuerst „Passwort entfernen“ verwenden.', failed: 'Anordnung fehlgeschlagen: {error}', remove: '{file} entfernen', up: '{file} nach oben', down: '{file} nach unten' },
+  fr: { fileCount: '{files} fichiers · {pages} pages', fileMeta: '{pages} pages · {size} Mo', emptySummary: 'Sortie {paper} ; {count} pages/feuille · {direction}. {hint}', summary: '{pages} pages source → {sheets} feuilles {paper} ; {count} pages/feuille · {direction}.', scale: ' Échelle minimale : environ {scale} %.', result: 'Terminé : {sheets} feuilles {paper} créées', loadError: 'Impossible de lire {file}. S’il est protégé, utilisez d’abord « Supprimer le mot de passe ».', failed: 'Échec de la mise en page : {error}', remove: 'Supprimer {file}', up: 'Monter {file}', down: 'Descendre {file}' },
+  'zh-Hans': { fileCount: '{files} 个文件・共 {pages} 页', fileMeta: '{pages} 页・{size} MB', emptySummary: '输出 {paper}；{count} 合 1・{direction}。{hint}', summary: '{pages} 个来源页面 → {sheets} 张 {paper}；{count} 合 1・{direction}。', scale: ' 最小缩放比例约 {scale}%。', result: '完成：已生成 {sheets} 张 {paper}', loadError: '{file} 无法读取；若有密码，请先使用“移除密码”。', failed: '合版失败：{error}', remove: '移除 {file}', up: '上移 {file}', down: '下移 {file}' },
+  ru: { fileCount: '{files} файлов · {pages} страниц', fileMeta: '{pages} страниц · {size} МБ', emptySummary: 'Вывод: {paper}; {count} стр./лист · {direction}. {hint}', summary: '{pages} исходных страниц → {sheets} листов {paper}; {count} стр./лист · {direction}.', scale: ' Минимальный масштаб около {scale}%.', result: 'Готово: создано {sheets} листов {paper}', loadError: 'Не удалось прочитать {file}. Если файл защищён, сначала снимите пароль.', failed: 'Ошибка размещения: {error}', remove: 'Удалить {file}', up: 'Переместить {file} вверх', down: 'Переместить {file} вниз' },
+  'pt-BR': { fileCount: '{files} arquivos · {pages} páginas', fileMeta: '{pages} páginas · {size} MB', emptySummary: 'Saída {paper}; {count} por folha · {direction}. {hint}', summary: '{pages} páginas de origem → {sheets} folhas {paper}; {count} por folha · {direction}.', scale: ' Escala mínima aproximada: {scale}%.', result: 'Concluído: {sheets} folhas {paper} criadas', loadError: 'Não foi possível ler {file}. Se houver senha, remova-a primeiro.', failed: 'Falha no layout: {error}', remove: 'Remover {file}', up: 'Mover {file} para cima', down: 'Mover {file} para baixo' },
+  th: { fileCount: '{files} ไฟล์ · {pages} หน้า', fileMeta: '{pages} หน้า · {size} MB', emptySummary: 'ส่งออก {paper} · {count} หน้าต่อแผ่น · {direction} {hint}', summary: '{pages} หน้าต้นฉบับ → {sheets} แผ่น {paper} · {count} หน้าต่อแผ่น · {direction}', scale: ' อัตราส่วนต่ำสุดประมาณ {scale}%', result: 'เสร็จแล้ว: สร้าง {paper} {sheets} แผ่น', loadError: 'อ่าน {file} ไม่ได้ หากมีรหัสผ่าน ให้เอารหัสผ่านออกก่อน', failed: 'จัดหน้าไม่สำเร็จ: {error}', remove: 'ลบ {file}', up: 'เลื่อน {file} ขึ้น', down: 'เลื่อน {file} ลง' },
+  vi: { fileCount: '{files} tệp · {pages} trang', fileMeta: '{pages} trang · {size} MB', emptySummary: 'Đầu ra {paper}; {count} trang/tờ · {direction}. {hint}', summary: '{pages} trang nguồn → {sheets} tờ {paper}; {count} trang/tờ · {direction}.', scale: ' Tỷ lệ nhỏ nhất khoảng {scale}%.', result: 'Hoàn tất: đã tạo {sheets} tờ {paper}', loadError: 'Không đọc được {file}. Nếu có mật khẩu, hãy gỡ mật khẩu trước.', failed: 'Dàn trang thất bại: {error}', remove: 'Xóa {file}', up: 'Đưa {file} lên', down: 'Đưa {file} xuống' },
+  id: { fileCount: '{files} file · {pages} halaman', fileMeta: '{pages} halaman · {size} MB', emptySummary: 'Keluaran {paper}; {count} halaman/lembar · {direction}. {hint}', summary: '{pages} halaman sumber → {sheets} lembar {paper}; {count} halaman/lembar · {direction}.', scale: ' Skala minimum sekitar {scale}%.', result: 'Selesai: membuat {sheets} lembar {paper}', loadError: '{file} tidak dapat dibaca. Jika memakai kata sandi, hapus kata sandinya terlebih dahulu.', failed: 'Tata letak gagal: {error}', remove: 'Hapus {file}', up: 'Pindahkan {file} ke atas', down: 'Pindahkan {file} ke bawah' },
+};
+
+function locale() { return globalThis.pdfToolI18n?.locale ?? document.documentElement.lang ?? 'en'; }
+function translate(source) { return globalThis.pdfToolI18n?.translate(source) ?? source; }
+function message(key, values = {}) {
+  const template = (messageTemplates[locale()] ?? messageTemplates.en)[key] ?? messageTemplates.en[key] ?? key;
+  return template.replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? ''));
+}
+
 const MM = 72 / 25.4;
 const PAPER = {
   A3: [297 * MM, 420 * MM],
@@ -1717,6 +1775,7 @@ let pdfLibPromise;
 let outputUrl = '';
 let active = false;
 let previousHeading = null;
+let lastResult = null;
 
 const mobileOption = document.createElement('option');
 mobileOption.value = 'nup';
@@ -1747,8 +1806,8 @@ function activate() {
   tab.classList.add('is-active');
   tab.setAttribute('aria-pressed', 'true');
   toolSelect.value = 'nup';
-  title.textContent = '多頁合版';
-  description.textContent = '將 2 或 4 個 PDF 頁面縮排到同一張紙，適合表單、講義與節省紙張列印。';
+  title.textContent = translate('多頁合版');
+  description.textContent = translate('將 2 或 4 個 PDF 頁面縮排到同一張紙，適合表單、講義與節省紙張列印。');
   legalNotice.hidden = true;
   toolForm.hidden = true;
   workspace.hidden = false;
@@ -1820,17 +1879,17 @@ function updateSummary() {
   const pages = files.reduce((total, file) => total + file.pages, 0);
   const duplicate = document.querySelector('#nup-duplicate').checked;
   const outputPages = duplicate ? pages : Math.ceil(pages / layout.count);
-  const direction = layout.count === 4 ? '2 × 2 四格' : layout.landscape ? '左右排列' : '上下排列';
+  const direction = translate(layout.count === 4 ? '2 × 2 四格' : layout.landscape ? '左右排列' : '上下排列');
   const range = scaleRange(layout);
   let text = files.length
-    ? `${pages} 個來源頁面 → ${outputPages} 張 ${layout.paper}；${layout.count} 合 1・${direction}。`
-    : `輸出 ${layout.paper}；${layout.count} 合 1・${direction}。加入 PDF 後會顯示張數與縮放比例。`;
+    ? message('summary', { pages, sheets: outputPages, paper: layout.paper, count: layout.count, direction })
+    : message('emptySummary', { paper: layout.paper, count: layout.count, direction, hint: translate('加入 PDF 後會顯示張數與縮放比例。') });
   summary.classList.remove('is-warning');
   if (range) {
     const min = Math.round(range.min * 100);
-    text += ` 最小縮放比例約 ${min}%。`;
+    text += message('scale', { scale: min });
     if (min < 60) {
-      text += ' ⚠ 文字可能過小，建議減少合版頁數或使用較大的紙張。';
+      text += ` ⚠ ${translate('文字可能過小，建議減少合版頁數或使用較大的紙張。')}`;
       summary.classList.add('is-warning');
     }
   }
@@ -1840,14 +1899,15 @@ function updateSummary() {
 function releaseResult() {
   if (outputUrl) URL.revokeObjectURL(outputUrl);
   outputUrl = '';
+  lastResult = null;
   result.hidden = true;
   openLink.removeAttribute('href');
 }
 
-function renderFiles() {
+function renderFiles(resetOutput = true) {
   fileList.replaceChildren();
   const pages = files.reduce((total, file) => total + file.pages, 0);
-  fileCount.textContent = files.length ? `${files.length} 個檔案・共 ${pages} 頁` : '尚未加入檔案';
+  fileCount.textContent = files.length ? message('fileCount', { files: files.length, pages }) : translate('尚未加入檔案');
   files.forEach((item, index) => {
     const row = document.createElement('li');
     row.className = 'nup-file-row';
@@ -1856,7 +1916,7 @@ function renderFiles() {
     const name = document.createElement('strong');
     name.textContent = item.name;
     const meta = document.createElement('small');
-    meta.textContent = `${item.pages} 頁・${(item.file.size / 1024 / 1024).toFixed(2)} MB`;
+    meta.textContent = message('fileMeta', { pages: item.pages, size: (item.file.size / 1024 / 1024).toFixed(2) });
     main.append(name, meta);
     const actions = document.createElement('div');
     actions.className = 'nup-file-row-actions';
@@ -1870,26 +1930,26 @@ function renderFiles() {
       button.dataset.action = action;
       button.dataset.index = index;
       button.disabled = disabled;
-      button.setAttribute('aria-label', action === 'remove' ? `移除 ${item.name}` : `${label === '↑' ? '上移' : '下移'} ${item.name}`);
+      button.setAttribute('aria-label', message(action === 'remove' ? 'remove' : label === '↑' ? 'up' : 'down', { file: item.name }));
       actions.append(button);
     }
     row.append(main, actions);
     fileList.append(row);
   });
   processButton.disabled = files.length === 0;
-  status.textContent = files.length ? '準備就緒' : '請先加入 PDF';
-  releaseResult();
+  status.textContent = files.length ? translate('準備就緒') : translate('請先加入 PDF');
+  if (resetOutput) releaseResult();
   updateSummary();
 }
 
 async function addFiles(fileCollection) {
   const incoming = [...fileCollection].filter((file) => file.type === 'application/pdf' || /\.pdf$/i.test(file.name));
   if (!incoming.length) {
-    status.textContent = '請選擇 PDF 檔案。';
+    status.textContent = translate('請選擇 PDF 檔案。');
     return;
   }
   processButton.disabled = true;
-  status.textContent = '正在讀取 PDF 頁面資訊…';
+  status.textContent = translate('正在讀取 PDF 頁面資訊…');
   try {
     const { PDFDocument } = await loadPdfLib();
     for (const file of incoming) {
@@ -1905,7 +1965,7 @@ async function addFiles(fileCollection) {
         });
       } catch (error) {
         console.error('N-up PDF load failed:', error);
-        status.textContent = `${file.name} 無法讀取；若有密碼，請先使用「移除密碼」。`;
+        status.textContent = message('loadError', { file: file.name });
       }
     }
   } finally {
@@ -2017,22 +2077,23 @@ async function createOutput() {
 processButton.addEventListener('click', async () => {
   if (!files.length) return;
   processButton.disabled = true;
-  status.textContent = '正在產生合版 PDF…';
+  status.textContent = translate('正在產生合版 PDF…');
   releaseResult();
   try {
     const output = await createOutput();
     const blob = new Blob([output.bytes], { type: 'application/pdf' });
     outputUrl = URL.createObjectURL(blob);
-    const base = files.length === 1 ? files[0].name.replace(/\.pdf$/i, '') : '合版文件';
+    const base = files.length === 1 ? files[0].name.replace(/\.pdf$/i, '') : translate('合版文件');
     const filename = `${base}_${output.layout.count}合1_${output.layout.paper}.pdf`;
     openLink.href = outputUrl;
     downloadButton.dataset.filename = filename;
-    resultTitle.textContent = `完成：已產生 ${output.pages} 張 ${output.layout.paper}`;
+    lastResult = { sheets: output.pages, paper: output.layout.paper };
+    resultTitle.textContent = message('result', lastResult);
     result.hidden = false;
-    status.textContent = '處理完成，可下載或在新分頁預覽。';
+    status.textContent = translate('處理完成，可下載或在新分頁預覽。');
   } catch (error) {
     console.error('N-up PDF generation failed:', error);
-    status.textContent = `合版失敗：${error.message || '請確認 PDF 是否有效。'}`;
+    status.textContent = message('failed', { error: error.message || translate('處理失敗，請確認檔案是否有效。') });
   } finally {
     processButton.disabled = files.length === 0;
   }
@@ -2050,6 +2111,18 @@ downloadButton.addEventListener('click', () => {
 
 workspace.querySelectorAll('input[name="nup-layout"], input[name="nup-paper"], input[name="nup-orientation"], #nup-margin, #nup-gap, #nup-duplicate')
   .forEach((input) => input.addEventListener('input', updateSummary));
+
+globalThis.addEventListener('pdf-tool-language-change', () => {
+  if (active) {
+    title.textContent = translate('多頁合版');
+    description.textContent = translate('將 2 或 4 個 PDF 頁面縮排到同一張紙，適合表單、講義與節省紙張列印。');
+  }
+  renderFiles(false);
+  if (lastResult) {
+    resultTitle.textContent = message('result', lastResult);
+    status.textContent = translate('處理完成，可下載或在新分頁預覽。');
+  }
+});
 
 window.addEventListener('beforeunload', releaseResult);
 renderFiles();
