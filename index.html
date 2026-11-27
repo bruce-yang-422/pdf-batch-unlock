@@ -79,12 +79,12 @@
     <script type="module" src="./assets/ui-polish.js?v=20261127-2"></script>
     <script type="module" src="./assets/i18n.js?v=20261127-6"></script>
     <script type="module" src="./assets/nup.js?v=20261127-5"></script>
-    <script type="module" src="./assets/pwa.js?v=20261126-1"></script>
+    <script type="module" src="./assets/pwa.js?v=20261127-2"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CFPIHGYZ.css">
     <link rel="stylesheet" href="./assets/layout-DH4mL2.css?v=20261126-1">
-    <link rel="stylesheet" href="./assets/ui-polish.css?v=20261127-2">
+    <link rel="stylesheet" href="./assets/ui-polish.css?v=20261127-3">
     <link rel="stylesheet" href="./assets/nup.css?v=20261127-5">
-    <link rel="stylesheet" href="./assets/pwa.css?v=20261126-3">
+    <link rel="stylesheet" href="./assets/pwa.css?v=20261127-4">
   </head>
   <body>
     <main class="app-shell">
@@ -510,7 +510,7 @@
           <a href="./privacy/" data-legal-page="privacy">Privacy</a><span aria-hidden="true">·</span>
           <a href="./terms/" data-legal-page="terms">Terms</a><span aria-hidden="true">·</span>
           <a href="./licenses/" data-legal-page="licenses">Open Source Licenses</a>
-          <span aria-hidden="true">·</span><a href="https://github.com/bruce-yang-422/pdf-batch-unlock/releases/download/v1.1.0/pdf-toolbox-v1.1.0.zip">Chrome / Edge Extension v1.1.0 (ZIP)</a>
+          <span aria-hidden="true">·</span><a id="footer-extension-link" href="https://github.com/bruce-yang-422/pdf-batch-unlock/releases/download/v1.1.0/pdf-toolbox-v1.1.0.zip">Chrome / Edge Extension v1.1.0 (ZIP)</a>
           <span id="footer-install-action" hidden>
             <button id="footer-install-button" type="button">安裝 App</button>
           </span>
@@ -531,6 +531,18 @@
         <button id="pwa-install-button" class="pwa-install-button" type="button">安裝 App</button>
       </div>
     </aside>
+
+    <dialog id="extension-download-dialog" class="extension-download-dialog" data-i18n-skip aria-labelledby="extension-dialog-title" aria-describedby="extension-dialog-description">
+      <form method="dialog">
+        <h2 id="extension-dialog-title">取得瀏覽器外掛</h2>
+        <p id="extension-dialog-description">手機通常無法直接安裝 ZIP，請選擇要如何處理連結。</p>
+        <div class="extension-dialog-actions">
+          <button id="extension-dialog-cancel" type="submit" value="cancel">取消</button>
+          <button id="extension-copy-link" type="button">複製連結</button>
+          <button id="extension-download-zip" class="is-primary" type="button">仍要下載 ZIP</button>
+        </div>
+      </form>
+    </dialog>
 
   </body>
 </html>

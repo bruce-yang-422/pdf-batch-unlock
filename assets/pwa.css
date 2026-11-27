@@ -149,3 +149,39 @@
 
 #footer-install-button:hover { background: #d9f0e9; }
 #footer-install-button:focus-visible { outline: 2px solid #147b6d; outline-offset: 2px; }
+
+#footer-extension-link.is-copy-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 4px 11px;
+  border: 1px solid #a8d3c9;
+  border-radius: 999px;
+  color: #115e52;
+  background: #edf8f5;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.extension-download-dialog {
+  width: min(420px, calc(100vw - 28px));
+  padding: 0;
+  border: 1px solid #d7e3e0;
+  border-radius: 18px;
+  color: #173d38;
+  background: #fff;
+  box-shadow: 0 22px 65px rgb(20 66 59 / 28%);
+}
+.extension-download-dialog::backdrop { background: rgb(20 31 42 / 48%); backdrop-filter: blur(2px); }
+.extension-download-dialog form { padding: 20px; }
+.extension-download-dialog h2 { margin: 0; font-size: 1.05rem; }
+.extension-download-dialog p { margin: 9px 0 18px; color: #58716d; font-size: 0.86rem; line-height: 1.55; }
+.extension-dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.extension-dialog-actions button { min-height: 40px; padding: 8px 13px; border: 1px solid #cbd9d6; border-radius: 10px; color: #335b55; background: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.extension-dialog-actions button.is-primary { border-color: #147b6d; color: #fff; background: #147b6d; }
+.extension-dialog-actions button:focus-visible { outline: 3px solid rgb(20 123 109 / 22%); outline-offset: 2px; }
+
+@media (max-width: 420px) {
+  .extension-dialog-actions button { flex: 1 1 100%; }
+}

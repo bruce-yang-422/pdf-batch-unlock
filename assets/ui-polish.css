@@ -5,6 +5,10 @@ body {
   overflow-x: clip;
 }
 
+@media (min-width: 641px) {
+  html { scrollbar-gutter: stable; }
+}
+
 .header-bar {
   display: flex;
   align-items: center;
