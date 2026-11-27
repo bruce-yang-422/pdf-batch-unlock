@@ -6,6 +6,7 @@
 
 # Locally generated browser extension release archives
 /browser-extension/release/*.zip
+/browser-extension/Releases/*.zip
 
 # Editors and operating systems
 .idea/

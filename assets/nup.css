@@ -1,0 +1,94 @@
+.tool-tabs { grid-template-columns: repeat(9, minmax(0, 1fr)); }
+.card.nup-mode .unlock-legal-notice { display: none !important; }
+
+.nup-tool-tab {
+  appearance: none;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+}
+
+.nup-tool-tab:hover { background: rgba(20, 123, 109, 0.08); }
+.nup-tool-tab.is-active {
+  background: linear-gradient(135deg, #2376a3, #147b6d);
+  box-shadow: 0 8px 18px rgba(20, 123, 109, 0.2);
+  color: #fff;
+}
+
+.nup-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}
+.nup-workspace[hidden] { display: none; }
+.nup-main, .nup-settings { min-width: 0; }
+.nup-file-card, .nup-settings {
+  border: 1px solid var(--border-color, #dce5e9);
+  border-radius: 18px;
+  background: var(--panel-bg, #fff);
+  padding: 1rem;
+}
+.nup-file-card { margin-top: 1rem; }
+.nup-file-actions, .nup-result > div { display: flex; gap: 0.5rem; align-items: center; }
+.nup-settings > h3 { margin: 0 0 1rem; }
+.nup-fieldset { border: 0; margin: 0 0 1rem; padding: 0; }
+.nup-fieldset legend { font-weight: 800; margin-bottom: 0.6rem; }
+.nup-layouts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+.nup-layout-card {
+  align-items: center;
+  border: 1px solid var(--border-color, #dce5e9);
+  border-radius: 14px;
+  cursor: pointer;
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: auto auto 1fr;
+  padding: 0.75rem;
+}
+.nup-layout-card:has(input:checked), .nup-segments label:has(input:checked) {
+  border-color: #147b6d;
+  background: rgba(20, 123, 109, 0.09);
+}
+.nup-layout-card small { display: block; color: var(--muted-color, #64748b); margin-top: 0.15rem; }
+.nup-sheet { background: #fff; border: 2px solid #147b6d; border-radius: 3px; display: grid; gap: 2px; padding: 2px; width: 32px; height: 24px; }
+.nup-sheet i { background: #bfe4dc; border-radius: 1px; }
+.nup-sheet-2 { grid-template-columns: 1fr 1fr; }
+.nup-sheet-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.nup-segments { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.45rem; }
+.nup-segments-2 { grid-template-columns: repeat(2, 1fr); }
+.nup-segments label { border: 1px solid var(--border-color, #dce5e9); border-radius: 10px; cursor: pointer; text-align: center; }
+.nup-segments input, .nup-layout-card > input { position: absolute; opacity: 0; pointer-events: none; }
+.nup-segments span { display: block; padding: 0.65rem 0.4rem; font-weight: 700; }
+.nup-summary { border-radius: 12px; background: rgba(20, 123, 109, 0.08); line-height: 1.55; padding: 0.8rem; }
+.nup-summary.is-warning { background: #fff3cd; color: #775500; }
+.nup-advanced { border-top: 1px solid var(--border-color, #dce5e9); margin: 1rem 0; padding-top: 0.8rem; }
+.nup-advanced summary { cursor: pointer; font-weight: 800; margin-bottom: 0.8rem; }
+.nup-number-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; margin-bottom: 0.75rem; }
+.nup-number-grid label { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+.nup-number-grid input { width: 4.5rem; }
+.nup-settings .primary-button { width: 100%; }
+.nup-result { border-top: 1px solid var(--border-color, #dce5e9); display: grid; gap: 0.75rem; margin-top: 1rem; padding-top: 1rem; }
+.nup-result[hidden] { display: none; }
+.nup-result .text-button { display: inline-flex; align-items: center; }
+.nup-file-row { align-items: center; display: grid; gap: 0.6rem; grid-template-columns: minmax(0, 1fr) auto; }
+.nup-file-row-main { min-width: 0; }
+.nup-file-row-main strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nup-file-row-main small { color: var(--muted-color, #64748b); }
+.nup-file-row-actions { display: flex; gap: 0.25rem; }
+.nup-file-row-actions button { min-width: 2rem; }
+
+@media (max-width: 900px) {
+  .tool-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .nup-workspace { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .nup-tool-tab { display: none; }
+  .nup-layouts, .nup-number-grid { grid-template-columns: 1fr; }
+  .nup-file-actions { align-items: flex-end; flex-direction: column; }
+}

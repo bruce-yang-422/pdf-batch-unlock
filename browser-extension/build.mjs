@@ -113,6 +113,7 @@ await Promise.all([
   copyExtensionSource('theme.js', 'assets/theme.js'),
   ...engineFiles.map(([file, name]) => copy('assets/' + file, 'assets/' + name)),
   copy('assets/wasm'),
+  copy('assets/pdf-lib.min.js'),
   copy('LICENSE'),
   write('assets/toolbox.css', [...toolboxStyles, themeStyles].join('\n')),
   write('assets/legal.css', (await read('assets/legal-pages.css')) + '\n' + themeStyles),
@@ -134,6 +135,7 @@ const toolboxScripts = [
   bundle,
   await read('assets/ui-polish.js'),
   extensionI18n,
+  await read('assets/nup.js'),
   'const legalTitles = ' + JSON.stringify(legalTitles) + ';\n' + await readExtensionSource('extension-ui.js'),
 ];
 await write('assets/toolbox.js', toolboxScripts.map((script) => '{\n' + script + '\n}\n').join('\n'));

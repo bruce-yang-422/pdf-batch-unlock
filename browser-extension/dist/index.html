@@ -68,6 +68,7 @@
           <button class="tool-tab" type="button" data-tool="merge">合併 PDF</button>
           <button class="tool-tab" type="button" data-tool="split">拆分 PDF</button>
           <button class="tool-tab" type="button" data-tool="pages">頁面管理</button>
+          <button id="nup-tool-tab" class="nup-tool-tab" type="button" data-tool="nup">多頁合版</button>
           <button class="tool-tab" type="button" data-tool="decorate">浮水印／頁碼</button>
           <button class="tool-tab" type="button" data-tool="pdf-to-jpg">PDF 轉 JPG</button>
           <button class="tool-tab" type="button" data-tool="jpg-to-pdf">JPG 轉 PDF</button>
@@ -321,11 +322,95 @@
           </section>
         </form>
 
+        <section id="nup-workspace" class="nup-workspace" hidden aria-labelledby="nup-workspace-title">
+          <div class="nup-main">
+            <div id="nup-drop-zone" class="drop-zone" tabindex="0" role="button" aria-controls="nup-file-input">
+              <input id="nup-file-input" class="visually-hidden" type="file" accept="application/pdf,.pdf" multiple />
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
+              </svg>
+              <strong>將 PDF 拖曳到這裡</strong>
+              <span>或點一下選擇多個檔案</span>
+            </div>
+
+            <section class="nup-file-card" aria-labelledby="nup-files-title">
+              <div class="queue-heading">
+                <div><span class="section-kicker">本批次</span><h3 id="nup-files-title">待合版檔案</h3></div>
+                <div class="nup-file-actions">
+                  <button id="nup-sort-files" class="text-button compact" type="button">依檔名排序</button>
+                  <button id="nup-clear-files" class="text-button compact" type="button">清除全部</button>
+                </div>
+              </div>
+              <p id="nup-file-count" class="file-feedback" aria-live="polite">尚未加入檔案</p>
+              <ul id="nup-file-list" class="file-list"></ul>
+            </section>
+          </div>
+
+          <aside class="nup-settings" aria-labelledby="nup-workspace-title">
+            <h3 id="nup-workspace-title">合版設定</h3>
+            <fieldset class="nup-fieldset">
+              <legend>1. 選擇版型</legend>
+              <div class="nup-layouts">
+                <label class="nup-layout-card">
+                  <input type="radio" name="nup-layout" value="2" checked />
+                  <span class="nup-sheet nup-sheet-2" aria-hidden="true"><i></i><i></i></span>
+                  <span><b>2 合 1</b><small>一張放 2 頁</small></span>
+                </label>
+                <label class="nup-layout-card">
+                  <input type="radio" name="nup-layout" value="4" />
+                  <span class="nup-sheet nup-sheet-4" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                  <span><b>4 合 1</b><small>一張放 4 頁</small></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="nup-fieldset">
+              <legend>2. 輸出紙張</legend>
+              <div class="nup-segments">
+                <label><input type="radio" name="nup-paper" value="A3" /><span>A3</span></label>
+                <label><input type="radio" name="nup-paper" value="A4" checked /><span>A4</span></label>
+                <label><input type="radio" name="nup-paper" value="A5" /><span>A5</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="nup-fieldset">
+              <legend>3. 排列方向</legend>
+              <div class="nup-segments nup-segments-2">
+                <label><input type="radio" name="nup-orientation" value="landscape" checked /><span>左右排列</span></label>
+                <label><input type="radio" name="nup-orientation" value="portrait" /><span>上下排列</span></label>
+              </div>
+            </fieldset>
+
+            <p id="nup-summary" class="nup-summary" aria-live="polite"></p>
+
+            <details class="nup-advanced">
+              <summary>進階設定</summary>
+              <div class="nup-number-grid">
+                <label>邊界 <span><input id="nup-margin" type="number" min="0" max="30" step="1" value="5" /> mm</span></label>
+                <label>格間距 <span><input id="nup-gap" type="number" min="0" max="30" step="1" value="0" /> mm</span></label>
+              </div>
+              <label class="check-option"><input id="nup-cutline" type="checkbox" /> 顯示裁切虛線</label>
+              <label class="check-option"><input id="nup-duplicate" type="checkbox" /> 單頁重複填滿一張紙</label>
+            </details>
+
+            <button id="nup-process" class="primary-button" type="button" disabled>產生合版 PDF</button>
+            <div id="nup-status" class="status" role="status" aria-live="polite">請先加入 PDF</div>
+            <div id="nup-result" class="nup-result" hidden>
+              <strong id="nup-result-title"></strong>
+              <div>
+                <button id="nup-download" class="secondary-button" type="button">下載 PDF</button>
+                <a id="nup-open" class="text-button" target="_blank" rel="noopener">在新分頁預覽</a>
+              </div>
+            </div>
+          </aside>
+        </section>
+
         <footer class="site-footer" data-i18n-skip>
           <span>© 2026 Bruce</span><span aria-hidden="true">·</span>
           <a href="./legal.html?page=privacy" data-legal-page="privacy">Privacy</a><span aria-hidden="true">·</span>
           <a href="./legal.html?page=terms" data-legal-page="terms">Terms</a><span aria-hidden="true">·</span>
           <a href="./legal.html?page=licenses" data-legal-page="licenses">Open Source Licenses</a>
+          <span aria-hidden="true">·</span><a href="https://github.com/bruce-yang-422/pdf-batch-unlock/releases/download/v1.0.0/pdf-toolbox-v1.0.0.zip">Chrome / Edge Extension v1.0.0 (ZIP)</a>
         </footer>
       </section>
     </main>

@@ -13,6 +13,7 @@
 - 移除 PDF 密碼，支援批次處理與 ZIP 下載
 - 使用 AES-256 為 PDF 加上開啟密碼
 - 合併及逐頁拆分 PDF
+- 將 2 或 4 個 PDF 頁面合版到一張 A3、A4 或 A5，支援裁切線與單頁重複
 - 重新排序、旋轉、刪除或擷取 PDF 頁面
 - 加入文字／圖片浮水印及頁碼
 - PDF 轉 JPG，支援 96、150、300 DPI
@@ -114,6 +115,10 @@ ZIP 會輸出至 `browser-extension/release/pdf-toolbox-<version>.zip`。發行�
 ```
 
 `browser-extension/dist/` 是生成內容，請勿直接修改。網站工作區、翻譯或法律頁更新後，請重新執行 `build.mjs`。
+
+### 多頁合版模組
+
+多頁合版的介面與處理邏輯位於 `assets/nup.js` 與 `assets/nup.css`。由於目前 repository 僅保留主工具的建置後 bundle，這項功能以隔離模組掛接主介面，請勿直接修改 `assets/index-*.js`。`pdf-lib.min.js` 只會在使用者首次加入合版檔案時延遲載入，不影響其他工具的初始載入；擴充功能建置腳本會將模組與相依檔案一併封裝。
 
 ## 部署
 
