@@ -1501,11 +1501,15 @@ rows.push(
   ['2 × 2 四格', '2 × 2 grid', '2 × 2 グリッド', '2 × 2 격자', 'Cuadrícula 2 × 2', '2 × 2-Raster', 'Grille 2 × 2', '2 × 2 四格', 'Сетка 2 × 2', 'Grade 2 × 2', 'ตาราง 2 × 2', 'Lưới 2 × 2', 'Kisi 2 × 2'],
   ['加入 PDF 後會顯示張數與縮放比例。', 'Add PDFs to see the sheet count and scale.', 'PDF を追加すると、枚数と縮小率が表示されます。', 'PDF를 추가하면 용지 수와 배율이 표시됩니다.', 'Añade PDF para ver el número de hojas y la escala.', 'PDFs hinzufügen, um Blattzahl und Skalierung zu sehen.', 'Ajoutez des PDF pour voir le nombre de feuilles et l’échelle.', '加入 PDF 后会显示张数和缩放比例。', 'Добавьте PDF, чтобы увидеть число листов и масштаб.', 'Adicione PDFs para ver o número de folhas e a escala.', 'เพิ่ม PDF เพื่อดูจำนวนแผ่นและอัตราส่วน', 'Thêm PDF để xem số tờ và tỷ lệ.', 'Tambahkan PDF untuk melihat jumlah lembar dan skala.'],
   ['文字可能過小，建議減少合版頁數或使用較大的紙張。', 'Text may be too small. Use fewer pages per sheet or larger paper.', '文字が小さすぎる可能性があります。ページ数を減らすか、大きい用紙を使用してください。', '글자가 너무 작을 수 있습니다. 한 장당 페이지 수를 줄이거나 더 큰 용지를 사용하세요.', 'El texto puede quedar muy pequeño. Reduce las páginas por hoja o usa papel más grande.', 'Text könnte zu klein sein. Weniger Seiten pro Blatt oder größeres Papier verwenden.', 'Le texte risque d’être trop petit. Réduisez le nombre de pages par feuille ou utilisez un papier plus grand.', '文字可能过小，建议减少合版页数或使用较大的纸张。', 'Текст может быть слишком мелким. Уменьшите число страниц на листе или выберите бумагу большего формата.', 'O texto pode ficar pequeno. Use menos páginas por folha ou papel maior.', 'ข้อความอาจเล็กเกินไป ให้ลดจำนวนหน้าต่อแผ่นหรือใช้กระดาษขนาดใหญ่ขึ้น', 'Chữ có thể quá nhỏ. Hãy giảm số trang mỗi tờ hoặc dùng giấy lớn hơn.', 'Teks mungkin terlalu kecil. Kurangi halaman per lembar atau gunakan kertas lebih besar.'],
+  ['內容會明顯縮小，列印前請確認文字大小。', 'Content will be noticeably reduced. Check the text size before printing.', '内容が大きく縮小されます。印刷前に文字サイズを確認してください。', '내용이 눈에 띄게 축소됩니다. 인쇄 전에 글자 크기를 확인하세요.', 'El contenido se reducirá notablemente. Comprueba el tamaño del texto antes de imprimir.', 'Der Inhalt wird deutlich verkleinert. Bitte prüfen Sie die Textgröße vor dem Drucken.', 'Le contenu sera sensiblement réduit. Vérifiez la taille du texte avant l’impression.', '内容会明显缩小，打印前请确认文字大小。', 'Содержимое будет заметно уменьшено. Проверьте размер текста перед печатью.', 'O conteúdo será reduzido de forma perceptível. Confira o tamanho do texto antes de imprimir.', 'เนื้อหาจะถูกย่ออย่างเห็นได้ชัด โปรดตรวจสอบขนาดตัวอักษรก่อนพิมพ์', 'Nội dung sẽ bị thu nhỏ đáng kể. Hãy kiểm tra cỡ chữ trước khi in.', 'Konten akan diperkecil secara nyata. Periksa ukuran teks sebelum mencetak.'],
   ['正在讀取 PDF 頁面資訊…', 'Reading PDF page information…', 'PDF のページ情報を読み込んでいます…', 'PDF 페이지 정보를 읽는 중…', 'Leyendo la información de páginas…', 'PDF-Seiteninformationen werden gelesen…', 'Lecture des informations de pages…', '正在读取 PDF 页面信息…', 'Чтение сведений о страницах PDF…', 'Lendo informações das páginas…', 'กำลังอ่านข้อมูลหน้า PDF…', 'Đang đọc thông tin trang PDF…', 'Membaca informasi halaman PDF…'],
   ['請選擇 PDF 檔案。', 'Choose PDF files.', 'PDF ファイルを選択してください。', 'PDF 파일을 선택하세요.', 'Selecciona archivos PDF.', 'Bitte PDF-Dateien auswählen.', 'Choisissez des fichiers PDF.', '请选择 PDF 文件。', 'Выберите файлы PDF.', 'Selecione arquivos PDF.', 'เลือกไฟล์ PDF', 'Hãy chọn tệp PDF.', 'Pilih file PDF.'],
   ['正在產生合版 PDF…', 'Creating N-up PDF…', '面付け PDF を作成しています…', '모아찍기 PDF 만드는 중…', 'Creando el PDF combinado…', 'Mehrfach-PDF wird erstellt…', 'Création du PDF mis en page…', '正在生成合版 PDF…', 'Создание PDF с размещением…', 'Criando PDF diagramado…', 'กำลังสร้าง PDF แบบหลายหน้าต่อแผ่น…', 'Đang tạo PDF dàn trang…', 'Membuat PDF multi-halaman…'],
   ['處理完成，可下載或在新分頁預覽。', 'Done. Download the PDF or preview it in a new tab.', '完了しました。ダウンロードするか、新しいタブで確認できます。', '완료되었습니다. 다운로드하거나 새 탭에서 미리 볼 수 있습니다.', 'Listo. Descarga el PDF o ábrelo en otra pestaña.', 'Fertig. PDF herunterladen oder in einem neuen Tab ansehen.', 'Terminé. Téléchargez le PDF ou prévisualisez-le dans un nouvel onglet.', '处理完成，可下载或在新标签页预览。', 'Готово. Скачайте PDF или откройте его в новой вкладке.', 'Concluído. Baixe o PDF ou visualize-o em uma nova guia.', 'เสร็จแล้ว ดาวน์โหลด PDF หรือดูตัวอย่างในแท็บใหม่ได้', 'Hoàn tất. Hãy tải PDF hoặc xem trước trong thẻ mới.', 'Selesai. Unduh PDF atau pratinjau di tab baru.'],
-  ['合版文件', 'N-up document', '面付け文書', '모아찍기 문서', 'Documento combinado', 'Mehrfachdokument', 'Document mis en page', '合版文件', 'Документ с размещением', 'Documento diagramado', 'เอกสารหลายหน้าต่อแผ่น', 'Tài liệu dàn trang', 'Dokumen multi-halaman']
+  ['合版文件', 'N-up document', '面付け文書', '모아찍기 문서', 'Documento combinado', 'Mehrfachdokument', 'Document mis en page', '合版文件', 'Документ с размещением', 'Documento diagramado', 'เอกสารหลายหน้าต่อแผ่น', 'Tài liệu dàn trang', 'Dokumen multi-halaman'],
+  ['合版預覽', 'Layout preview', '面付けプレビュー', '모아찍기 미리보기', 'Vista previa del diseño', 'Anordnungsvorschau', 'Aperçu de la mise en page', '合版预览', 'Предпросмотр размещения', 'Prévia do layout', 'ตัวอย่างการจัดหน้า', 'Xem trước dàn trang', 'Pratinjau tata letak'],
+  ['合版配置預覽', 'N-up layout preview', '面付け配置のプレビュー', '모아찍기 배치 미리보기', 'Vista previa de la disposición', 'Vorschau der Mehrfachanordnung', 'Aperçu de la disposition multiple', '合版配置预览', 'Предпросмотр схемы размещения', 'Prévia da disposição', 'ตัวอย่างรูปแบบหลายหน้าต่อแผ่น', 'Xem trước bố cục nhiều trang', 'Pratinjau susunan multi-halaman'],
+  ['加入 PDF 後會依檔案與頁面順序顯示配置。', 'Add PDFs to preview the arrangement in file and page order.', 'PDF を追加すると、ファイルとページの順番で配置を表示します。', 'PDF를 추가하면 파일 및 페이지 순서대로 배치를 표시합니다.', 'Añade PDF para ver la disposición según el orden de archivos y páginas.', 'PDFs hinzufügen, um die Anordnung in Datei- und Seitenreihenfolge zu sehen.', 'Ajoutez des PDF pour afficher la disposition selon l’ordre des fichiers et des pages.', '加入 PDF 后会按文件和页面顺序显示配置。', 'Добавьте PDF, чтобы увидеть размещение в порядке файлов и страниц.', 'Adicione PDFs para visualizar a disposição na ordem dos arquivos e páginas.', 'เพิ่ม PDF เพื่อดูการจัดตามลำดับไฟล์และหน้า', 'Thêm PDF để xem bố cục theo thứ tự tệp và trang.', 'Tambahkan PDF untuk melihat susunan menurut urutan file dan halaman.']
 );
 
 // Keep tool names, actions and privacy copy idiomatic in the original locales.
@@ -1739,6 +1743,9 @@ const result = document.querySelector('#nup-result');
 const resultTitle = document.querySelector('#nup-result-title');
 const downloadButton = document.querySelector('#nup-download');
 const openLink = document.querySelector('#nup-open');
+const previewPaper = document.querySelector('#nup-preview-paper');
+const previewMeta = document.querySelector('#nup-preview-meta');
+const previewFrame = document.querySelector('#nup-preview-frame');
 
 const messageTemplates = {
   'zh-Hant': { fileCount: '{files} 個檔案・共 {pages} 頁', fileMeta: '{pages} 頁・{size} MB', emptySummary: '輸出 {paper}；{count} 合 1・{direction}。{hint}', summary: '{pages} 個來源頁面 → {sheets} 張 {paper}；{count} 合 1・{direction}。', scale: ' 最小縮放比例約 {scale}%。', result: '完成：已產生 {sheets} 張 {paper}', loadError: '{file} 無法讀取；若有密碼，請先使用「移除密碼」。', failed: '合版失敗：{error}', remove: '移除 {file}', up: '上移 {file}', down: '下移 {file}' },
@@ -1769,6 +1776,8 @@ const PAPER = {
   A4: [210 * MM, 297 * MM],
   A5: [148 * MM, 210 * MM],
 };
+const CAUTION_SCALE = 0.85;
+const DANGER_SCALE = 0.6;
 
 let files = [];
 let pdfLibPromise;
@@ -1776,6 +1785,7 @@ let outputUrl = '';
 let active = false;
 let previousHeading = null;
 let lastResult = null;
+let settingsTouched = false;
 
 const mobileOption = document.createElement('option');
 mobileOption.value = 'nup';
@@ -1845,10 +1855,10 @@ function selected(name) {
   return document.querySelector(`input[name="${name}"]:checked`)?.value;
 }
 
-function geometry() {
-  const count = Number(selected('nup-layout'));
-  const paper = selected('nup-paper');
-  const landscape = selected('nup-orientation') === 'landscape';
+function geometry(overrides = {}) {
+  const count = overrides.count ?? Number(selected('nup-layout'));
+  const paper = overrides.paper ?? selected('nup-paper');
+  const landscape = overrides.landscape ?? selected('nup-orientation') === 'landscape';
   const margin = Math.max(0, Number(document.querySelector('#nup-margin').value) || 0) * MM;
   const gap = Math.max(0, Number(document.querySelector('#nup-gap').value) || 0) * MM;
   const [portraitWidth, portraitHeight] = PAPER[paper];
@@ -1874,6 +1884,36 @@ function scaleRange(layout) {
   return scales.length ? { min: Math.min(...scales), max: Math.max(...scales) } : null;
 }
 
+function recommendSettings() {
+  const sourcePages = files.flatMap((file) => file.sizes);
+  if (!sourcePages.length || settingsTouched) return;
+  const pageCount = sourcePages.length;
+  const candidates = [];
+  for (const count of [2, 4]) {
+    for (const paper of ['A5', 'A4', 'A3']) {
+      for (const landscape of [true, false]) {
+        const layout = geometry({ count, paper, landscape });
+        const scales = sourcePages.map(([width, height]) => fitScale(width, height, layout));
+        const worstDeviation = Math.max(...scales.map((scale) => Math.abs(Math.log2(Math.max(scale, 0.01)))));
+        const minimumScale = Math.min(...scales);
+        const maximumScale = Math.max(...scales);
+        const severeShrinkPenalty = minimumScale < 0.6 ? (0.6 - minimumScale) * 3 : 0;
+        const excessiveUpscalePenalty = maximumScale > 1.15 ? (maximumScale - 1.15) * 0.35 : 0;
+        const emptySlotPenalty = pageCount < count ? (count - pageCount) * 0.08 : 0;
+        const paperPreference = paper === 'A3' ? 0.02 : paper === 'A5' ? 0.01 : 0;
+        const rotatedPageRatio = sourcePages.filter(([width, height]) => (height > width) !== layout.slotPortrait).length / pageCount;
+        const rotationPenalty = rotatedPageRatio * 0.025;
+        candidates.push({ layout, score: worstDeviation + severeShrinkPenalty + excessiveUpscalePenalty + emptySlotPenalty + paperPreference + rotationPenalty });
+      }
+    }
+  }
+  candidates.sort((a, b) => a.score - b.score || a.layout.count - b.layout.count);
+  const recommended = candidates[0].layout;
+  document.querySelector(`input[name="nup-layout"][value="${recommended.count}"]`).checked = true;
+  document.querySelector(`input[name="nup-paper"][value="${recommended.paper}"]`).checked = true;
+  document.querySelector(`input[name="nup-orientation"][value="${recommended.landscape ? 'landscape' : 'portrait'}"]`).checked = true;
+}
+
 function updateSummary() {
   const layout = geometry();
   const pages = files.reduce((total, file) => total + file.pages, 0);
@@ -1884,16 +1924,51 @@ function updateSummary() {
   let text = files.length
     ? message('summary', { pages, sheets: outputPages, paper: layout.paper, count: layout.count, direction })
     : message('emptySummary', { paper: layout.paper, count: layout.count, direction, hint: translate('加入 PDF 後會顯示張數與縮放比例。') });
-  summary.classList.remove('is-warning');
+  summary.classList.remove('is-caution', 'is-danger');
   if (range) {
     const min = Math.round(range.min * 100);
     text += message('scale', { scale: min });
-    if (min < 60) {
+    if (range.min < DANGER_SCALE) {
       text += ` ⚠ ${translate('文字可能過小，建議減少合版頁數或使用較大的紙張。')}`;
-      summary.classList.add('is-warning');
+      summary.classList.add('is-danger');
+    } else if (range.min < CAUTION_SCALE) {
+      text += ` ⚠ ${translate('內容會明顯縮小，列印前請確認文字大小。')}`;
+      summary.classList.add('is-caution');
     }
   }
   summary.textContent = text;
+  renderPreview(layout);
+}
+
+function renderPreview(layout = geometry()) {
+  const duplicate = document.querySelector('#nup-duplicate').checked;
+  const cutline = document.querySelector('#nup-cutline').checked;
+  const marginMm = Math.max(0, Number(document.querySelector('#nup-margin').value) || 0);
+  const gapMm = Math.max(0, Number(document.querySelector('#nup-gap').value) || 0);
+  previewPaper.className = 'nup-preview-paper';
+  previewPaper.classList.add(layout.count === 4 ? 'is-four-up' : layout.landscape ? 'is-two-landscape' : 'is-two-portrait');
+  previewPaper.classList.toggle('is-portrait', !layout.landscape);
+  previewPaper.classList.toggle('has-cutlines', cutline);
+  previewPaper.style.padding = `${Math.min(30, 8 + marginMm * 1.1)}px`;
+  previewPaper.style.gap = `${Math.min(24, gapMm * 1.3)}px`;
+  previewMeta.textContent = `${layout.paper}・${translate(layout.count === 4 ? '4 合 1' : '2 合 1')}`;
+  previewPaper.replaceChildren();
+  const sourcePages = files.flatMap((file) => Array.from({ length: file.pages }, (_, index) => ({ file, page: index + 1 })));
+  for (let index = 0; index < layout.count; index += 1) {
+    const source = duplicate ? sourcePages[0] : sourcePages[index];
+    const slot = document.createElement('div');
+    slot.className = 'nup-preview-slot';
+    const page = document.createElement('span');
+    page.className = 'nup-preview-page';
+    page.setAttribute('aria-hidden', 'true');
+    for (let line = 0; line < 5; line += 1) page.append(document.createElement('i'));
+    const number = document.createElement('b');
+    number.textContent = source ? String(source.page) : String(index + 1);
+    if (source) slot.title = `${source.file.name} · ${source.page}`;
+    else slot.classList.add('is-placeholder');
+    slot.append(page, number);
+    previewPaper.append(slot);
+  }
 }
 
 function releaseResult() {
@@ -1902,6 +1977,9 @@ function releaseResult() {
   lastResult = null;
   result.hidden = true;
   openLink.removeAttribute('href');
+  previewFrame.removeAttribute('src');
+  previewFrame.hidden = true;
+  previewPaper.hidden = false;
 }
 
 function renderFiles(resetOutput = true) {
@@ -1950,6 +2028,7 @@ async function addFiles(fileCollection) {
   }
   processButton.disabled = true;
   status.textContent = translate('正在讀取 PDF 頁面資訊…');
+  const recommendAfterLoad = files.length === 0 && !settingsTouched;
   try {
     const { PDFDocument } = await loadPdfLib();
     for (const file of incoming) {
@@ -1969,6 +2048,7 @@ async function addFiles(fileCollection) {
       }
     }
   } finally {
+    if (recommendAfterLoad) recommendSettings();
     renderFiles();
   }
 }
@@ -2005,7 +2085,7 @@ document.querySelector('#nup-sort-files').addEventListener('click', () => {
   files.sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant', { numeric: true }));
   renderFiles();
 });
-document.querySelector('#nup-clear-files').addEventListener('click', () => { files = []; renderFiles(); });
+document.querySelector('#nup-clear-files').addEventListener('click', () => { files = []; settingsTouched = false; renderFiles(); });
 
 function drawFitted(page, embedded, rotation, x0, y0, boxWidth, boxHeight, degrees) {
   const width = embedded.width;
@@ -2086,6 +2166,9 @@ processButton.addEventListener('click', async () => {
     const base = files.length === 1 ? files[0].name.replace(/\.pdf$/i, '') : translate('合版文件');
     const filename = `${base}_${output.layout.count}合1_${output.layout.paper}.pdf`;
     openLink.href = outputUrl;
+    previewFrame.src = `${outputUrl}#page=1&zoom=page-width&navpanes=0&toolbar=0`;
+    previewFrame.hidden = false;
+    previewPaper.hidden = true;
     downloadButton.dataset.filename = filename;
     lastResult = { sheets: output.pages, paper: output.layout.paper };
     resultTitle.textContent = message('result', lastResult);
@@ -2109,8 +2192,12 @@ downloadButton.addEventListener('click', () => {
   anchor.remove();
 });
 
-workspace.querySelectorAll('input[name="nup-layout"], input[name="nup-paper"], input[name="nup-orientation"], #nup-margin, #nup-gap, #nup-duplicate')
-  .forEach((input) => input.addEventListener('input', updateSummary));
+workspace.querySelectorAll('input[name="nup-layout"], input[name="nup-paper"], input[name="nup-orientation"], #nup-margin, #nup-gap, #nup-cutline, #nup-duplicate')
+  .forEach((input) => input.addEventListener('input', (event) => {
+    if (event.isTrusted) settingsTouched = true;
+    releaseResult();
+    updateSummary();
+  }));
 
 globalThis.addEventListener('pdf-tool-language-change', () => {
   if (active) {
@@ -2118,6 +2205,7 @@ globalThis.addEventListener('pdf-tool-language-change', () => {
     description.textContent = translate('將 2 或 4 個 PDF 頁面縮排到同一張紙，適合表單、講義與節省紙張列印。');
   }
   renderFiles(false);
+  previewPaper.setAttribute('aria-label', translate('合版配置預覽'));
   if (lastResult) {
     resultTitle.textContent = message('result', lastResult);
     status.textContent = translate('處理完成，可下載或在新分頁預覽。');

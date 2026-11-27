@@ -16,6 +16,9 @@ const result = document.querySelector('#nup-result');
 const resultTitle = document.querySelector('#nup-result-title');
 const downloadButton = document.querySelector('#nup-download');
 const openLink = document.querySelector('#nup-open');
+const previewPaper = document.querySelector('#nup-preview-paper');
+const previewMeta = document.querySelector('#nup-preview-meta');
+const previewFrame = document.querySelector('#nup-preview-frame');
 
 const messageTemplates = {
   'zh-Hant': { fileCount: '{files} 個檔案・共 {pages} 頁', fileMeta: '{pages} 頁・{size} MB', emptySummary: '輸出 {paper}；{count} 合 1・{direction}。{hint}', summary: '{pages} 個來源頁面 → {sheets} 張 {paper}；{count} 合 1・{direction}。', scale: ' 最小縮放比例約 {scale}%。', result: '完成：已產生 {sheets} 張 {paper}', loadError: '{file} 無法讀取；若有密碼，請先使用「移除密碼」。', failed: '合版失敗：{error}', remove: '移除 {file}', up: '上移 {file}', down: '下移 {file}' },
@@ -46,6 +49,8 @@ const PAPER = {
   A4: [210 * MM, 297 * MM],
   A5: [148 * MM, 210 * MM],
 };
+const CAUTION_SCALE = 0.85;
+const DANGER_SCALE = 0.6;
 
 let files = [];
 let pdfLibPromise;
@@ -53,6 +58,7 @@ let outputUrl = '';
 let active = false;
 let previousHeading = null;
 let lastResult = null;
+let settingsTouched = false;
 
 const mobileOption = document.createElement('option');
 mobileOption.value = 'nup';
@@ -122,10 +128,10 @@ function selected(name) {
   return document.querySelector(`input[name="${name}"]:checked`)?.value;
 }
 
-function geometry() {
-  const count = Number(selected('nup-layout'));
-  const paper = selected('nup-paper');
-  const landscape = selected('nup-orientation') === 'landscape';
+function geometry(overrides = {}) {
+  const count = overrides.count ?? Number(selected('nup-layout'));
+  const paper = overrides.paper ?? selected('nup-paper');
+  const landscape = overrides.landscape ?? selected('nup-orientation') === 'landscape';
   const margin = Math.max(0, Number(document.querySelector('#nup-margin').value) || 0) * MM;
   const gap = Math.max(0, Number(document.querySelector('#nup-gap').value) || 0) * MM;
   const [portraitWidth, portraitHeight] = PAPER[paper];
@@ -151,6 +157,36 @@ function scaleRange(layout) {
   return scales.length ? { min: Math.min(...scales), max: Math.max(...scales) } : null;
 }
 
+function recommendSettings() {
+  const sourcePages = files.flatMap((file) => file.sizes);
+  if (!sourcePages.length || settingsTouched) return;
+  const pageCount = sourcePages.length;
+  const candidates = [];
+  for (const count of [2, 4]) {
+    for (const paper of ['A5', 'A4', 'A3']) {
+      for (const landscape of [true, false]) {
+        const layout = geometry({ count, paper, landscape });
+        const scales = sourcePages.map(([width, height]) => fitScale(width, height, layout));
+        const worstDeviation = Math.max(...scales.map((scale) => Math.abs(Math.log2(Math.max(scale, 0.01)))));
+        const minimumScale = Math.min(...scales);
+        const maximumScale = Math.max(...scales);
+        const severeShrinkPenalty = minimumScale < 0.6 ? (0.6 - minimumScale) * 3 : 0;
+        const excessiveUpscalePenalty = maximumScale > 1.15 ? (maximumScale - 1.15) * 0.35 : 0;
+        const emptySlotPenalty = pageCount < count ? (count - pageCount) * 0.08 : 0;
+        const paperPreference = paper === 'A3' ? 0.02 : paper === 'A5' ? 0.01 : 0;
+        const rotatedPageRatio = sourcePages.filter(([width, height]) => (height > width) !== layout.slotPortrait).length / pageCount;
+        const rotationPenalty = rotatedPageRatio * 0.025;
+        candidates.push({ layout, score: worstDeviation + severeShrinkPenalty + excessiveUpscalePenalty + emptySlotPenalty + paperPreference + rotationPenalty });
+      }
+    }
+  }
+  candidates.sort((a, b) => a.score - b.score || a.layout.count - b.layout.count);
+  const recommended = candidates[0].layout;
+  document.querySelector(`input[name="nup-layout"][value="${recommended.count}"]`).checked = true;
+  document.querySelector(`input[name="nup-paper"][value="${recommended.paper}"]`).checked = true;
+  document.querySelector(`input[name="nup-orientation"][value="${recommended.landscape ? 'landscape' : 'portrait'}"]`).checked = true;
+}
+
 function updateSummary() {
   const layout = geometry();
   const pages = files.reduce((total, file) => total + file.pages, 0);
@@ -161,16 +197,51 @@ function updateSummary() {
   let text = files.length
     ? message('summary', { pages, sheets: outputPages, paper: layout.paper, count: layout.count, direction })
     : message('emptySummary', { paper: layout.paper, count: layout.count, direction, hint: translate('加入 PDF 後會顯示張數與縮放比例。') });
-  summary.classList.remove('is-warning');
+  summary.classList.remove('is-caution', 'is-danger');
   if (range) {
     const min = Math.round(range.min * 100);
     text += message('scale', { scale: min });
-    if (min < 60) {
+    if (range.min < DANGER_SCALE) {
       text += ` ⚠ ${translate('文字可能過小，建議減少合版頁數或使用較大的紙張。')}`;
-      summary.classList.add('is-warning');
+      summary.classList.add('is-danger');
+    } else if (range.min < CAUTION_SCALE) {
+      text += ` ⚠ ${translate('內容會明顯縮小，列印前請確認文字大小。')}`;
+      summary.classList.add('is-caution');
     }
   }
   summary.textContent = text;
+  renderPreview(layout);
+}
+
+function renderPreview(layout = geometry()) {
+  const duplicate = document.querySelector('#nup-duplicate').checked;
+  const cutline = document.querySelector('#nup-cutline').checked;
+  const marginMm = Math.max(0, Number(document.querySelector('#nup-margin').value) || 0);
+  const gapMm = Math.max(0, Number(document.querySelector('#nup-gap').value) || 0);
+  previewPaper.className = 'nup-preview-paper';
+  previewPaper.classList.add(layout.count === 4 ? 'is-four-up' : layout.landscape ? 'is-two-landscape' : 'is-two-portrait');
+  previewPaper.classList.toggle('is-portrait', !layout.landscape);
+  previewPaper.classList.toggle('has-cutlines', cutline);
+  previewPaper.style.padding = `${Math.min(30, 8 + marginMm * 1.1)}px`;
+  previewPaper.style.gap = `${Math.min(24, gapMm * 1.3)}px`;
+  previewMeta.textContent = `${layout.paper}・${translate(layout.count === 4 ? '4 合 1' : '2 合 1')}`;
+  previewPaper.replaceChildren();
+  const sourcePages = files.flatMap((file) => Array.from({ length: file.pages }, (_, index) => ({ file, page: index + 1 })));
+  for (let index = 0; index < layout.count; index += 1) {
+    const source = duplicate ? sourcePages[0] : sourcePages[index];
+    const slot = document.createElement('div');
+    slot.className = 'nup-preview-slot';
+    const page = document.createElement('span');
+    page.className = 'nup-preview-page';
+    page.setAttribute('aria-hidden', 'true');
+    for (let line = 0; line < 5; line += 1) page.append(document.createElement('i'));
+    const number = document.createElement('b');
+    number.textContent = source ? String(source.page) : String(index + 1);
+    if (source) slot.title = `${source.file.name} · ${source.page}`;
+    else slot.classList.add('is-placeholder');
+    slot.append(page, number);
+    previewPaper.append(slot);
+  }
 }
 
 function releaseResult() {
@@ -179,6 +250,9 @@ function releaseResult() {
   lastResult = null;
   result.hidden = true;
   openLink.removeAttribute('href');
+  previewFrame.removeAttribute('src');
+  previewFrame.hidden = true;
+  previewPaper.hidden = false;
 }
 
 function renderFiles(resetOutput = true) {
@@ -227,6 +301,7 @@ async function addFiles(fileCollection) {
   }
   processButton.disabled = true;
   status.textContent = translate('正在讀取 PDF 頁面資訊…');
+  const recommendAfterLoad = files.length === 0 && !settingsTouched;
   try {
     const { PDFDocument } = await loadPdfLib();
     for (const file of incoming) {
@@ -246,6 +321,7 @@ async function addFiles(fileCollection) {
       }
     }
   } finally {
+    if (recommendAfterLoad) recommendSettings();
     renderFiles();
   }
 }
@@ -282,7 +358,7 @@ document.querySelector('#nup-sort-files').addEventListener('click', () => {
   files.sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant', { numeric: true }));
   renderFiles();
 });
-document.querySelector('#nup-clear-files').addEventListener('click', () => { files = []; renderFiles(); });
+document.querySelector('#nup-clear-files').addEventListener('click', () => { files = []; settingsTouched = false; renderFiles(); });
 
 function drawFitted(page, embedded, rotation, x0, y0, boxWidth, boxHeight, degrees) {
   const width = embedded.width;
@@ -363,6 +439,9 @@ processButton.addEventListener('click', async () => {
     const base = files.length === 1 ? files[0].name.replace(/\.pdf$/i, '') : translate('合版文件');
     const filename = `${base}_${output.layout.count}合1_${output.layout.paper}.pdf`;
     openLink.href = outputUrl;
+    previewFrame.src = `${outputUrl}#page=1&zoom=page-width&navpanes=0&toolbar=0`;
+    previewFrame.hidden = false;
+    previewPaper.hidden = true;
     downloadButton.dataset.filename = filename;
     lastResult = { sheets: output.pages, paper: output.layout.paper };
     resultTitle.textContent = message('result', lastResult);
@@ -386,8 +465,12 @@ downloadButton.addEventListener('click', () => {
   anchor.remove();
 });
 
-workspace.querySelectorAll('input[name="nup-layout"], input[name="nup-paper"], input[name="nup-orientation"], #nup-margin, #nup-gap, #nup-duplicate')
-  .forEach((input) => input.addEventListener('input', updateSummary));
+workspace.querySelectorAll('input[name="nup-layout"], input[name="nup-paper"], input[name="nup-orientation"], #nup-margin, #nup-gap, #nup-cutline, #nup-duplicate')
+  .forEach((input) => input.addEventListener('input', (event) => {
+    if (event.isTrusted) settingsTouched = true;
+    releaseResult();
+    updateSummary();
+  }));
 
 globalThis.addEventListener('pdf-tool-language-change', () => {
   if (active) {
@@ -395,6 +478,7 @@ globalThis.addEventListener('pdf-tool-language-change', () => {
     description.textContent = translate('將 2 或 4 個 PDF 頁面縮排到同一張紙，適合表單、講義與節省紙張列印。');
   }
   renderFiles(false);
+  previewPaper.setAttribute('aria-label', translate('合版配置預覽'));
   if (lastResult) {
     resultTitle.textContent = message('result', lastResult);
     status.textContent = translate('處理完成，可下載或在新分頁預覽。');

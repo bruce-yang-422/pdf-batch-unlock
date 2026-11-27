@@ -77,13 +77,13 @@
     </script>
     <script type="module" crossorigin src="./assets/index-XfCSYlnY.js?v=20260827-1"></script>
     <script type="module" src="./assets/ui-polish.js?v=20260827-1"></script>
-    <script type="module" src="./assets/i18n.js?v=20261126-2"></script>
-    <script type="module" src="./assets/nup.js?v=20261127-1"></script>
+    <script type="module" src="./assets/i18n.js?v=20261127-4"></script>
+    <script type="module" src="./assets/nup.js?v=20261127-3"></script>
     <script type="module" src="./assets/pwa.js?v=20261126-1"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CFPIHGYZ.css">
     <link rel="stylesheet" href="./assets/layout-DH4mL2.css?v=20261126-1">
     <link rel="stylesheet" href="./assets/ui-polish.css?v=20260819-17">
-    <link rel="stylesheet" href="./assets/nup.css?v=20261127-1">
+    <link rel="stylesheet" href="./assets/nup.css?v=20261127-3">
     <link rel="stylesheet" href="./assets/pwa.css?v=20261126-3">
   </head>
   <body>
@@ -388,7 +388,8 @@
         </form>
 
         <section id="nup-workspace" class="nup-workspace" hidden aria-labelledby="nup-workspace-title">
-          <div class="nup-main">
+          <div class="nup-left-column">
+            <div class="nup-main">
             <div id="nup-drop-zone" class="drop-zone" tabindex="0" role="button" aria-controls="nup-file-input">
               <input id="nup-file-input" class="visually-hidden" type="file" accept="application/pdf,.pdf" multiple />
               <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -409,9 +410,9 @@
               <p id="nup-file-count" class="file-feedback" aria-live="polite">尚未加入檔案</p>
               <ul id="nup-file-list" class="file-list"></ul>
             </section>
-          </div>
+            </div>
 
-          <aside class="nup-settings" aria-labelledby="nup-workspace-title">
+            <section class="nup-settings" aria-labelledby="nup-workspace-title">
             <h3 id="nup-workspace-title">合版設定</h3>
             <fieldset class="nup-fieldset">
               <legend id="nup-layout-legend">1. 選擇版型</legend>
@@ -463,9 +464,30 @@
             <div id="nup-result" class="nup-result" hidden>
               <strong id="nup-result-title"></strong>
               <div>
-                <button id="nup-download" class="secondary-button" type="button">下載 PDF</button>
-                <a id="nup-open" class="text-button" target="_blank" rel="noopener">在新分頁預覽</a>
+                <button id="nup-download" class="secondary-button nup-result-button" type="button">
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 4v12m0 0-4.5-4.5M12 16l4.5-4.5M4 20h16" /></svg>
+                  <span>下載 PDF</span>
+                </button>
+                <a id="nup-open" class="nup-result-button nup-preview-button" target="_blank" rel="noopener">
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 5h5v5M13 11l6-6M19 13v4a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4" /></svg>
+                  <span>在新分頁預覽</span>
+                </a>
               </div>
+            </div>
+            </section>
+          </div>
+
+          <aside class="nup-preview-panel" aria-labelledby="nup-preview-title">
+            <div class="nup-preview-card">
+              <div class="nup-preview-heading">
+                <strong id="nup-preview-title">合版預覽</strong>
+                <span id="nup-preview-meta">A4・2 合 1</span>
+              </div>
+              <div id="nup-preview-stage" class="nup-preview-stage">
+                <div id="nup-preview-paper" class="nup-preview-paper" aria-label="合版配置預覽"></div>
+                <iframe id="nup-preview-frame" class="nup-preview-frame" title="合版預覽" hidden></iframe>
+              </div>
+              <p id="nup-preview-note" class="nup-preview-note">加入 PDF 後會依檔案與頁面順序顯示配置。</p>
             </div>
           </aside>
         </section>
