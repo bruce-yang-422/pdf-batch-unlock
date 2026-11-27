@@ -1,4 +1,4 @@
-ㄗㄨㄛ# PDF 本機工具箱瀏覽器外掛
+# PDF 本機工具箱瀏覽器外掛
 
 Google Chrome 和 Microsoft Edge 共用同一個 Manifest V3 外掛。點擊工具列圖示即可在獨立分頁開啟 PDF 工作區。
 
