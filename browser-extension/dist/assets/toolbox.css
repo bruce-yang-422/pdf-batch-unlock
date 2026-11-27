@@ -1554,8 +1554,76 @@ body.is-native-sorting .page-card:hover {
 
   & .error-notice-heading button:hover { background: #603a45; }
 
+  /* N-up module and recently added navigation surfaces. */
+  & .nup-tool-tab { color: var(--ink); }
+  & .nup-tool-tab:hover { color: var(--ink); background: #344a58; }
+  & .nup-tool-tab.is-active {
+    color: #fff;
+    background: #166658;
+    border-color: #57b69f;
+  }
+
+  & :is(.nup-file-card, .nup-preview-panel, .nup-preview-card, .nup-number-field) {
+    color: var(--ink);
+    background: var(--panel);
+    border-color: var(--line);
+    box-shadow: none;
+  }
+
+  & :is(.nup-settings > h3, .nup-fieldset legend, .nup-advanced summary, .nup-number-copy strong,
+        .nup-preview-heading strong, .nup-result > strong) {
+    color: var(--ink);
+  }
+
+  & :is(.nup-layout-card small, .nup-number-copy small, .nup-number-control, .nup-file-row-main small,
+        .nup-preview-heading span, .nup-preview-note) {
+    color: var(--muted);
+  }
+
+  & :is(.nup-layout-card, .nup-segments label, .nup-number-grid input, .nup-result-button) {
+    color: var(--ink);
+    background: var(--input);
+    border-color: var(--line);
+  }
+
+  & :is(.nup-layout-card:has(input:checked), .nup-segments label:has(input:checked)) {
+    color: var(--success);
+    background: #203e37;
+    border-color: #477e70;
+  }
+
+  & .nup-number-field:focus-within {
+    border-color: #648fa8;
+    box-shadow: 0 0 0 3px rgb(100 143 168 / 16%);
+  }
+
+  & .nup-file-row { color: var(--ink); background: var(--input); }
+  & .nup-summary { color: var(--ink); background: var(--page); border-color: var(--line); }
+  & .nup-summary.is-caution { color: var(--warning); background: #40331f; border-color: #745b34; }
+  & .nup-summary.is-danger { color: var(--danger); background: #442a32; border-color: #79505c; }
+  & :is(.nup-advanced, .nup-result) { border-color: var(--line); }
+  & .nup-result-button:hover { color: var(--ink); background: #344a58; }
+
+  & .nup-preview-stage { background: var(--page); }
+
+  & .mobile-tool-drawer-panel {
+    color: var(--ink);
+    background: var(--surface);
+    box-shadow: 18px 0 48px rgb(0 0 0 / 38%);
+  }
+  & .mobile-tool-drawer-panel header span { color: var(--muted); }
+  & #mobile-tool-drawer-close { color: var(--ink); background: var(--input); }
+  & #mobile-tool-drawer-list button { color: var(--ink); }
+  & #mobile-tool-drawer-list button i { color: var(--muted); }
+  & #mobile-tool-drawer-list button:hover { background: #344a58; }
+  & #mobile-tool-drawer-list button.is-active {
+    color: var(--success);
+    background: #203e37;
+    border-color: #477e70;
+  }
+
   /* Keep the document preview faithful to downloaded pages. */
-  & :is(.decoration-preview-paper, .page-preview img) { color-scheme: light; }
+  & :is(.decoration-preview-paper, .page-preview img, .nup-preview-paper, .nup-preview-frame) { color-scheme: light; }
 
   & :focus-visible {
     outline: 2px solid var(--link);
