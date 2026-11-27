@@ -20,7 +20,8 @@
 - JPG／JPEG 合併轉為 PDF
 - 支援 PWA 安裝與離線使用
 - 提供 Chrome／Microsoft Edge Manifest V3 擴充功能
-- 響應式介面與 13 種語言
+- 響應式介面、淺色／深色／跟隨系統主題與 13 種語言
+- 手機版採用 App Bar 與抽屜式工具導覽，集中管理工具、外觀及語言偏好
 
 ## 快速開始
 
@@ -44,6 +45,8 @@ python -m http.server 8080
 4. 執行處理並確認結果。
 5. 下載 PDF、JPG 或 ZIP；支援預覽的工具也可先在內嵌閱讀器或新分頁檢查輸出。
 
+桌面版可由頂部工具列切換功能；手機版請點選左上角選單按鈕開啟工具抽屜。手機版的外觀與語言設定位於抽屜下方「偏好設定」，桌面版則顯示於頁面右上方。
+
 合併、拆分及 PDF 轉 JPG 不直接支援加密 PDF。請先使用「移除密碼」，再處理解密後的副本。
 
 ## 支援語言
@@ -61,7 +64,7 @@ https://pdf.stack-base.com/?lang=en
 
 ## 瀏覽器擴充功能
 
-下載並解壓縮 [Chrome／Edge 擴充功能 v1.1.1（ZIP）](https://github.com/bruce-yang-422/pdf-batch-unlock/releases/download/v1.1.1/pdf-toolbox-v1.1.1.zip)，即可手動安裝。
+下載並解壓縮 [Chrome／Edge 擴充功能 v1.1.2（ZIP）](https://github.com/bruce-yang-422/pdf-batch-unlock/releases/download/v1.1.2/pdf-toolbox-v1.1.2.zip)，即可手動安裝。
 
 1. Chrome 開啟 `chrome://extensions`；Edge 開啟 `edge://extensions`。
 2. 開啟「開發人員模式」。
@@ -92,6 +95,7 @@ ZIP 會輸出至 `browser-extension/release/pdf-toolbox-v<version>.zip`。發行
 | JSZip | 封裝多檔處理結果 |
 | Web Crypto API | 產生加密安全的隨機密碼 |
 | Service Worker | PWA 與離線快取 |
+| CSS color scheme、matchMedia | 淺色、深色與跟隨系統主題 |
 
 所有執行階段資產均由網站或擴充功能本身提供，不依賴後端服務或 API key。
 
@@ -121,7 +125,7 @@ ZIP 會輸出至 `browser-extension/release/pdf-toolbox-v<version>.zip`。發行
 
 多頁合版的介面與處理邏輯位於 `assets/nup.js` 與 `assets/nup.css`。由於目前 repository 僅保留主工具的建置後 bundle，這項功能以隔離模組掛接主介面，請勿直接修改 `assets/index-*.js`。`pdf-lib.min.js` 只會在使用者首次加入合版檔案時延遲載入，不影響其他工具的初始載入；擴充功能建置腳本會將模組與相依檔案一併封裝。
 
-主工具的介面補強與浮水印實體輸出確認流程位於 `assets/ui-polish.js` 與 `assets/ui-polish.css`；多語系文字集中於 `assets/i18n.js`。浮水印與多頁合版的實體預覽皆直接使用剛產生的 PDF Blob，因此預覽和下載不會經過兩套不同的輸出流程。
+主工具的介面補強、手機導覽與浮水印實體輸出確認流程位於 `assets/ui-polish.js` 與 `assets/ui-polish.css`；多語系文字集中於 `assets/i18n.js`。網站與擴充功能共用 `browser-extension/theme.js` 與 `browser-extension/theme.css` 提供外觀主題。浮水印與多頁合版的實體預覽皆直接使用剛產生的 PDF Blob，因此預覽和下載不會經過兩套不同的輸出流程。
 
 ## 部署
 
@@ -152,13 +156,13 @@ git diff -- browser-extension/dist
 python -m http.server 8080
 ```
 
-請手動驗證各 PDF 工具、語言切換、PWA 離線模式，以及 Chrome／Edge 未封裝擴充功能。
+請手動驗證各 PDF 工具、語言與主題切換、手機工具抽屜、PWA 離線模式，以及 Chrome／Edge 未封裝擴充功能。
 
 ## 隱私與安全
 
 - 沒有後端、資料庫、帳號系統、analytics 或追蹤程式。
 - 文件、圖片與密碼只存在目前瀏覽器工作階段的記憶體中。
-- `localStorage` 只保存語言及 PWA 提示偏好。
+- `localStorage` 只保存語言、外觀主題及 PWA 提示偏好。
 - `sessionStorage` 只保存當次瀏覽階段的 PWA 提示狀態。
 - Cache Storage 只保存應用程式資產，不保存使用者文件或輸出結果。
 - 活動紀錄與輸出檔在重新整理或關閉分頁後清除。

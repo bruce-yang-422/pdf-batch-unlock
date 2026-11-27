@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'pdf-local-toolbox-';
-const CACHE_NAME = `${CACHE_PREFIX}v42`;
+const CACHE_NAME = `${CACHE_PREFIX}v43`;
 const APP_SHELL = [
   './',
   './index.html',

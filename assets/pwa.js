@@ -47,7 +47,7 @@ function updateExtensionLinkMode() {
   if (!footerExtensionLink) return;
   clearTimeout(extensionCopyTimer);
   const mobile = mobileFooterQuery.matches;
-  footerExtensionLink.textContent = mobile ? extensionLabels()[0] : 'Chrome / Edge Extension v1.1.1 (ZIP)';
+  footerExtensionLink.textContent = mobile ? extensionLabels()[0] : 'Chrome / Edge Extension v1.1.2 (ZIP)';
   footerExtensionLink.classList.toggle('is-copy-link', mobile);
   if (mobile) footerExtensionLink.setAttribute('role', 'button');
   else footerExtensionLink.removeAttribute('role');
